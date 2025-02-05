@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <ion-item class="profile-avatar" *ngIf="userProfile?.profile_photo">
+        <ion-avatar>
+          <img [src]="userProfile?.profile_photo" alt="Avatar">
+        </ion-avatar>
+      </ion-item>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list class="m-side-menu-list">
+
+    <!-- Nome -->
+    <ion-item>
+      <ion-icon name="contact" slot="start" color="primary"></ion-icon>
+      <span class="text-dark-gray">{{ user?.full_name }}</span>
+      <ion-button slot="end" fill="clear" color="primary" (click)="gotToEditName()">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Email -->
+    <ion-item>
+      <ion-icon name="mail" slot="start" color="primary"></ion-icon>
+      <span class="text-dark-gray">{{ user?.email }}</span>
+    </ion-item>
+
+    <!-- Telefone -->
+    <ion-item>
+      <ion-icon name="call" slot="start" color="primary"></ion-icon>
+      <span class="text-dark-gray" *ngIf="userProfile">
+        <span *ngIf="userProfile?.mobile_phone_area">
+          ({{ userProfile?.mobile_phone_area }})
+        </span>
+        {{ userProfile?.mobile_phone }}
+      </span>
+      <ion-button slot="end" fill="clear" color="primary" (click)="gotToEditPhone()">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Senha -->
+    <ion-item *ngIf="!user?.is_social_user">
+      <ion-icon name="lock" slot="start" color="primary"></ion-icon>
+      <span class="text-dark-gray">******</span>
+      <ion-button slot="end" fill="outline" color="primary" (click)="gotToEditPassword()">
+        {{ 'EDIT_PASSWORD' | translate }}
+      </ion-button>
+    </ion-item>
+
+    <!-- Excluir Conta -->
+    <ion-item *ngIf="!user?.is_social_user">
+      <ion-icon name="trash" slot="start" color="primary"></ion-icon>
+      <ion-label>Excluir conta</ion-label>
+      <ion-button slot="end" fill="outline" color="primary" (click)="deleteaccount()">
+        Excluir
+      </ion-button>
+    </ion-item>
+
+  </ion-list>
+</ion-content>

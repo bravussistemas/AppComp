@@ -1,0 +1,146 @@
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { IonContent, ModalController, NavController, Platform } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserAddressProvider, UserAddress } from '../../providers/user-address/user-address';
+import { AuthService } from '../../providers/auth-service';
+import { DeliveryState } from '../../providers/delivery-state/delivery-state';
+import { DeliveryMethod } from '../../shared/interfaces';
+import { Utils } from '../../utils/utils';
+import { ToastHelper } from '../../utils/toast-helper';
+import { LoadingHelper } from '../../utils/loading-helper';
+import { SettingsService } from '../../providers/settings-service';
+import { LastRequestService } from '../../providers/last-request-service';
+import { Store } from '../../shared/models/store.model';
+
+@Component({
+  selector: 'app-choose-delivery-address',
+  templateUrl: './choose-delivery-address.page.html',
+  styleUrls: ['./choose-delivery-address.page.scss'],
+})
+export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
+  @ViewChild(IonContent, { static: false }) content: IonContent;
+
+  addressAcceptableList: UserAddress[] = [];
+  addressNotAcceptableList: UserAddress[] = [];
+  goToAfter: string | undefined;
+  redirectType: string | undefined;
+  onCancel: Function | undefined;
+  onSelect: Function | undefined;
+  userAddressId: number | undefined;
+  private unregisterBackButtonAction: any;
+
+  constructor(
+    public navCtrl: NavController,
+    private router: Router,
+    private route: ActivatedRoute,
+    public userAddressProvider: UserAddressProvider,
+    private settingsService: SettingsService,
+    private lastRequestService: LastRequestService,
+    public deliveryState: DeliveryState,
+    public toastHelper: ToastHelper,
+    public loadingHelper: LoadingHelper,
+    public modalCtrl: ModalController,
+    public authService: AuthService,
+    public platform: Platform
+  ) {}
+
+  ngOnInit(): void {
+    this.goToAfter = this.route.snapshot.queryParamMap.get('goToAfter') || undefined;
+    this.redirectType = this.route.snapshot.queryParamMap.get('redirectType') || undefined;
+    this.userAddressId = Number(this.route.snapshot.queryParamMap.get('userAddressId')) || undefined;
+    this.load();
+    this.initializeBackButtonCustomHandler();
+  }
+
+  ngOnDestroy(): void {
+    this.unregisterBackButtonAction && this.unregisterBackButtonAction();
+  }
+
+  initializeBackButtonCustomHandler(): void {
+    this.unregisterBackButtonAction = this.platform.backButton.subscribeWithPriority(10, () => {
+      this.router.navigate(['/previous-page']); // Substitua '/previous-page' pela rota anterior.
+      this.executeOnCancelCallback();
+    });
+  }
+
+  executeOnCancelCallback(): void {
+    if (this.onCancel && Utils.isFunction(this.onCancel)) {
+      this.onCancel();
+      this.onCancel = undefined;
+    }
+  }
+
+  executeOnSelectCallback(address: UserAddress): void {
+    if (this.onSelect && Utils.isFunction(this.onSelect)) {
+      this.onSelect(address);
+      this.onSelect = undefined;
+    }
+  }
+
+  load(): void {
+    this.loadAddressList(this.deliveryState.store);
+  }
+
+  loadAddressList(store: Store): void {
+    this.loadingHelper.setLoading('addressList', true);
+    this.userAddressProvider
+      .list({ store_id: store.id.toString() })
+      .subscribe(
+        (resp) => {
+          if (resp.acceptable.length && this.userAddressId) {
+            const autoSelected = this.autoSelectWithId(resp.acceptable, this.userAddressId);
+            if (autoSelected) return;
+          }
+          this.addressAcceptableList = resp.acceptable;
+          this.addressNotAcceptableList = resp.not_acceptable;
+          this.loadingHelper.setLoading('addressList', false);
+        },
+        () => this.toastHelper.connectionError()
+      );
+  }
+
+  autoSelectWithId(userAddressList: UserAddress[], id: number): boolean {
+    const selected = userAddressList.find((userAddress) => userAddress.id === id);
+    if (selected && this.isValidSelectAddress(userAddressList, selected)) {
+      this.selectAddress(selected);
+      return true;
+    }
+    return false;
+  }
+
+  isValidSelectAddress(addressAcceptableList: UserAddress[], userAddress: UserAddress): boolean {
+    return addressAcceptableList.some((addr) => addr.id === userAddress.id);
+  }
+
+  selectAddress(address: UserAddress): void {
+    this.deliveryState.deliveryAddress = address.address;
+    this.deliveryState.deliveryMethod = DeliveryMethod.DELIVERY_METHOD_HOUSE;
+    this.lastRequestService.updateSettings({
+      subtitle: address.address.simple_address,
+      userAddressId: address.id,
+    });
+    this.executeOnSelectCallback(address);
+    this.redirectToAfterPage();
+  }
+
+  redirectToAfterPage(): void {
+    if (this.goToAfter) {
+      this.router.navigate([this.goToAfter]);
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
+
+  async addAddress(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: this.deliveryState.store.accept_delivery_by_district ? 'AddAddressSimplePage' : 'AddAddressPage',
+      componentProps: { goToAfter: this.goToAfter },
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data?.user_address) {
+      this.addressAcceptableList.unshift(data.user_address);
+      this.selectAddress(data.user_address);
+    }
+  }
+}

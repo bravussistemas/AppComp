@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>139965212713-k7cl4dl5b6lpptgj0as9uiavjstlsb3i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.139965212713-k7cl4dl5b6lpptgj0as9uiavjstlsb3i</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBiq9PPbTL1SvG37Xm44_sXcEAcRi6tXXI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>139965212713</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.com.ohmybread</string>
+	<key>PROJECT_ID</key>
+	<string>firebase-oh-my-bread</string>
+	<key>STORAGE_BUCKET</key>
+	<string>firebase-oh-my-bread.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:139965212713:ios:311c4f62f10e0597</string>
+	<key>DATABASE_URL</key>
+	<string>https://fir-oh-my-bread.firebaseio.com</string>
+</dict>
+</plist>

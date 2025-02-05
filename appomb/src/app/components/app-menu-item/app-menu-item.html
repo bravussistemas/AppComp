@@ -1,0 +1,15 @@
+<ng-container *ngFor="let page of pages">
+    <ng-container *ngIf="!(page?.hidden && page?.hidden())">
+      <ion-item button detail="false" (click)="openPage(page)" [color]="page.ionicColor">
+        <ion-icon [name]="page.icon" slot="start" [color]="page.ionicColorIcon || 'primary'"></ion-icon>
+        <ion-label>
+          <span [innerHTML]="page.title | translate"></span>
+          <ng-container *ngIf="page.subTitle">
+            <br />
+            <small>{{ page.subTitle }}</small>
+          </ng-container>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ng-container>
+  

@@ -1,0 +1,52 @@
+<ion-row class="menu-product-actions">
+
+    <!-- Botão de Remoção -->
+    <ion-col size="2" class="line-break">
+      <ion-button color="dark" fill="clear"
+                  [disabled]="loading || disabled"
+                  (click)="openRemoveAmountPrompt()">
+        <ion-icon class="bold-icon" name="remove-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-col>
+  
+    <!-- Spinner -->
+    <ion-col *ngIf="loading" size="3" class="line-break menu-product-amount">
+      <ion-spinner *ngIf="loading"></ion-spinner>
+    </ion-col>
+  
+    <!-- Quantidade -->
+    <ion-col *ngIf="!loading" size="3" class="line-break menu-product-amount">
+      <span class="feature text-red">
+        {{ item.amount_out }}
+      </span>
+      <span class="feature">/</span>
+      <span class="feature text-green">
+        {{ maxAmount }}
+      </span>
+    </ion-col>
+  
+    <!-- Botão de Adição -->
+    <ion-col size="2" class="line-break">
+      <ion-button color="dark" fill="clear"
+                  [disabled]="loading || disabled"
+                  (click)="openAddAmountPrompt()">
+        <ion-icon class="bold-icon" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-col>
+  
+    <!-- Quantidade no Estoque -->
+    <ion-col>
+      <h1 class="amount-in-store">{{ item.amount_in_store }}</h1>
+    </ion-col>
+  
+  </ion-row>
+  
+  <!-- Item Oculto -->
+  <div tappable (click)="goToDetail()"
+       *ngIf="!item.is_visible" class="list-item-overlay">
+    <div class="list-item-overlay-background"></div>
+    <div class="list-item-overlay-body center">
+      {{"DEACTIVATED" | translate}}
+    </div>
+  </div>
+  

@@ -1,0 +1,28 @@
+<div (click)="onComing()" class="reservation-wrapper-inner" ion-button color="dark" clear
+     [ngClass]="{'active': clientIsComing}">
+    <ion-spinner *ngIf="loadingHelper.isLoading('isComing')" class="centered-spinner"></ion-spinner>
+    <ion-item *ngIf="!loadingHelper.isLoading('isComing')">
+        <ion-label>{{"CLICK_HERE_WHEN_COMING" | translate}}</ion-label>
+        <ion-toggle (ionChange)="onComing()" [(ngModel)]="clientIsComing" item-end></ion-toggle>
+    </ion-item>
+</div>
+
+<div 
+    (click)="onComing()" 
+    class="reservation-wrapper-inner" 
+    ion-button 
+    color="dark" 
+    clear 
+    [ngClass]="{'active': clientIsComing}" 
+    [attr.aria-busy]="loadingHelper.isLoading('isComing')">
+    
+    <ion-spinner 
+        *ngIf="loadingHelper.isLoading('isComing')" 
+        class="centered-spinner">
+    </ion-spinner>
+    
+    <ion-item *ngIf="!loadingHelper.isLoading('isComing')">
+        <ion-label>{{"CLICK_HERE_WHEN_COMING" | translate}}</ion-label>
+        <ion-toggle [(ngModel)]="clientIsComing" item-end></ion-toggle>
+    </ion-item>
+</div>

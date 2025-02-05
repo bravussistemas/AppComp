@@ -1,0 +1,22 @@
+<div class="shm-overlay" [@overlayState]="state" (click)="toggle()"></div>
+<div class="shm-wrapper"
+     #shmWrapper
+     (swipeup)="onSwipeUp()"
+     (swipedown)="onSwipeDown()"
+     (pan)="onSwipeDownBody()"
+     [@cardState]="state"
+     (@cardState.done)="handleAnimDone($event)"
+>
+  <div class="shm-container">
+    <div class="shm-header" (click)="toggle()" #shmHeader>
+      <div class="shm-toggle-icon-container">
+        <ion-icon [name]="state === 'close' ? 'ios-arrow-up': 'ios-arrow-down'"
+                  color="primary"></ion-icon>
+      </div>
+      <div *ngIf="modalTitle" class="shm-title">{{modalTitle}}</div>
+    </div>
+    <div class="shm-body" #shmBody (scroll)="onScroll($event)">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

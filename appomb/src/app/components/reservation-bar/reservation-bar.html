@@ -1,0 +1,8 @@
+<button (click)="goToCheckout()" [ngClass]="{ 'btn-reservation-visible': units}" ion-item detail-push class="store-item gray-item-new reservation-wrapper-inner">
+  <ion-label>
+    <h1>{{"CONTINUE_TO_PAYMENT" | translate}}</h1>
+    <h2 *ngIf="subtitle && subtitle.length">{{subtitle}}</h2>
+  </ion-label>
+  <span item-end><span class="feature"><span class="small-text normal-text">R$</span>{{total}}</span></span>
+  <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+</button>

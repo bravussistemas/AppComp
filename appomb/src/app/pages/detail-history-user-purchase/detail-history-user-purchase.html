@@ -1,0 +1,99 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
+<ion-content>
+  <!-- Dados da Compra -->
+  <h5><strong>Dados da compra</strong></h5>
+  <ion-list *ngIf="sale">
+    <!-- Status da Compra -->
+    <ion-item *ngIf="sale.is_reversed" class="status-cancelled">
+      CANCELADA
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <span class="title-label">Valor:</span> {{ sale.price | currency: "BRL" : true }}
+      </ion-label>
+      <ion-button
+        slot="end"
+        fill="clear"
+        [color]="sale.status | transactionStatusColor">
+        <strong>{{ sale.status_text }}</strong>
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <span class="title-label">Data:</span> {{ sale.date_sale | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="sale.transaction_identifier">
+      <ion-label>
+        <span class="title-label">Identificador:</span> {{ sale.transaction_identifier }}
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="sale?.card">
+      <ion-label>
+        <span class="title-label">Cartão:</span> {{ sale.card.card_number }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Dados de Entrega -->
+  <ng-container *ngIf="isDelivery()">
+    <hr>
+    <h5><strong>{{ sale?.delivery_method_label }}</strong></h5>
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <span class="title-label">Entregar na portaria?</span>
+          {{ sale?.delivery_receptionist ? "Sim" : "Não" }}
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <span class="title-label">Endereço de entrega:</span> {{ sale?.delivery_address }}
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <span class="title-label">Horário de entrega:</span> {{ sale?.pickup_sale_rules }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <!-- Dados da Loja -->
+  <ng-container *ngIf="!isDelivery()">
+    <hr>
+    <h5><strong>Dados da loja</strong></h5>
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <span class="title-label">Endereço:</span> {{ sale.store.address.get_simple_address }}
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <span class="title-label">Bairro:</span> {{ sale.store.address.district }}
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <span class="title-label">Contato:</span> {{ sale.store.phone }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <!-- Produtos -->
+  <hr>
+  <h5><strong>Produtos</strong></h5>
+  <ion-list>
+    <ion-item *ngFor="let product_sale of sale.product_sales">
+      <ion-label>
+        {{ product_sale.amount }} x {{ product_sale.product.name }} 
+        ({{ product_sale.price | currency: "BRL" : true }})
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

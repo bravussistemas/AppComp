@@ -1,0 +1,55 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        <strong>{{ day | amDateFormat: 'dddd' }} - {{ day | amDateFormat: 'L' }}</strong>
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="dismiss()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content #content>
+    <!-- Barra de Busca -->
+    <ion-searchbar
+      [(ngModel)]="searchText"
+      [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+      (ionInput)="onInput($event)"
+      [showCancelButton]="true"
+      [animated]="true">
+    </ion-searchbar>
+  
+    <!-- Spinner de Carregamento -->
+    <ion-spinner
+      *ngIf="loadingHelper.isLoading('list')"
+      class="page-spinner">
+    </ion-spinner>
+  
+    <!-- Botão Flutuante de Salvar -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button color="light" (click)="saveChanges()">
+        <ion-icon name="send"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  
+    <!-- Lista de Produtos -->
+    <ion-list id="products-list">
+      <ion-item
+        *ngFor="let item of productItems | productInventoryDayFilter:{name: searchText}"
+        [color]="item.active ? 'enabled-item-list' : 'disabled-item-list'"
+        (click)="toggleActive($event, item)">
+        <ion-toggle slot="start" [(ngModel)]="item.active" [checked]="item.active"></ion-toggle>
+        <ion-label class="line-break">{{ item.product?.name }}</ion-label>
+        <ion-input
+          *ngIf="item.active"
+          type="time"
+          [(ngModel)]="item.next_batch"
+          class="no-click input-release"
+          slot="end">
+        </ion-input>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  

@@ -1,0 +1,54 @@
+<ion-searchbar
+  *ngIf="sellersIds?.length"
+  [(ngModel)]="searchText"
+  [showCancelButton]="true"
+  [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+  [animated]="true">
+</ion-searchbar>
+
+<ion-spinner *ngIf="loadingHelper.isLoading('productsInventory')" class="page-spinner"></ion-spinner>
+
+<div *ngIf="!hasError() && notHasBreads() && !loadingHelper.isLoading('productsInventory')">
+  <page-message-box [text]="'EMPTY_PRODUCT_LIST_DAY' | translate"></page-message-box>
+</div>
+
+<ion-list
+  *ngIf="!loadingHelper.isLoading('productsInventory')">  
+  <ion-reorder-group [disabled]="!canReorder" (ionItemReorder)="reorderItems($event)">
+    <ng-container *ngFor="let resellerId of sellersIds; trackBy: trackByResellerId">
+      <!-- Header for Reseller -->
+      <ion-item-divider class="light-divider reseller-divider" *ngIf="itemsPerReseller[resellerId]">
+        <div class="reseller-divider-wrapper" (click)="openReseller(resellerId)">
+          <div class="logo">
+            <img [src]="itemsPerReseller[resellerId][0].reseller?.logo?.original" alt="Reseller Logo">
+          </div>
+          <div class="name">{{ itemsPerReseller[resellerId][0].reseller?.name }}</div>
+        </div>
+        <button *ngIf="!canReorder" (click)="startReorderReseller(resellerId)" class="reorder-button">
+          <ion-icon name="git-compare"></ion-icon>
+        </button>
+      </ion-item-divider>
+
+      <!-- Products List -->
+      <ng-container *ngIf="resellerOpen === resellerId">
+        <ion-item
+          *ngFor="let item of itemsPerReseller[resellerId] | productInventoryDayFilter:{name: searchText}; trackBy: trackByItemId">
+          <ion-grid class="menu-product-item">
+            <ion-row>
+              <ion-col col-2 class="icon-column">
+                <ion-spinner *ngIf="item.loading"></ion-spinner>
+                <button *ngIf="!item.loading && !canReorder" (click)="toggleProductDay(item)" color="primary">
+                  <ion-icon [name]="item.is_visible ? 'eye' : 'eye-off'"></ion-icon>
+                </button>
+              </ion-col>
+              <ion-col col-10>
+                <product-details [product]="item.product" [nextBatch]="item.next_batch"></product-details>
+                <adm-product-amount-control *ngIf="!canReorder" [item]="item"></adm-product-amount-control>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ng-container>
+    </ng-container>
+  </ion-reorder-group> 
+</ion-list>

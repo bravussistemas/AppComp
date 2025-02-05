@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Adicionar endereço</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Swiper Container replacing ion-slides -->
+  <swiper-container #slider [slides-per-view]="1" [space-between]="10" [allow-touch-move]="false">
+    
+    <!-- Slide for FIND ADDRESS BY CEP -->
+    <swiper-slide *ngIf="enableCep">
+      <form [formGroup]="formCep" (ngSubmit)="onSubmitFormCep()" novalidate>
+        <ion-list>
+          <ion-item>
+            <ion-label color="primary" position="floating">CEP</ion-label>
+            <ion-input formControlName="cep" type="number" #cepInput></ion-input>
+          </ion-item>
+          <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.cep?.length">
+            <li *ngFor="let error of formAddressErrors.getErrors().cep">{{ error }}</li>
+          </ul>
+        </ion-list>
+        <ion-button type="submit" expand="full" [disabled]="formCep.invalid || loadingHelper.isLoading('cepData')">
+          Próximo
+        </ion-button>
+        <hr>
+        <div class="text-center">
+          <ion-button fill="clear" (click)="findAddressByAddressClicked()">Não sei meu CEP</ion-button>
+        </div>
+      </form>
+    </swiper-slide>
+
+    <!-- Slide for address input form -->
+    <swiper-slide>
+      <form [formGroup]="formAddress" (ngSubmit)="onSubmitFormAddress()" novalidate>
+        <ion-list>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label color="primary" position="floating">Estado</ion-label>
+                  <ion-input (ionFocus)="goToChooseState()"
+                             [disabled]="!stateFieldEnabled"
+                             readonly
+                             formControlName="state"
+                             type="text"></ion-input>
+                </ion-item>
+                <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.state?.length">
+                  <li *ngFor="let error of formAddressErrors.getErrors().state">{{ error }}</li>
+                </ul>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label color="primary" position="floating">Cidade</ion-label>
+                  <ion-input (ionFocus)="goToChooseCity()"
+                             [disabled]="!cityFieldEnabled"
+                             readonly
+                             formControlName="city"
+                             type="text"></ion-input>
+                </ion-item>
+                <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.city?.length">
+                  <li *ngFor="let error of formAddressErrors.getErrors().city">{{ error }}</li>
+                </ul>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-item>
+            <ion-label color="primary" position="floating">Endereço</ion-label>
+            <ion-input formControlName="street" [disabled]="!streetFieldEnabled" type="text"></ion-input>
+          </ion-item>
+          <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.street?.length">
+            <li *ngFor="let error of formAddressErrors.getErrors().street">{{ error }}</li>
+          </ul>
+
+          <ion-item>
+            <ion-label color="primary" position="floating">Número</ion-label>
+            <ion-input formControlName="number" type="text" #numberInput maxlength="16"></ion-input>
+          </ion-item>
+          <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.number?.length">
+            <li *ngFor="let error of formAddressErrors.getErrors().number">{{ error }}</li>
+          </ul>
+
+          <ion-item>
+            <ion-label color="primary" position="floating">Complemento</ion-label>
+            <ion-input [disabled]="!hasComplement" formControlName="complement" type="text" maxlength="200"></ion-input>
+          </ion-item>
+          <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.complement?.length">
+            <li *ngFor="let error of formAddressErrors.getErrors().complement">{{ error }}</li>
+          </ul>
+
+          <ion-item lines="none" class="item-without-complement">
+            <ion-label><small>Sem complemento</small></ion-label>
+            <ion-checkbox formControlName="withoutComplement"></ion-checkbox>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="primary" position="floating">Referência (opcional)</ion-label>
+            <ion-input formControlName="ref" type="text" maxlength="200"></ion-input>
+          </ion-item>
+          <ul class="list-input-errors" *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.ref?.length">
+            <li *ngFor="let error of formAddressErrors.getErrors().ref">{{ error }}</li>
+          </ul>
+        </ion-list>
+        <ion-button type="submit" expand="full">Próximo</ion-button>
+      </form>
+    </swiper-slide>
+    
+  </swiper-container>
+</ion-content>

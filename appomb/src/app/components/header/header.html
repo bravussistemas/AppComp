@@ -1,0 +1,18 @@
+<ion-header class="m-app-header" [ngClass]="{'header-title-centered': centerTitle}">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+
+        <ion-title class="logo" (click)="headerClicked()">
+            {{ titleCaps ? title?.toUpperCase() : title }} <br>
+            <span class="title-address">{{subTitle}}</span>
+        </ion-title>
+
+        <ion-buttons slot="end" *ngIf="buttonIcon" [ngClass]="iconClass">
+            <ion-button (click)="btnClick($event)">
+                <ion-icon [name]="buttonIcon"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>

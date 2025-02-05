@@ -1,0 +1,34 @@
+<ion-header>
+  <app-header title="CADASTRAR CUPOM"></app-header>
+</ion-header>
+
+<ion-content>
+  <div class="main-content">
+    <!-- Formulário para cadastrar o cupom -->
+    <form id="myForm" [formGroup]="form" (ngSubmit)="onSubmit(form.valid)" novalidate>
+      <!-- Campo de cupom -->
+      <ion-item>
+        <ion-label position="floating" color="primary">Cupom</ion-label>
+        <ion-input
+          #input
+          formControlName="coupon"
+          type="text"
+        ></ion-input>
+      </ion-item>
+
+      <!-- Exibição de erros de validação -->
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().coupon?.length">
+        <li *ngFor="let error of formErrors.getErrors().coupon">
+          {{ error }}
+        </li>
+      </ul>
+
+      <div class="space-small"></div>
+
+      <!-- Botão para salvar -->
+      <ion-button expand="block" type="submit">
+        <strong>Salvar</strong>
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

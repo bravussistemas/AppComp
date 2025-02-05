@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Estornar transação da venda</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content class="ion-padding">
+    <ion-spinner *ngIf="loadingHelper.isLoading('list')" class="page-spinner" name="crescent"></ion-spinner>
+    <ng-container *ngIf="!loadingHelper.isLoading('list')">
+      <ion-list>
+        <ion-item *ngFor="let sale of sales">
+          <ion-label>
+            {{ sale.price | currency: "BRL": true }} -
+            {{ sale.transaction_identifier }}
+          </ion-label>
+          <ion-button
+            (click)="cancelSale(sale.id, sale.price)"
+            slot="end"
+            color="danger"
+            fill="solid"
+            aria-label="Estornar venda">
+            Estornar
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+  </ion-content>
+  

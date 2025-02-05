@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ product?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="parallax-header">
+  <!-- Imagem de Cabeçalho -->
+  <div class="header-image">
+    <swiper-container [slides-per-view]="1" [loop]="true">
+      <swiper-slide *ngFor="let img of images">
+        <img [src]="img" alt="Produto">
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <div [innerHTML]="product?.description || 'WITHOUT_DESCRIPTION' | translate"></div>
+  </div>
+</ion-content>

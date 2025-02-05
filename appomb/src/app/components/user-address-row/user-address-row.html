@@ -1,0 +1,11 @@
+<ion-item>
+  <ion-label>
+    <h1 class="break-line">{{address.name}}</h1>
+    <h2 class="break-line">{{address.address?.simple_address}}</h2>
+    <p class="break-line">{{address.address?.district}} - {{address.address?.city_label}}
+      ({{address.address?.state_label}})</p>
+  </ion-label>
+  <ion-button slot="end" color="danger" (click)="deleteAddress($event, address)">
+    <ion-icon name="trash"></ion-icon>
+  </ion-button>
+</ion-item>

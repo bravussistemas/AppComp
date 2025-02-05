@@ -1,0 +1,139 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Créditos do usuário <br>
+        <ion-note color="textGray">
+          <small>{{ data?.user?.first_name }} {{ data?.user?.last_name }}</small>
+        </ion-note>
+      </ion-title>
+    </ion-toolbar>
+    <ion-toolbar no-padding>
+      <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="add">
+          Adicionar
+        </ion-segment-button>
+        <ion-segment-button value="pending">
+          Disponível
+        </ion-segment-button>
+        <ion-segment-button value="used">
+          Já utilizado
+        </ion-segment-button>
+        <ion-segment-button value="history">
+          Histórico
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content class="ion-padding">
+    <ion-spinner *ngIf="loadingHelper.isLoading('detailCredit')" class="page-spinner" name="crescent"></ion-spinner>
+    <ng-container *ngIf="!loadingHelper.isLoading('detailCredit')">
+      <!-- Segmento Adicionar -->
+      <ng-container *ngIf="segment === 'add'">
+        <ion-list>
+          <ion-item class="text-center" color="madeira">
+            <h2>
+              Saldo: <span class="saldo">{{ data?.user?.credit_missing | currency: "BRL": true }}</span>
+            </h2>
+          </ion-item>
+        </ion-list>
+        <ion-list>
+          <ion-item>
+            <div slot="start">
+              <h1>R$</h1>
+            </div>
+            <ion-input
+              #inputCredit
+              id="inputCredit"
+              type="tel"
+              placeholder="0"
+              class="big-input"
+              (ionChange)="changeValue($event)">
+            </ion-input>
+            <button
+              [disabled]="!canSendAddCredit()"
+              (click)="addCredit()"
+              ion-button
+              fill="clear"
+              color="green-button"
+              slot="end"
+              aria-label="Adicionar crédito">
+              <ion-icon slot="icon-only" name="send"></ion-icon>
+            </button>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+  
+      <!-- Segmento Disponível -->
+      <ng-container *ngIf="segment === 'pending'">
+        <ion-list>
+          <ion-item class="text-center" color="madeira">
+            <h2>
+              Saldo: <span class="saldo">{{ data?.user?.credit_missing | currency: "BRL": true }}</span>
+            </h2>
+          </ion-item>
+        </ion-list>
+        <ion-list>
+          <ng-container *ngFor="let credit of data?.credits?.opened">
+            <ion-item *ngIf="!credit._hidden">
+              <ion-label>
+                <h2 *ngIf="credit.dirty">
+                  <ion-note><s>{{ credit.amount | currency: "BRL": true }}</s></ion-note>
+                  <br> {{ credit.missing_use | currency: "BRL": true }}
+                </h2>
+                <h2 *ngIf="!credit.dirty">{{ credit.amount | currency: "BRL": true }}</h2>
+                <p>{{ credit.created | date: 'short' }}</p>
+              </ion-label>
+              <button
+                [disabled]="credit._deleting"
+                (click)="deleteCredit(credit)"
+                ion-button
+                fill="clear"
+                color="danger"
+                slot="end"
+                aria-label="Deletar crédito">
+                <ion-icon slot="icon-only" name="trash" *ngIf="!credit._deleting"></ion-icon>
+                <ion-spinner *ngIf="credit._deleting"></ion-spinner>
+              </button>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </ng-container>
+  
+      <!-- Segmento Já Utilizado -->
+      <ng-container *ngIf="segment === 'used'">
+        <ion-list>
+          <ion-item *ngFor="let credit of data?.credits?.closed">
+            <ion-label>
+              <h2>{{ credit.amount | currency: "BRL": true }}</h2>
+              <p>{{ credit.created | date: 'short' }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+  
+      <!-- Segmento Histórico -->
+      <ng-container *ngIf="segment === 'history'">
+        <p class="text-center">
+          <ion-note>últimas 30 transações</ion-note>
+        </p>
+        <hr>
+        <ion-list>
+          <ion-item *ngFor="let payment of data?.history">
+            <ion-label text-wrap>
+              <ion-note>{{ payment.created | date: "short" }}</ion-note>
+              <br>
+              <h3>
+                Utilizou
+                <strong>{{ payment.amount | currency: "BRL": true }}</strong>
+                do crédito
+                <strong>{{ payment.client_credit?.id }}</strong> de
+                <strong>{{ payment.client_credit?.amount | currency: "BRL": true }}</strong>
+              </h3>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+    </ng-container>
+  </ion-content>
+  

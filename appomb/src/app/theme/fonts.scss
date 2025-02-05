@@ -1,0 +1,73 @@
+
+/*************************/
+/* Alegreya SC
+/*************************/
+
+/* latin-ext */
+@font-face {
+  font-family: 'Alegreya SC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Alegreya SC'), local('AlegreyaSC-Regular'), url(../assets/fonts/-74JUGs8W14C5cCBFRS30yYE0-AqJ3nfInTTiDXDjU4.ttf) format('truetype');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Alegreya SC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Alegreya SC'), local('AlegreyaSC-Regular'), url(../assets/fonts/-74JUGs8W14C5cCBFRS3044P5ICox8Kq3LLUNMylGO4.ttf) format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Alegreya SC';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Alegreya SC Bold'), local('AlegreyaSC-Bold'), url(../assets/fonts/M9OIREoxDkvynwTpBAYUq-jkDdvhIIFj_YMdgqpnSB0.ttf) format('truetype');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Alegreya SC';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Alegreya SC Bold'), local('AlegreyaSC-Bold'), url(../assets/fonts/M9OIREoxDkvynwTpBAYUq4lIZu-HDpmDIZMigmsroc4.ttf) format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+/*************************/
+/* Ubuntu
+/*************************/
+$font-path: "../assets/fonts";
+
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Ubuntu Light"), local("Ubuntu-Light"), url("#{$font-path}/Ubuntu/Ubuntu-Light.woff2") format("woff2"), url("#{$font-path}/Ubuntu/Ubuntu-Light.woff") format("woff"), url("#{$font-path}/Ubuntu/Ubuntu-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Ubuntu"), local("Ubuntu-Regular"), url("#{$font-path}/Ubuntu/Ubuntu-Regular.woff2") format("woff2"), url("#{$font-path}/Ubuntu/Ubuntu-Regular.woff") format("woff"), url("#{$font-path}/Ubuntu/Ubuntu-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Ubuntu"), local("Ubuntu-Regular"), url("#{$font-path}/Ubuntu/Ubuntu-Regular.woff2") format("woff2"), url("#{$font-path}/Ubuntu/Ubuntu-Regular.woff") format("woff"), url("#{$font-path}/Ubuntu/Ubuntu-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Ubuntu Bold"), local("Ubuntu-Bold"), url("#{$font-path}/Ubuntu/Ubuntu-Bold.woff2") format("woff2"), url("#{$font-path}/Ubuntu/Ubuntu-Bold.woff") format("woff"), url("#{$font-path}/Ubuntu/Ubuntu-Bold.ttf") format("truetype");
+}

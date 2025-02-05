@@ -1,0 +1,36 @@
+<div>
+  <ng-container *ngFor="let item of data">
+    <ion-card [ngClass]="{'req-taken': item.is_closed}">
+      <ion-card-content (click)="emitOnClickItem(item)">
+        <div class="req-item">
+          <div class="req-content">
+            <h3 class="item-title">{{item.sale_date_text}} —&nbsp;<span class="item-id">#{{item.id}}</span>
+              <span class="price-item">{{item.total | currency:"BRL":true}}</span>
+            </h3>
+
+            <h2 class="address">
+              <span
+                class="item-id">Loja:</span>&nbsp;<span><strong>{{item.store_name_internal}}</strong></span>
+            </h2>
+            <h2>{{item.is_closed ? (item.is_delivery ? 'PEDIDO ENTREGUE' : 'COMPRA RETIRADA') : item.client_notified ? 'PEDIDO A CAMINHO' : item.pickup_rules}}</h2>
+            <hr>
+            <ul>
+              <li *ngFor="let p of item.products">
+                <span class="prod-amount">{{p.amount}}x</span> <span class="prod-name">{{p.name}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ion-card-content>
+      <div
+        class="problem-reported"
+        *ngIf="item.has_problem"
+      >
+        Problema reportado: <br>
+        <strong>{{item.problem_type_desc}}</strong>
+      </div>
+      <button *ngIf="!item.has_problem" (click)="helpClicked($event, item)" clear full ion-button><strong>Ajuda</strong>
+      </button>
+    </ion-card>
+  </ng-container>
+</div>

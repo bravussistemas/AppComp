@@ -1,0 +1,55 @@
+<ion-header>
+  <app-header
+    subTitle="Histórico de pedidos"
+    [buttonIcon]="getHeaderAction()?.icon"
+    (headerBtnClick)="getHeaderAction()?.handler()"
+  ></app-header>
+</ion-header>
+<ion-content #rootContent class="content-with-fixed-toolbar-top">
+  <ion-toolbar ion-fixed>
+    <ion-segment
+      [(ngModel)]="currentTab"
+      (ionChange)="onSegmentChanged($event)">
+      <ion-segment-button value="actual">
+        <ng-container>
+          RECENTES
+        </ng-container>
+      </ion-segment-button>
+      <ion-segment-button value="previous">
+        ANTERIORES
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-spinner *ngIf="loadingHelper.isLoading('listUserSales')" class="page-spinner"></ion-spinner>
+
+  <ng-container *ngIf="!loadingHelper.isLoading('listUserSales')">
+    <div *ngIf="currentTab === 'actual'">
+      <my-requests-list
+        id="current-requests"
+        *ngIf="userSalesActual?.length else userSalesActualEmpty"
+        (reload)="load()"
+        (onClickItem)="onClickItem($event)"
+        [data]="userSalesActual"
+      >
+      </my-requests-list>
+      <ng-template #userSalesActualEmpty>
+        <div class="page-message">
+          <div>
+            Nenhum pedido em andamento <br><br>
+            <button (click)="changeTab('previous')" ion-button><strong>ver pedidos anteriores</strong></button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <div *ngIf="currentTab === 'previous'">
+      <my-requests-list
+        [data]="userSalesPrevious"
+        (reload)="load()"
+        (onClickItem)="onClickItem($event)"
+      ></my-requests-list>
+    </div>
+  </ng-container>
+
+</ion-content>

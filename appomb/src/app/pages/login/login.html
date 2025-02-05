@@ -1,0 +1,64 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-title class="logo">{{ appName }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content class="ion-padding">
+    <p class="note-login">
+      Entre com sua conta ou crie uma para realizar compras pelo app
+    </p>
+  
+    <div class="wrapper-login-page">
+      <ion-grid>
+        <!-- Google Login -->
+        <ion-row *ngIf="googleEnabled()">
+          <ion-col size="12">
+            <ion-button expand="block" fill="outline" color="primary" (click)="loginGoogle()">
+              <ion-icon slot="start" name="logo-google"></ion-icon>
+              <div style="text-align: left;">
+                Entrar com Google
+                <br />
+                <small>RECOMENDADO</small>
+              </div>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+  
+        <!-- Facebook Login -->
+        <ion-row *ngIf="facebookEnabled()">
+          <ion-col size="12">
+            <ion-button expand="block" fill="outline" color="primary" (click)="loginFacebook()">
+              <ion-icon slot="start" name="logo-facebook"></ion-icon>
+              <div style="text-align: left;">
+                Entrar com Facebook
+                <br />
+                <small>RECOMENDADO</small>
+              </div>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+  
+        <!-- Email Login -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-button expand="block" fill="outline" color="primary" (click)="goToSignInForm()">
+              <ion-icon slot="start" name="mail"></ion-icon>
+              Entrar com senha
+            </ion-button>
+          </ion-col>
+        </ion-row>
+  
+        <!-- Create Account -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-button expand="block" fill="outline" color="primary" (click)="createAccount()">
+              <ion-icon slot="start" name="person-add"></ion-icon>
+              Criar uma conta
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-content>
+  

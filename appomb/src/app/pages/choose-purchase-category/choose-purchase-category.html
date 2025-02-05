@@ -1,0 +1,103 @@
+<ion-header>
+  <app-header
+    [buttonIcon]="getHeaderAction()?.icon"
+    [iconClass]="getHeaderAction()?.iconClass"
+    (headerBtnClick)="getHeaderAction()?.handler($event)"
+  ></app-header>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="loading; else mainContent">
+    <div class="page-spinner-container">
+      <ion-spinner class="page-spinner"></ion-spinner>
+    </div>
+  </ng-container>
+
+  <ng-template #mainContent>
+    <app-hero-banner
+      *ngIf="appConfig?.choose_category_store_bg?.thumbnail"
+      [src]="appConfig?.choose_category_store_bg?.thumbnail"
+    >
+      <div class="logo-hero"
+        *ngIf="appConfig?.choose_category_store_bg_subtitle || appConfig?.choose_category_store_bg_title">
+        {{ appConfig?.choose_category_store_bg_title }}
+        <small *ngIf="appConfig?.choose_category_store_bg_subtitle">
+          {{ appConfig?.choose_category_store_bg_subtitle }}
+        </small>
+      </div>
+    </app-hero-banner>
+
+    <ion-list>
+      <!-- Lojas -->
+      <ng-container *ngIf="storesState?.has_normal_stores || hasErrorLoadStoreState">
+        <ion-item
+          id="btn-stores"
+          [disabled]="disableBtns"
+          class="store-item gray-item-new"
+          (click)="chooseStores()"
+        >
+          <img slot="start" src="assets/svg/icons/shop.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <ion-label>
+            <h1>Lojas</h1>
+            <h2 color="secondary">Reserve e busque na loja</h2>
+          </ion-label>
+          <ion-icon slot="end" color="darkGray" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+      </ng-container>
+
+      <!-- Entrega de pães -->
+      <ng-container *ngIf="storesState?.has_delivery_main || hasErrorLoadStoreState">
+        <ion-item
+          id="btn-delivery"
+          [disabled]="disableBtns"
+          class="store-item gray-item-new"
+          (click)="chooseStores(storeType.DELIVERY, deliveryType.MAIN)"
+        >
+          <img slot="start" src="assets/svg/icons/delivery_2.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <ion-label>
+            <h1>Entrega de pães</h1>
+            <h2 color="secondary">Escolha local e hora</h2>
+          </ion-label>
+          <ion-icon slot="end" color="darkGray" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+      </ng-container>
+
+      <!-- Entrega de pizzas -->
+      <ng-container *ngIf="storesState?.has_delivery_pizza || hasErrorLoadStoreState">
+        <ion-item
+          [disabled]="disableBtns"
+          class="store-item gray-item-new"
+          (click)="chooseStores(storeType.DELIVERY, deliveryType.PIZZA)"
+        >
+          <img slot="start" src="assets/svg/icons/pizza.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <ion-label>
+            <h1>Entrega de pizzas</h1>
+            <h2>Escolha local e hora</h2>
+          </ion-label>
+          <ion-icon slot="end" color="darkGray" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+
+    <!-- Atalho -->
+    <ng-container *ngIf="isValidLastRequestSettings()">
+      <ion-item-divider>
+        Atalho
+      </ion-item-divider>
+      <ion-list>
+        <ion-item
+          [disabled]="disableBtns"
+          class="store-item gray-item-new"
+          (click)="chooseLastRequest()"
+        >
+          <img slot="start" src="assets/svg/icons/previous.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <ion-label>
+            <h1>{{ lastRequestSettings.title }}</h1>
+            <h2>{{ lastRequestSettings.subtitle }}</h2>
+          </ion-label>
+          <ion-icon slot="end" color="darkGray" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+  </ng-template>
+</ion-content>

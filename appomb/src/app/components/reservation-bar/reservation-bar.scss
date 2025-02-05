@@ -1,0 +1,24 @@
+reservation-bar {
+  //bottom: 0;
+  left: 0;
+  width: 100%;
+  bottom: -100px;
+
+  .reservation-wrapper-inner {
+
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
+    bottom: -100px;
+    transition: bottom 400ms;
+
+    h2 {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap !important;
+    }
+
+    &.btn-reservation-visible {
+      bottom: 99px;
+    }
+  }
+}

@@ -1,0 +1,455 @@
+<ion-header>
+  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address"></app-header>
+</ion-header>
+
+<ion-content #rootContent>
+  <ng-container *ngIf="isForDelivery && inSellerMode(user, store)">
+    <page-message-box text="Lojista não pode efetuar venda em loja de entrega."></page-message-box>
+  </ng-container>
+
+  <ng-container *ngIf="!(isForDelivery && inSellerMode(user, store))">
+    <page-message-box *ngIf="hasError()" [text]="'REQUEST_SERVER_ERROR' | translate"></page-message-box>
+    <ion-spinner [showTimeout]="800" *ngIf="isLoading" class="page-spinner"></ion-spinner>
+    <div *ngIf="!isLoading && isEmptyList()">
+      <page-message-box
+        [text]="'EMPTY_CHECKOUT_LIST' | translate"></page-message-box>
+    </div>
+    <div class="checkout-wrapper" *ngIf="!isLoading && !isEmptyList() && !isPixPayment()">
+
+      <!--   INÍCIO: LISTA DE ITENS NO CARRINHO   -->
+      <div class="list-thumb-round">
+        <ion-list>
+          <div *ngFor="let day of days">
+            <!-- HEADER -->
+
+            <!-- ITEM -->
+            <ion-item *ngFor="let item of data[day]">
+              <product-img item-start [product]="item.product"></product-img>
+              <ion-grid class="menu-product-item">
+                <product-details [product]="item.product" [nextBatch]="item.next_batch"></product-details>
+                <item-cart-amount (onChange)="onItemChangeAmount($event)" [item]="item"></item-cart-amount>
+              </ion-grid>
+            </ion-item>
+
+            <!-- FOOTER -->
+            <ion-item-divider *ngIf="inSellerMode(user, store)">
+              <button ion-button item-start color="dark" clear
+                      (click)="cancelDay(day)">
+                <ion-icon name="close"></ion-icon>
+                {{ 'CANCEL_ITEMS' | translate }}
+              </button>
+            </ion-item-divider>
+            <ion-item-divider *ngIf="!inSellerMode(user, store)">
+              <button ion-button item-start color="dark" clear
+                      (click)="addMoreItems()">
+                <ion-icon name="add"></ion-icon>
+                Adicionar mais itens
+              </button>
+            </ion-item-divider>
+
+          </div>
+        </ion-list>
+      </div>
+      <!--   FINAL: LISTA DE ITENS NO CARRINHO   -->
+
+      <!--   INÍCIO: OPÇÕES ENTREGA   -->
+      <div
+        *ngIf="productsPrice && !inSellerMode(user, store) && isForDelivery"
+      >
+        <ion-list>
+          <ion-item-divider>Entrega</ion-item-divider>
+          <!--   INÍCIO: BOTÃO DE ENDEREÇO   -->
+          <button
+            tappable
+            (click)="goToChooseAddress()"
+            ion-item
+            color="clear"
+            clear
+          >
+            <label>Endereço</label>
+            <ng-container *ngIf="deliveryAddress else noAddress">
+              <h2>
+                <strong>{{deliveryAddress?.minimum_address}}</strong>
+              </h2>
+              <p>
+                {{deliveryAddress?.complement}}
+                <ng-container *ngIf="deliveryAddress?.ref"> &middot; {{deliveryAddress?.ref}}</ng-container>
+              </p>
+            </ng-container>
+            <ng-template #noAddress>
+              <h2>Escolha...</h2>
+            </ng-template>
+            <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+          </button>
+          <!--   FIM: BOTÃO DE ENDEREÇO   -->
+          <!--   INÍCIO: BOTÃO DE HORÁRIO   -->
+          <button
+            tappable
+            (click)="goToChooseDeliveryHour()"
+            *ngIf="mustShowChooseDeliveryHour"
+            ion-item
+            color="clear"
+            clear
+          >
+            <label>Horário para entrega</label>
+            <ng-container *ngIf="selectedDeliveryHourValid() else noHour">
+              <h2>
+                <strong>
+                  {{deliveryStateData?.hour.start_hour|deliveryHour}}
+                  -
+                  {{deliveryStateData?.hour.end_hour|deliveryHour}}
+                </strong>
+              </h2>
+            </ng-container>
+            <ng-template #noHour>
+              <h2>Escolha...</h2>
+            </ng-template>
+            <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+          </button>
+          <!--   FIM: BOTÃO DE HORÁRIO   -->
+          <!--   INÍCIO: BOTÃO DE ENTREGAR NA PORTARIA   -->
+          <button
+            tappable
+            (click)="toggleDeliveryReceptionist()"
+            *ngIf="isForDelivery"
+            ion-item
+            color="clear"
+            clear
+          >
+            <ion-label>
+              <label>Entregar na portaria?</label>
+              <ng-container>
+              </ng-container>
+            </ion-label>
+            <ion-toggle item-end [(ngModel)]="deliveryReceptionist" [checked]="deliveryReceptionist"></ion-toggle>
+          </button>
+          <!--   FIM: BOTÃO DE ENTREGAR NA PORTARIA   -->
+        </ion-list>
+      </div>
+      <!--   FINAL: OPÇÕES ENTREGA   -->
+
+      <!--   INÍCIO: RESUMO VALORES   -->
+      <div class="purchase-details">
+
+        <div class="purchase-details-item"
+             *ngIf="!inSellerMode(user, store) && testDecimalField(freeDeliveryPrice) && isForDelivery">
+          <div class="detail featured-info">
+            <strong>FRETE GRÁTIS</strong> A PARTIR DE <strong>{{freeDeliveryPrice | currency:"BRL":true}}</strong>
+          </div>
+        </div>
+
+        <div class="purchase-details-item">
+          <div class="purchase-details-item__line-title">
+            Subtotal
+          </div>
+          <div class="purchase-details-item__line-value">
+            {{productsPrice | currency:"BRL":true}}
+          </div>
+        </div>
+        <div class="purchase-details-item" *ngIf="canApplyCoupon && !inSellerMode(user, store) && couponDiscountPrice">
+          <div class="purchase-details-item__line-title">
+            Cupom
+          </div>
+          <div class="purchase-details-item__line-value success">
+            -{{couponDiscountPrice | currency:"BRL":true}}
+          </div>
+        </div>
+        <div class="purchase-details-item" *ngIf="!inSellerMode(user, store) && isForDelivery">
+          <div class="purchase-details-item__line-title">
+            Taxa de entrega
+          </div>
+          <div class="purchase-details-item__line-value" [ngClass]="{'success': isFreeDeliveryByPrice}">
+          <span [ngClass]="{'free-delivery-price':  isFreeDeliveryByPrice}">
+            {{deliveryAddressInfo?.delivery_price | currency:"BRL":true }}
+          </span>
+            <span *ngIf="isFreeDeliveryByPrice">
+            <strong>GRÁTIS</strong>
+          </span>
+          </div>
+        </div>
+        <div class="purchase-details-item"
+             *ngIf="isForDelivery && canApplyCoupon && !inSellerMode(user, store)
+           && testDecimalField(couponRegister?.coupon?.amount_discount_delivery_price)">
+          <div class="purchase-details-item__line-title">
+            Cupom: taxa de entrega ({{couponRegister?.coupon?.amount_discount_delivery_price_display}})
+          </div>
+          <div class="purchase-details-item__line-value success">
+            -{{deliveryPriceCouponDiscount | currency:"BRL":true}}
+          </div>
+        </div>
+        <div class="purchase-details-item --purchase-total">
+          <div class="purchase-details-item__line-title">
+            Total
+          </div>
+          <div class="purchase-details-item__line-value">
+            {{total | currency:"BRL":true}}
+          </div>
+        </div>
+      </div>
+      <!--   FINAL: RESUMO VALORES   -->
+
+      <!--   INÍCIO: PAGAMENTO   -->
+      <ion-list
+        *ngIf="!inSellerMode(user, store)"
+      >
+        <!--   INÍCIO: CUPOM   -->
+        <button
+          ion-item
+          tappable
+          no-lines
+          (click)="goToChooseCoupon()"
+          class="coupon-item"
+        >
+          <ion-icon item-start class="coupon-icon">
+            <img src="assets/svg/icons/coupon.svg">
+          </ion-icon>
+          <ion-label [ngClass]="{'coupon-disabled': hasCoupon && !canApplyCoupon}">
+            <h2>CUPOM</h2>
+            <ng-container *ngIf="hasCoupon else noCoupon">
+              <h1 *ngIf="!testDecimalField(couponRegister?.coupon?.amount_discount_delivery_price)">
+                {{couponRegister?.coupon?.code}} ({{couponRegister?.coupon?.amount_discount_display}})
+              </h1>
+              <h1 *ngIf="testDecimalField(couponRegister?.coupon?.amount_discount_delivery_price)">
+                {{couponRegister?.coupon?.code}}
+              </h1>
+              <p *ngIf="!canApplyCoupon" class="line-break">
+                <small class="detail" style="color: red;font-weight: bold;">
+                  * somente para compras acima de R${{minimunCoupon}}
+                </small>
+              </p>
+            </ng-container>
+            <ng-template #noCoupon>
+              <ng-container *ngIf="this.couponErrors?.length else noCouponError">
+                <p>Clique para gerir seus cupons</p>
+                <p>* {{this.couponErrors?.length}} cupom desativado(s)</p>
+              </ng-container>
+              <ng-template #noCouponError>
+                <p>Clique para adicionar um cupom</p>
+              </ng-template>
+            </ng-template>
+          </ion-label>
+          <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+        </button>
+        <!--   FINAL: CUPOM   -->
+
+        <!--   INÍCIO: AGENDAR ENTREGA   -->
+        <button
+          ion-item
+          tappable
+          no-lines
+          *ngIf="store?.show_schedule_delivery_option"
+          (click)="goToChooseScheduleDeliveryDate()"
+          class="coupon-item"
+        >
+          <ion-icon item-start class="card-icon"></ion-icon>
+          <ion-label>
+            <h2 *ngIf="isForDelivery">Agendar entrega</h2>
+            <h2 *ngIf="!isForDelivery">Agendar retirada do pedido</h2>
+            <ng-container *ngIf="scheduleDeliveryDate?.date else noScheduleDeliveryDate">
+              <h1>{{scheduleDeliveryDate.date|date:'dd/MM - EEEE'}}</h1>
+            </ng-container>
+            <ng-template #noScheduleDeliveryDate>
+              <p>Escolher dia...</p>
+            </ng-template>
+          </ion-label>
+          <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+        </button>
+        <!--   FINAL: AGENDAR ENTREGA   -->
+
+        <!--   INÍCIO: USER PRÉ-PAGO   -->
+        <button
+          ion-item
+          tappable
+          no-lines
+          *ngIf="userCreditBalance"
+          (click)="useCredit = !useCredit"
+          [ngClass]="{'line-disabled': !useCredit}"
+          class="coupon-item"
+        >
+          <ion-icon item-start class="card-icon">
+            <ion-icon name="star" item-start></ion-icon>
+          </ion-icon>
+          <ion-label>
+            <h2>CRÉDITO PRÉ-PAGO</h2>
+            <h1>
+              <span style="opacity: 0.6; font-weight: normal;">Saldo:</span>
+              <span [ngClass]="{'stroke': useCredit}">
+              {{userCreditBalance | currency:"BRL":true }}
+            </span>
+              <ng-container *ngIf="useCredit">
+                <br>
+                <span style="opacity: 0.6; font-weight: normal;">Novo saldo:</span>
+                {{userCreditBalanceDisplay | currency:"BRL":true }}
+              </ng-container>
+            </h1>
+            <p *ngIf="!useCredit">Clique para ativar seu crédito</p>
+          </ion-label>
+          <ion-toggle
+            [(ngModel)]="useCredit"
+            (ngModelChange)="useCreditChanged($event)"
+            [checked]="useCredit"></ion-toggle
+          >
+        </button>
+        <!--   FINAL: USER PRÉ-PAGO   -->
+
+        
+        <ion-list radio-group [(ngModel)]="tipopagamento" *ngIf="!useCredit && storewithpix">
+          <ion-list-header>
+            Pagamento
+          </ion-list-header>        
+          <ion-item>
+            <ion-label>Cartão de crédito</ion-label>
+            <ion-radio checked="true" value="cartao" ></ion-radio>
+          </ion-item>        
+          <ion-item>
+            <ion-label>PIX</ion-label>
+            <ion-radio value="pix"></ion-radio>
+          </ion-item>
+        </ion-list>
+        <!--   INÍCIO: ESCOLHER FORMA PAGAMENTO   -->        
+        <button
+          ion-item
+          tappable
+          no-lines
+          *ngIf="!useCredit && tipopagamento=='cartao'"
+          id="cartaobotao"
+          (click)="goToChooseDefaultCard()"
+          [ngClass]="{'line-disabled': useCredit}"
+          class="coupon-item"
+        >
+          <ion-icon item-start class="card-icon">
+            <brand-icon *ngIf="!!defaultCard" item-start [brandId]="defaultCard?.brand"></brand-icon>
+            <ion-icon *ngIf="!defaultCard" name="card" item-start></ion-icon>
+          </ion-icon>
+          <ion-label>
+            <h2>CARTÃO DE CRÉDITO</h2>
+            <ng-container *ngIf="!!defaultCard">
+              <h1>{{defaultCard?.card_number}}</h1>
+            </ng-container>
+            <ng-container *ngIf="!defaultCard">
+              <h1>{{ 'REGISTER_CREDIT_CARD' | translate }}</h1>
+            </ng-container>
+          </ion-label>                    
+        </button>
+        <!--   FINAL: ESCOLHER FORMA PAGAMENTO   -->
+
+        <!--   INÍCIO: DOCUMENTO NA NOTA   -->
+        <button
+          ion-item
+          tappable
+          no-lines
+          *ngIf="isForDelivery && store?.show_document_note_option"
+          (click)="goToRegisterDocumentNote()"
+          class="coupon-item"
+        >
+          <ion-icon item-start class="card-icon"></ion-icon>
+          <ion-label>
+            <h2>CPF/CNPJ na nota?</h2>
+            <ng-container *ngIf="docNote">
+              <h1>{{docNote|document}}</h1>
+            </ng-container>
+            <ng-container *ngIf="!docNote">
+              <p>Adicionar</p>
+            </ng-container>
+          </ion-label>
+          <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+        </button>
+        <!--   FINAL: DOCUMENTO NA NOTA   -->
+
+      </ion-list>
+    </div>
+    <!--   FINAL: PAGAMENTO   -->
+
+    <div *ngIf="productsPrice > 0 && inSellerMode(user, store)"
+         class="reservation-wrapper-inner">
+      <div class="bottom-menu">
+        <div
+          (click)="selectPaymentMode(paymentModes.CREDIT)"
+          class="bottom-menu__item"
+          [ngClass]="{'--active': selectedFinishMethod === paymentModes.CREDIT}"
+        >
+          CRÉDITO
+        </div>
+        <div
+          (click)="selectPaymentMode(paymentModes.DEBIT)"
+          class="bottom-menu__item"
+          [ngClass]="{'--active': selectedFinishMethod === paymentModes.DEBIT}"
+        >
+          DÉBITO
+        </div>
+        <div
+          (click)="selectPaymentMode(paymentModes.MONEY)"
+          class="bottom-menu__item"
+          [ngClass]="{'--active': selectedFinishMethod === paymentModes.MONEY}"
+        >
+          DINHEIRO
+        </div>
+      </div>
+    </div>
+
+    <ion-item *ngIf="productsPrice > 0 && inSellerMode(user, store)">
+      <ion-label color="primary" floating>CPF/CNPJ na nota?</ion-label>
+      <ion-input
+        tabindex="-1"
+        id="sellerDocumentNote"
+        (ionChange)="changeDocNoteValue($event)"
+        type="text"
+      ></ion-input>
+    </ion-item>
+
+    <!--   INÍCIO: BOTÃO CONFIRMAR   -->
+    <div
+      padding
+      *ngIf="productsPrice && !isLoading && !isPixPayment()"
+    >
+      <button
+        ion-button
+        full
+        block
+        type="submit"
+        tappable
+        (click)="payAction()"
+      >
+        <ng-container *ngIf="!canConfirmRequest else confirmLabel">
+
+          <strong *ngIf="mustSelectDeliveryAddress">Escolher endereço de entrega</strong>
+          <strong *ngIf="!mustSelectDeliveryAddress && mustSelectCreditCard">Escolher cartão de crédito</strong>
+          <strong *ngIf="!mustSelectDeliveryAddress && !mustSelectCreditCard && mustSelectDeliveryDate">
+            Escolher data para entrega
+          </strong>
+          <strong *ngIf="!mustSelectDeliveryAddress && !mustSelectCreditCard && !mustSelectDeliveryDate && mustAddDocumentNote">
+            Adicionar documento para a nota
+          </strong>
+          <strong *ngIf="!mustSelectDeliveryAddress && !mustSelectCreditCard && !mustSelectDeliveryDate && !mustAddDocumentNote && !this.selectedDeliveryHourValid()">
+            Escolher hora para entrega
+          </strong>
+        </ng-container>
+        <ng-template #confirmLabel>
+          <strong *ngIf="!inSellerMode(user, store)">Confirmar pedido</strong>
+          <strong *ngIf="inSellerMode(user, store)">Efetuar venda</strong>
+        </ng-template>
+      </button>
+    </div>
+    <!--   FINAL: BOTÃO CONFIRMAR   -->
+    <div *ngIf="isPixPayment()">
+      <br />
+      <br />
+      <img style="text-align: center; margin-left: 30px;"  src="../../assets/img/pix.png" width="80%" fixed>
+      <ion-card>
+        <ion-card-header>    
+          <ion-label>Chave pix copia e cola</ion-label>       
+        </ion-card-header>
+        <ion-card-content>    
+          <div all-copy class="all-copy">
+            <p>{{pix_pixcopiacola}}</p>
+          </div>
+          <button ion-button outline (click)="clicoucopiar()">Copiar </button>
+        </ion-card-content>  
+      </ion-card>        
+      <p>
+      <ion-label class="my-label">Tempo limite para o pagamento: {{pix_timer}}</ion-label>
+      </p>
+    </div>
+  </ng-container>
+
+</ion-content>

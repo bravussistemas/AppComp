@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-toolbar class="m-app-header">
+      <ion-title class="logo">
+        {{ 'LOGIN' | translate }}
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content class="no-scroll">
+  
+    <!-- Formulário de Login -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-list>
+  
+        <!-- Campo de E-mail -->
+        <ion-item>
+          <ion-icon name="mail" slot="start"></ion-icon>
+          <ion-input
+            #inputEmail
+            placeholder="{{ 'EMAIL' | translate }}"
+            formControlName="email"
+            type="email"
+          ></ion-input>
+        </ion-item>
+        <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.email?.length">
+          <li *ngFor="let error of formErrors.getErrors()?.email">{{ error }}</li>
+        </ul>
+  
+        <!-- Campo de Senha -->
+        <ion-item>
+          <ion-icon name="lock-closed" slot="start"></ion-icon>
+          <ion-input
+            #inputPassword
+            placeholder="{{ 'PASSWORD' | translate }}"
+            formControlName="password"
+            [type]="inputType"
+          ></ion-input>
+          <ion-button fill="clear" slot="end" (click)="toggleShowPassword()">
+            <ion-icon *ngIf="inputType === 'password'" name="eye-off"></ion-icon>
+            <ion-icon *ngIf="inputType === 'text'" name="eye"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.password?.length">
+          <li *ngFor="let error of formErrors.getErrors()?.password">{{ error }}</li>
+        </ul>
+  
+        <div class="space-small"></div>
+        <ion-button expand="block" type="submit">{{ 'SUBMIT' | translate }}</ion-button>
+  
+        <!-- Links de Ação -->
+        <ion-item class="form-actions">
+          <p class="action-button" tappable (click)="goToForgotPassword()">{{ 'FORGOT_PASSWORD' | translate }}</p>
+          <p class="action-button" tappable (click)="goToSignUp()">{{ 'CREATE_ACCOUNT' | translate }}</p>
+        </ion-item>
+  
+      </ion-list>
+    </form>
+  </ion-content>
+  

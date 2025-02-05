@@ -1,0 +1,19 @@
+<ng-container *ngIf="stores?.length">
+  <ion-item-divider color="madeira" class="text-center">
+    {{title}}
+  </ion-item-divider>
+
+  <ion-reorder-group [disabled]="!reordering" (ionItemReorder)="reorderItems($event)">
+    <ion-item *ngFor="let store of stores">
+      <ion-thumbnail slot="start" *ngIf="store?.image?.thumbnail">
+        <img [src]="store?.image?.thumbnail || defaultThumb" />
+      </ion-thumbnail>
+      <ion-label>
+        <h1>{{store.name}}</h1>
+        <h2>{{store.address?.get_simple_address}}</h2>
+        <p *ngIf="store.subtitle">{{store.subtitle?.message}}</p>
+      </ion-label>
+      <ion-reorder slot="end"></ion-reorder>
+    </ion-item>
+  </ion-reorder-group>
+</ng-container>

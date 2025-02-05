@@ -1,0 +1,56 @@
+<ion-header>
+    <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address"></app-header>
+</ion-header>
+  
+<ion-content padding>
+
+    <!-- Spinner de Carregamento -->
+    <ion-spinner [showTimeout]="800" *ngIf="loadingHelper.isLoading('items')" class="page-spinner"></ion-spinner>
+
+    <!-- Placeholder para lista vazia -->
+    <div *ngIf="!loadingHelper.isLoading('items') && items?.length === 0" class="placeholder-text">
+        {{ 'NO_CREDIT_CARDS_REGISTERED' | translate }}
+    </div>
+
+    <!-- Lista de Cartões -->
+    <ion-list *ngIf="!loadingHelper.isLoading('items') && items?.length > 0">
+        <ion-item 
+        *ngFor="let item of items" 
+        (click)="onSelectCard(item)" 
+        class="card-item">
+
+        <!-- Ícone da Bandeira -->
+        <brand-icon item-start [brandId]="item.brand"></brand-icon>
+
+        <!-- Número do Cartão e Data de Validade -->
+        <div>
+            <span class="text-card-number">{{ item.card_number }}</span>
+            <span class="text-valid-date" *ngIf="item.valid_date">
+            ({{ item.valid_date | date: 'MM/yyyy' }})
+            </span>
+        </div>
+
+        <!-- Botão de Exclusão -->
+        <ion-button 
+            fill="outline" 
+            color="danger" 
+            item-end 
+            (click)="deleteCard($event, item.id)">
+            <ion-icon slot="start" name="trash"></ion-icon>
+            {{ 'DELETE' | translate }}
+        </ion-button>
+        </ion-item>
+    </ion-list>
+
+    <!-- Botão para Adicionar Cartão -->
+    <div class="add-card-section" *ngIf="!loadingHelper.isLoading('items')">
+        <ion-button 
+        expand="block" 
+        color="primary" 
+        (click)="goToAddCard()">
+        {{ 'REGISTER_CREDIT_CARD' | translate }}
+        </ion-button>
+    </div>
+
+</ion-content>
+  

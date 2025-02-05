@@ -1,0 +1,23 @@
+<ion-list>
+  <!-- Botão para Resumo Financeiro -->
+  <ion-item button (click)="goToFinancialResume()">
+    Resumo financeiro
+  </ion-item>
+
+  <!-- Botão para Mensagens do Dia (Visível apenas para administradores ou vendedores da loja) -->
+  <ion-item *ngIf="isAdminOrStoreSeller()" button (click)="goToAddOperatingDayNotePage()">
+    Mensagens do dia
+  </ion-item>
+
+  <!-- Botão para Ativar/Desativar Push de Nova Venda (Visível apenas para vendedores da loja) -->
+  <ion-item *ngIf="isStoreSeller()" [disabled]="loading" button (click)="enableSaleNotification(!enabledSaleNotification)">
+    [{{ loading ? 'Carregando...' : (enabledSaleNotification ? 'DESATIVAR' : 'ATIVAR') }}] push nova venda
+    <ion-spinner slot="end" *ngIf="loading"></ion-spinner>
+  </ion-item>
+
+  <!-- Botão para Ativar/Desativar Push de Última Entrega (Visível apenas para vendedores da loja) -->
+  <ion-item *ngIf="isStoreSeller()" [disabled]="loading" button (click)="enableDeliveryFinishNotification(!enabledLastDeliveryNotification)">
+    [{{ loading ? 'Carregando...' : (enabledLastDeliveryNotification ? 'DESATIVAR' : 'ATIVAR') }}] push última entrega
+    <ion-spinner slot="end" *ngIf="loading"></ion-spinner>
+  </ion-item>
+</ion-list>

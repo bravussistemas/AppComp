@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Escolher entregador</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="ready" (click)="refreshCache()">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Exibe o spinner enquanto carrega -->
+  <ion-spinner
+    *ngIf="!ready"
+    class="page-spinner"
+    style="display: block; margin: auto;"></ion-spinner>
+
+  <!-- Exibe mensagem se não houver entregadores -->
+  <page-message-box
+    *ngIf="ready && !employers.length"
+    [text]="'Nenhum entregador ativo.'">
+  </page-message-box>
+
+  <!-- Lista de entregadores -->
+  <ion-list *ngIf="ready">
+    <ion-item button (click)="choose(null)">
+      <ion-label>
+        Nenhum
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <hr />
+
+  <ion-list *ngIf="ready">
+    <ion-item
+      button
+      *ngFor="let employee of employers"
+      (click)="choose(employee)">
+      <ion-label>
+        {{ employee.name }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

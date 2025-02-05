@@ -1,0 +1,41 @@
+<ion-header>
+  <app-header
+    [subTitle]="'Entregas'"></app-header>
+</ion-header>
+
+<ion-content>
+  <adm-list-dispatch-orders
+    [data]="dataDispatchOrders"
+    [mapList]="mapListOnlyEmployee"
+    [user]="user"
+  ></adm-list-dispatch-orders>
+</ion-content>
+
+
+<ion-header>
+  <app-header [subTitle]="'Entregas'"></app-header>
+</ion-header>
+
+<ion-content padding>
+
+  <!-- Indicador de Carregamento -->
+  <ion-spinner 
+    [showTimeout]="800" 
+    *ngIf="loadingHelper.isLoading('dispatchOrders')" 
+    class="page-spinner">
+  </ion-spinner>
+
+  <!-- Placeholder para Lista Vazia -->
+  <div *ngIf="!loadingHelper.isLoading('dispatchOrders') && (!dataDispatchOrders || dataDispatchOrders.length === 0)" class="placeholder-text">
+    {{ 'NO_DISPATCH_ORDERS_AVAILABLE' | translate }}
+  </div>
+
+  <!-- Lista de Entregas -->
+  <adm-list-dispatch-orders
+    *ngIf="!loadingHelper.isLoading('dispatchOrders') && dataDispatchOrders?.length > 0"
+    [data]="dataDispatchOrders"
+    [mapList]="mapListOnlyEmployee"
+    [user]="user"
+  ></adm-list-dispatch-orders>
+
+</ion-content>

@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Horário de entrega</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="scroll-fancy" [scrollEvents]="true">
+  <div class="choose-delivery-content">
+    <div class="page-icon">
+      <div class="icon-content">
+        <img src="assets/icon/clock.svg">
+      </div>
+      <div class="icon-legend">
+        Qual o melhor horário para <br> entregar o seu pedido?
+      </div>
+    </div>
+    <ion-list>
+      <ion-item
+        *ngFor="let item of items"
+        [ngClass]="{
+          'disabled': item.is_full || item.is_past || item.is_before_next_batch,
+          'invalid': (item.is_full || item.is_before_next_batch) && !item.is_past
+        }"
+        (click)="select(item)"
+        [disabled]="item.is_full || item.is_past || item.is_before_next_batch"
+        button>
+        <ion-label>
+          <span class="hour-label">
+            {{ item.start_hour | deliveryHour }} - {{ item.end_hour | deliveryHour }}
+          </span>
+          <ion-badge *ngIf="item.is_full && !item.is_past" color="danger">
+            CHEIO
+          </ion-badge>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

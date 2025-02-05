@@ -1,0 +1,174 @@
+<ion-header>
+  <ion-toolbar class="m-app-header">
+    <ion-buttons slot="start" *ngIf="isFirstAccess">
+      <ion-button icon-only></ion-button>
+    </ion-buttons>
+    <ion-title>
+      Cartão de crédito
+    </ion-title>
+    <ion-buttons slot="end" *ngIf="isFirstAccess">
+      <ion-button icon-only (click)="skipCardRegister()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form style="margin-top: 0" class="icon-form form-slider" [formGroup]="form" novalidate>
+    <!-- Substituindo ion-slides por swiper-container -->
+    <swiper-container
+      #mySlider
+      class="fix-slide-flip"
+      [slides-per-view]="1"
+      [space-between]="10"
+      [allow-touch-move]="false"
+    >
+      <swiper-slide>
+        <ion-grid>
+          <ion-row class="auto-height">
+            <ion-col>
+              <ion-item>
+                <ion-label color="primary" position="floating">{{ 'CARD_NUMBER' | translate }}</ion-label>
+                <ion-input
+                  tabindex="-1"
+                  formControlName="cardNumber"
+                  type="tel"
+                  ccNumber
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cardNumber?.length">
+            <li *ngFor="let error of formErrors.getErrors()?.cardNumber">
+              {{ error }}
+            </li>
+          </ul>
+
+          <ion-row class="auto-height">
+            <ion-col>
+              <ion-item>
+                <ion-label color="primary" position="floating">{{ 'CARD_BRAND_ID' | translate }}</ion-label>
+                <ion-select tabindex="-1" formControlName="cardBrandId">
+                  <ion-select-option *ngFor="let cardBrand of cardBrands" [value]="cardBrand.value">
+                    {{ cardBrand.label }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+            <ion-col size="2" class="brand-icon-form-container">
+              <ion-item>
+                <brand-icon item-start [brandId]="currentBrandId"></brand-icon>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cardBrandId?.length">
+            <li *ngFor="let error of formErrors.getErrors()?.cardBrandId">
+              {{ error }}
+            </li>
+          </ul>
+
+          <ion-row class="auto-height">
+            <ion-col size="6">
+              <ion-item>
+                <ion-label color="primary" position="floating">
+                  {{ 'EXPIRATION_DATE' | translate }}
+                </ion-label>
+                <ion-input
+                  tabindex="-1"
+                  formControlName="expiration"
+                  #inputExpiration
+                  maxlength="5"
+                  type="tel"
+                  id="inputExpiration"
+                ></ion-input>
+              </ion-item>
+              <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.expiration?.length">
+                <li *ngFor="let error of formErrors.getErrors()?.expiration">
+                  {{ error }}
+                </li>
+              </ul>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+            <ion-col size="5">
+              <ion-item>
+                <ion-label color="primary" position="floating">{{ 'CVV' | translate }}</ion-label>
+                <ion-input
+                  tabindex="-1"
+                  formControlName="cvv"
+                  #inputCvv
+                  maxlength="4"
+                  type="tel"
+                  ccCvc
+                ></ion-input>
+                <ion-icon name="card" class="cvv-indicator" slot="end"></ion-icon>
+              </ion-item>
+              <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cvv?.length">
+                <li *ngFor="let error of formErrors.getErrors()?.cvv">
+                  {{ error }}
+                </li>
+              </ul>
+            </ion-col>
+          </ion-row>
+          <div class="space-small"></div>
+          <div class="box-submit-btn">
+            <ion-button
+              type="button"
+              (click)="goToFormStep(formSteps.STEP_HOLDER_INFO)"
+              expand="block"
+              color="default-button"
+            >
+              {{ 'CONTINUE' | translate }}
+            </ion-button>
+          </div>
+        </ion-grid>
+      </swiper-slide>
+
+      <swiper-slide>
+        <ion-list>
+          <ion-item>
+            <ion-label color="primary" position="floating">{{ 'CARD_HOLDER_NAME' | translate }}</ion-label>
+            <ion-input tabindex="-1" formControlName="cardHolderName" type="text"></ion-input>
+          </ion-item>
+          <div class="tip-input">
+            {{ 'CARD_HOLDER_NAME_TIP' | translate }}
+          </div>
+          <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cardHolderName?.length">
+            <li *ngFor="let error of formErrors.getErrors()?.cardHolderName">
+              {{ error }}
+            </li>
+          </ul>
+          <ion-item>
+            <ion-label color="primary" position="floating">{{ 'CARD_HOLDER_ID' | translate }}</ion-label>
+            <ion-input
+              tabindex="-1"
+              formControlName="cardHolderId"
+              id="inputCardHolderId"
+              type="tel"
+            ></ion-input>
+          </ion-item>
+          <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cardHolderId?.length">
+            <li *ngFor="let error of formErrors.getErrors()?.cardHolderId">
+              {{ error }}
+            </li>
+          </ul>
+          <div class="space-small"></div>
+          <div class="box-submit-btn">
+            <ion-button type="button" (click)="submitForm()" expand="block">
+              {{ 'SAVE_CARD' | translate }}
+            </ion-button>
+          </div>
+        </ion-list>
+      </swiper-slide>
+    </swiper-container>
+
+    <div class="space-small"></div>
+    <div class="brands-list">
+      <ul>
+        <li *ngFor="let brand of cardBrands">
+          <brand-icon slot="start" [brandId]="brand.value"></brand-icon>
+        </li>
+      </ul>
+    </div>
+  </form>
+</ion-content>

@@ -1,0 +1,27 @@
+page-add-address-simple {
+  ion-slides {
+    height: auto;
+    min-height: 100%;
+  }
+
+  ion-list {
+    .grid {
+      padding: 0;
+    }
+
+    .col {
+      padding: 0 5px 0 0;
+    }
+  }
+
+  .item-without-complement {
+    .item-inner {
+      border-bottom: none !important;
+    }
+  }
+
+  .not-cep {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}

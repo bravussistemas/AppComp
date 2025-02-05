@@ -1,0 +1,88 @@
+page-register-credit-card {
+  .secure-data-tip {
+    col {
+    }
+
+    ion-row {
+      height: 45px;
+    }
+
+    * {
+      color: #999999 !important;
+      font-size: 1.45rem;
+    }
+
+    ion-icon {
+      font-size: 2rem !important;
+    }
+  }
+
+  .box-submit-btn {
+    padding: 0 10px;
+  }
+
+  .list-input-errors {
+    text-align: left !important;
+  }
+
+  .btn-float-input-scan-card {
+    margin: 0 !important;
+  }
+
+  .brands-list {
+    max-width: 300px;
+    margin: auto;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      list-style: none;
+      height: 40px;
+
+      li {
+        flex: 1;
+        padding: 5px;
+
+        brand-icon {
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+          border-radius: 5px;
+
+          i.svg-icon {
+            max-width: 100%;
+            width: 100% !important;
+            height: 30px !important;
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+
+  .cardNumberBox {
+    display: flex;
+  }
+
+  .brand-icon-form-container {
+    align-items: flex-end;
+    max-width: 40px;
+    display: flex;
+
+    ion-item {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    brand-icon {
+      padding: 0;
+      margin: 0;
+
+      i {
+        height: 20px !important;
+        width: 32px !important;
+      }
+    }
+  }
+}

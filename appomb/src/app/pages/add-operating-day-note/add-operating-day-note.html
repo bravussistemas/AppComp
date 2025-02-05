@@ -1,0 +1,155 @@
+<ion-header>
+  <app-header
+    [title]="store?.name"
+    [subTitle]="store?.address?.get_simple_address"></app-header>
+
+  <ion-toolbar *ngIf="user?.is_staff" class="ion-padding">
+    <ion-segment [(ngModel)]="noteType" (ionChange)="onSegmentChanged($event)">
+      <ion-segment-button [value]="noteTypeEnum.NORMAL">
+        Simples
+      </ion-segment-button>
+      <ion-segment-button [value]="noteTypeEnum.WARNING">
+        Pop-up
+      </ion-segment-button>
+      <ion-segment-button [value]="noteTypeEnum.SUBTITLE">
+        Subtítulo
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" *ngIf="activeView === 'LIST'">
+    <ion-fab-button (click)="changeToView('FORM')" color="success">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" *ngIf="activeView === 'FORM'">
+    <ion-fab-button (click)="headerBtnCreateClick()" color="success">
+      <ion-icon name="send"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="start" *ngIf="activeView === 'FORM'">
+    <ion-fab-button (click)="changeToView('LIST')" color="danger">
+      <ion-icon name="close"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ng-container *ngIf="activeView === 'LIST'">
+    <ion-item-divider>Mensagem atual</ion-item-divider>
+    <ion-list>
+      <ng-container *ngIf="!hasNote()">
+        <p class="ion-text-center">Nenhuma mensagem ativa</p>
+      </ng-container>
+      <ng-container *ngIf="hasNote()">
+        <ion-item>
+          <ion-label>
+            <h2>{{ currentNote.title }}</h2>
+            <h3>{{ currentNote.message }}</h3>
+            <p>{{ currentNote.get_repeat_period_display }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button (click)="setActive(currentNote)" color="dark">
+              <strong>Desativar</strong>
+            </ion-button>
+            <ion-button color="danger" (click)="deleteNote(currentNote)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+
+    <ion-item-divider>Outras mensagens</ion-item-divider>
+    <ion-list>
+      <ng-container *ngFor="let item of currentNoteList">
+        <ion-item *ngIf="!currentNote || item.id !== currentNote.id">
+          <ion-label>
+            <h2 class="ion-text-color-medium">{{ item.title }}</h2>
+            <h3 class="ion-text-color-medium">{{ item.message }}</h3>
+            <p class="ion-text-color-medium">{{ item.get_repeat_period_display }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button (click)="setActive(item)" color="success">
+              <strong>Ativar</strong>
+            </ion-button>
+            <ion-button color="danger" (click)="deleteNote(item)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="activeView === 'FORM'">
+    <form [formGroup]="form" novalidate *ngIf="loaded">
+      <ion-list>
+        <div *ngIf="noteType === noteTypeEnum.WARNING">
+          <ion-item>
+            <ion-label color="primary" position="stacked">Exibir em toda abertura do app?</ion-label>
+            <ion-checkbox formControlName="showAllOpen"></ion-checkbox>
+          </ion-item>
+        </div>
+
+        <ion-item>
+          <ion-label color="primary" position="stacked">Dia</ion-label>
+          <ion-input (click)="openDatePicker()" type="text" formControlName="day" readonly
+                     [value]="day | amDateFormat:'DD/MM/YYYY'"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label color="primary" position="stacked">Repetir</ion-label>
+          <ion-select [(ngModel)]="selectedRepeatPeriod" formControlName="repeat_period">
+            <ion-select-option *ngFor="let period of periods" [value]="period.value">{{ period.label }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().repeat_period?.length">
+          <li *ngFor="let error of formErrors.getErrors().repeat_period">
+            {{ error }}
+          </li>
+        </ul>
+        <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().popup_type?.length">
+          <li *ngFor="let error of formErrors.getErrors().popup_type">
+            {{ error }}
+          </li>
+        </ul>
+
+        <div *ngIf="noteType === noteTypeEnum.WARNING">
+          <ion-item>
+            <ion-label color="primary" position="stacked">Tipo do pop-up</ion-label>
+            <ion-select [(ngModel)]="selectedPopupType" formControlName="popup_type">
+              <ion-select-option *ngFor="let poptype of popupTypes" [value]="poptype.value">{{ poptype.label }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ng-container *ngIf="selectedPopupType == 1">
+            <ion-item>
+              <ion-label color="primary" position="stacked">Número da versão (ex: 1.12.2)</ion-label>
+              <ion-input formControlName="app_version_to_update" type="text"></ion-input>
+            </ion-item>
+          </ng-container>
+
+          <ion-item>
+            <ion-label color="primary" position="stacked">Imagem do pop-up</ion-label>
+            <ion-input formControlName="image" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label color="primary" position="stacked">Título</ion-label>
+            <ion-input formControlName="title" type="text"></ion-input>
+          </ion-item>
+        </div>
+
+        <ion-item>
+          <ion-label color="primary" position="stacked">Mensagem</ion-label>
+          <ion-textarea formControlName="message"></ion-textarea>
+        </ion-item>
+      </ion-list>
+    </form>
+  </ng-container>
+
+</ion-content>

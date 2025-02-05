@@ -1,0 +1,59 @@
+<ion-header>
+  <app-header title="Agendar entrega"></app-header>
+</ion-header>
+
+<ion-content>
+  <!-- Spinner enquanto carrega -->
+  <ion-spinner
+    *ngIf="loadingHelper.isLoading('getStoreNextValidOpenedDays'); else mainContent"
+    class="page-spinner"
+  ></ion-spinner>
+
+  <!-- Conteúdo principal -->
+  <ng-template #mainContent>
+    <div class="main-content">
+      <p>Qual a melhor data para enviarmos o seu pedido?</p>
+      <hr>
+
+      <!-- Formulário -->
+      <form id="myForm" [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+        <!-- Campo de data -->
+        <ion-item>
+          <ion-label position="floating" color="primary">Data</ion-label>
+          <ion-select formControlName="date" placeholder="Data">
+            <ion-select-option *ngFor="let day of days" [value]="day">
+              {{ day | date: 'dd/MM - EEEE' }}
+              {{ day === today ? ' (Hoje)' : '' }}
+              {{ day === tomorrow ? ' (Amanhã)' : '' }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <!-- Erros do campo data -->
+        <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().date?.length">
+          <li *ngFor="let error of formErrors.getErrors().date">
+            {{ error }}
+          </li>
+        </ul>
+
+        <!-- Campo de observação -->
+        <ion-item>
+          <ion-label position="stacked" color="primary">Observação</ion-label>
+          <ion-textarea formControlName="observation"></ion-textarea>
+        </ion-item>
+        <!-- Erros do campo observação -->
+        <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().observation?.length">
+          <li *ngFor="let error of formErrors.getErrors().observation">
+            {{ error }}
+          </li>
+        </ul>
+
+        <div class="space-small"></div>
+
+        <!-- Botão salvar -->
+        <ion-button expand="block" type="submit" [disabled]="form.invalid">
+          <strong>Salvar</strong>
+        </ion-button>
+      </form>
+    </div>
+  </ng-template>
+</ion-content>

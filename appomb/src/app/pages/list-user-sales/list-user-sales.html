@@ -1,0 +1,81 @@
+<ion-header>
+    <ng-container *ngIf="!continueBuying">
+      <app-header 
+        [title]="store?.name" 
+        [subTitle]="store?.address?.get_simple_address">
+      </app-header>
+    </ng-container>
+    <ng-container *ngIf="continueBuying">
+      <ion-toolbar color="primary">
+        <ion-title *ngIf="store && !isStoreDelivery">
+          {{ 'MY_RESERVATIONS' | translate }}
+        </ion-title>
+        <ion-title *ngIf="store && isStoreDelivery">
+          {{ 'MY_PURCHASES' | translate }}
+        </ion-title>
+      </ion-toolbar>
+    </ng-container>
+  </ion-header>
+  
+  <ion-content #rootContent>
+    <ion-spinner 
+      *ngIf="loadingHelper.isLoading('items')" 
+      class="page-spinner" 
+      [showTimeout]="800">
+    </ion-spinner>
+  
+    <div class="list-thumb-round">
+      <ion-list>
+        <ng-container *ngFor="let day of days">
+          <!-- HEADER -->
+          <ion-item-divider color="light">
+            <strong>{{ day | amDateFormat:'dddd' }}</strong>, {{ day | amDateFormat:'DD/MM/YYYY' }}
+          </ion-item-divider>
+  
+          <!-- ITEMS -->
+          <ion-item *ngFor="let item of items[day]" lines="full">
+            <product-img item-start [product]="item.product"></product-img>
+            <ion-grid>
+              <ion-row class="menu-product-item">
+                <ion-col size="6">
+                  <product-details [product]="item.product"></product-details>
+                </ion-col>
+                <ion-col size="3" class="menu-product-amount">
+                  <span class="amount" [ngClass]="{'disabled-text': item.amount === 0}">
+                    <strong>{{ item.amount }}</strong>
+                    <small>un</small>
+                  </span>
+                </ion-col>
+                <ion-col size="3" class="total-price">
+                  <span class="price" [ngClass]="{'disabled-text': item.amount === 0}">
+                    {{ item.total | currency: "BRL": true }}
+                  </span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+  
+          <!-- FOOTER -->
+          <ion-item-divider class="footer-total">
+            <ion-grid>
+              <ion-row class="menu-product-item">
+                <ion-col size="9" class="text-right">
+                  <strong>Total:</strong>
+                </ion-col>
+                <ion-col size="3" class="total-price">
+                  <span>
+                    {{ total[day]?.total | currency: "BRL": true }}
+                  </span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item-divider>
+        </ng-container>
+      </ion-list>
+    </div>
+  
+    <div *ngIf="!loadingHelper.isLoading('items') && (!days || !days.length)">
+      <page-message-box [text]="'Nenhuma compra até o momento.'"></page-message-box>
+    </div>
+  </ion-content>
+  

@@ -1,0 +1,76 @@
+adm-list-dispatch-orders {
+
+  .dispatch-list {
+    ion-item {
+      border-bottom: 15px solid #ffffff;
+    }
+
+    ion-avatar {
+      padding-left: 20px;
+    }
+
+    .product-list {
+      word-wrap: break-word;
+      white-space: initial;
+      font-size: 12px;
+    }
+
+    .name-color {
+      color: #494949;
+      white-space: normal;
+      line-height: initial;
+
+    }
+
+    .col-buttons-client {
+      ion-icon {
+        display: block;
+      }
+    }
+
+    .item-inner {
+      padding-right: 0 !important;
+    }
+
+    ion-grid {
+      padding: 0 !important;
+    }
+  }
+
+  .items-group {
+    border: 2px solid #7a7a7a;
+    border-radius: 8px;
+    margin: 6px;
+    overflow: hidden;
+
+    adm-dispatch-list-item {
+      display: none;
+    }
+
+    ion-item-divider {
+      padding: 10px;
+      font-size: 19px;
+      font-weight: bold;
+      background: #222;
+      color: #fff;
+    }
+
+    .items-group {
+      ion-item-divider {
+        background: #7a7a7a;
+      }
+    }
+
+    &.opened {
+      adm-dispatch-list-item {
+        display: block;
+      }
+
+      //border: 2px solid #222222;
+      //
+      //ion-item-divider {
+      //  background: #222222;
+      //}
+    }
+  }
+}

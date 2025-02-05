@@ -1,0 +1,13 @@
+<div class="secondary-menu">
+    <ng-container *ngFor="let item of items">
+      <button
+        menuClose
+        ion-item
+        *ngIf="item.hidden && item.hidden()"
+        [ngClass]="item.cssClass || 'dummy'"
+        (click)="item.handler ? item.handler() : null">
+        <ion-icon [name]="item.icon" slot="start" color="text-disabled"></ion-icon>
+        <span [innerHTML]="item.title | translate"></span>
+      </button>
+    </ng-container>
+  </div>

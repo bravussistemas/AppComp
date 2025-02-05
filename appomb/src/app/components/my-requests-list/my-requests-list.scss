@@ -1,0 +1,164 @@
+my-requests-list {
+  .req-item {
+    display: flex;
+  }
+
+  ion-card.card-md {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+    margin-bottom: 30px;
+  }
+
+  .req-prod-image {
+    max-height: 80px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .img-data {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .img-data-title {
+      color: #ffffff;
+      letter-spacing: -1px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.5em;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 1);
+    }
+
+    .img-data-subtitle {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 1);
+    }
+
+    img {
+      filter: gray; /* IE6-9 */
+      -webkit-filter: grayscale(0.5); /* Google Chrome, Safari 6+ & Opera 15+ */
+      filter: grayscale(0.5); /* Microsoft Edge and Firefox 35+ */
+    }
+  }
+
+  .req-content {
+    flex: 1;
+    font-size: 12px;
+
+    h2 {
+      color: #373737;
+      font-weight: bold;
+      font-size: 1.2em;
+      text-transform: uppercase;
+
+      span {
+        opacity: 0.7;
+      }
+    }
+
+    h3 {
+      color: color($colors, 'primary');
+      font-weight: bold;
+      font-size: 1.2em;
+      text-transform: uppercase;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 3px 0;
+        padding: 0;
+      }
+    }
+
+    .prod-amount {
+      font-weight: bold;
+    }
+
+    .prod-name {
+    }
+
+    .req-when {
+      font-size: 1.1em;
+      text-transform: uppercase;
+      color: #116ed6;
+    }
+
+  }
+
+  .req-type-icon {
+    font-size: 1.6em;
+    color: #097038;
+  }
+
+  .item-title {
+    display: flex;
+    font-size: 1.3em !important;
+
+    .price-item {
+      margin-left: auto;
+    }
+  }
+
+  .item-id {
+    opacity: 0.5;
+  }
+
+  .address {
+    font-weight: normal !important;
+  }
+
+  //.req-taken {
+  //
+  //  .req-content {
+  //    h3 {
+  //      color: rgba(0, 0, 0, 0.5);
+  //    }
+  //  }
+  //
+  //  .req-type-icon {
+  //    color: rgba(4, 30, 15, 0.4);
+  //  }
+  //
+  //  .req-prod-image {
+  //    background: #383838;
+  //    img {
+  //      opacity: 0.7;
+  //      filter: gray; /* IE6-9 */
+  //      -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+  //      filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+  //    }
+  //  }
+  //}
+
+  .problem-reported {
+    padding: 10px;
+    max-width: 250px;
+    margin: auto;
+    text-align: center;
+    color: #92747e;
+  }
+
+  .rating {
+    display: flex;
+    justify-content: center;
+
+    &.loading-rating {
+      opacity: 0.3;
+    }
+  }
+}

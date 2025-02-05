@@ -1,0 +1,68 @@
+<ion-header #header class="shadowless" [ngClass]="{ 'hide-back-button': loading() }">
+  <ion-toolbar color="madeira">
+    <!-- Botão do menu lateral -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <!-- Título dinâmico -->
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="store-list">
+  <!-- Banner do topo -->
+  <app-hero-banner *ngIf="bannerSrc && !loading()" [src]="bannerSrc"></app-hero-banner>
+
+  <!-- Botões flutuantes para reordenação -->
+  <ng-container *ngIf="mustShowStoreList() && isAdmin">
+    <ion-fab vertical="bottom" horizontal="end" *ngIf="isReordering">
+      <ion-fab-button color="green-button" (click)="saveReorder()">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-fab vertical="bottom" horizontal="start" *ngIf="isReordering">
+      <ion-fab-button color="red-button-dark" (click)="cancelReorder()">
+        <ion-icon name="close"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-fab vertical="bottom" horizontal="end" *ngIf="!isReordering">
+      <ion-fab-button color="light-button" (click)="startReorder()">
+        <ion-icon name="git-compare"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-container>
+
+  <!-- Spinner de carregamento -->
+  <ion-spinner *ngIf="loading()" class="page-spinner"></ion-spinner>
+
+  <!-- Lista de lojas -->
+  <div class="wrapper-login-page fadeIn" *ngIf="mustShowStoreList()">
+    <store-list
+      [stores]="storesByType?.delivery"
+      [title]="sectionTitles.delivery"
+      [reordering]="reorder"
+      (chooseStore)="chooseStore($event)"
+    ></store-list>
+
+    <store-list
+      [stores]="storesByType?.normal"
+      [title]="sectionTitles.normal"
+      [reordering]="reorder"
+      (chooseStore)="chooseStore($event)"
+    ></store-list>
+
+    <store-list
+      [stores]="storesByType?.points"
+      [title]="sectionTitles.points"
+      [reordering]="reorder"
+      (chooseStore)="chooseStore($event)"
+    ></store-list>
+
+    <store-list
+      [stores]="storesByType?.others"
+      [title]="sectionTitles.others"
+      [reordering]="reorder"
+      (chooseStore)="chooseStore($event)"
+    ></store-list>
+  </div>
+</ion-content>

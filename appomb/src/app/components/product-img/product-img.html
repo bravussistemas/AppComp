@@ -1,0 +1,8 @@
+<ion-thumbnail item-start>
+    <img
+            item-start
+            class="thumb-product"
+            [src]="parseThumbUrl(product?.image_thumbnail?.original)"
+            tappable
+            (click)="goToDetail()">
+</ion-thumbnail>

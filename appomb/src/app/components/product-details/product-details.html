@@ -1,0 +1,38 @@
+<ion-row>
+  <ion-col class="title-product line-break">
+    <h4 class="name-product" tappable (click)="goToDetail()">
+      <span [innerHTML]="product?.name_formatted || product?.name"></span>
+      <strong class="price-product">{{ product?.price | currency: "BRL": true }}</strong>
+    </h4>
+  </ion-col>
+
+  <ng-container *ngIf="!simpleView">
+    <ng-container *ngIf="enableAdminView">
+      <ion-col class="title-product line-break">
+        <div class="menu-admin">
+          <ng-content></ng-content>
+        </div>
+      </ion-col>
+    </ng-container>
+
+    <ng-container *ngIf="!enableAdminView">
+      <ion-col
+        *ngIf="nextBatch && mustShowNextBatch()"
+        class="title-product product-label-box line-break"
+      >
+        <h4 class="product-label label-light" [title]="'NEXT_BATCH_THIS_BREAD_AT' | translate:{'nextBatch': nextBatch | batchHour}">
+          <span>{{ nextBatch | batchHour }}</span>
+        </h4>
+      </ion-col>
+
+      <ion-col
+        *ngIf="nextBatch && productInStore() && !mustShowNextBatch()"
+        class="title-product product-label-box line-break"
+      >
+        <h4 class="product-label label-dark" [title]="'BREAD_AVAILABLE_IN_STORE' | translate">
+          <span>{{ 'IN_STORE' | translate }}</span>
+        </h4>
+      </ion-col>
+    </ng-container>
+  </ng-container>
+</ion-row>

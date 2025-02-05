@@ -1,0 +1,97 @@
+<ion-header>
+  <app-header
+    [title]="store?.name"
+    [subTitle]="store?.address?.get_simple_address"
+    [buttonIcon]="'refresh'"
+    (headerBtnClick)="headerBtnClick()">
+  </app-header>
+</ion-header>
+
+<ion-content [ngClass]="{'with-select': canChooseEmployee()}">
+  <ion-toolbar>
+    <div class="toolbar-lines-content">
+      <!-- Segmentos -->
+      <div class="toolbar-line">
+        <ion-segment [(ngModel)]="section" (ionChange)="onSegmentChanged($event)">
+          <ion-segment-button [value]="sections.DAY">Dia</ion-segment-button>
+          <ion-segment-button [value]="sections.WEEK">Semana</ion-segment-button>
+          <ion-segment-button [value]="sections.MONTH">Mês</ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <!-- Seleção de Entregadores -->
+      <ng-container *ngIf="!loadingHelper.isLoading('updateBalanceDay')">
+        <div class="toolbar-line" id="bottom-btn-content" *ngIf="canChooseEmployee()">
+          <div class="reservation-wrapper-inner borded" style="padding-top: 15px;">
+            <div *ngIf="loadingHelper.isLoading('loadDeliveryEmployees')">
+              carregando entregadores...
+            </div>
+            <div *ngIf="!loadingHelper.isLoading('loadDeliveryEmployees')" [formGroup]="form">
+              <ion-select formControlName="delivery_employee" placeholder="Selecionar entregador...">
+                <ion-select-option *ngFor="let emp of deliveryEmployees" [value]="emp.id">
+                  {{ emp.name }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ion-toolbar>
+
+  <!-- Spinner de Carregamento -->
+  <ion-spinner
+    *ngIf="loadingHelper.isLoading('updateBalanceDay')"
+    class="page-spinner"
+    style="margin-top: 0;">
+  </ion-spinner>
+
+  <!-- Histórico e Saldo -->
+  <ng-container *ngIf="!loadingHelper.isLoading('updateBalanceDay')">
+    <div [innerHTML]="storeBalanceContentHtml"></div>
+
+    <h4 class="ion-text-center ion-margin-top ion-margin-bottom">Histórico de pré-pago</h4>
+    <div *ngIf="!clientCreditHistory?.length" class="ion-text-center ion-padding">
+      Nenhum registro no período.
+    </div>
+    <ion-list *ngIf="clientCreditHistory?.length">
+      <ion-item *ngFor="let item of clientCreditHistory">
+        <ion-label>
+          <ion-note>{{ item.when | date:'short' }}</ion-note>
+          <p>{{ item.user_email }}</p>
+          <h3 class="break-line">
+            <strong>{{ item.user_name }}</strong> {{ parseAction(item.type_transaction) }}
+            <strong>{{ item.action_amount | currency:"BRL":true }}</strong>
+          </h3>
+        </ion-label>
+        <ion-note slot="end">
+          <strong [ngStyle]="{color: parseActionColor(item.type_transaction)}">
+            {{ item.result_amount | currency:"BRL":true }}
+          </strong>
+        </ion-note>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid id="bottom-btn-content" class="hide-open-keyboard">
+      <ion-row>
+        <ion-col size="3">
+          <ion-button expand="block" fill="clear" (click)="prevDay()">
+            <ion-icon name="arrow-dropleft"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" class="ion-text-center">
+          <ion-label [innerHTML]="getDateLabel()"></ion-label>
+        </ion-col>
+        <ion-col size="3">
+          <ion-button expand="block" fill="clear" (click)="nextDay()">
+            <ion-icon name="arrow-dropright"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

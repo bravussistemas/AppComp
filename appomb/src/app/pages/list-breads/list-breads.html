@@ -1,0 +1,81 @@
+<ion-header>
+  <app-header
+    [buttonIcon]="enableSearch ? 'close' : 'search'"
+    (headerBtnClick)="enableSearch ? stopSearch() : startSearch()">
+  </app-header>
+  <ion-toolbar no-border-top color="primary" *ngIf="enableSearch">
+    <ion-searchbar
+      *ngIf="products?.length"
+      [(ngModel)]="searchText"
+      [showCancelButton]="false"
+      [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+      [animated]="true">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Admin Controls -->
+  <ng-container *ngIf="isAdmin" ion-fixed>
+    <ion-fab *ngIf="reorder" bottom right>
+      <button (click)="saveReorder()" color="green-button" ion-fab>
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-fab *ngIf="reorder" bottom left>
+      <button (click)="cancelReorder()" color="red-button-dark" ion-fab>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-fab *ngIf="!reorder" bottom right>
+      <button ion-fab color="light-button">
+        <ion-icon name="arrow-dropup"></ion-icon>
+      </button>
+      <ion-fab-list side="top">
+        <button ion-fab (click)="openEditProductsModal()">
+          <ion-icon name="clipboard"></ion-icon>
+        </button>
+        <button ion-fab (click)="startReorder()">
+          <ion-icon name="git-compare"></ion-icon>
+        </button>
+      </ion-fab-list>
+    </ion-fab>
+  </ng-container>
+
+  <!-- Informational Message -->
+  <ion-item color="madeira" *ngIf="canShowMsg === true">
+    <p class="line-break">
+      Toque sobre cada item e veja <br>
+      informações detalhadas sobre os nossos produtos!
+    </p>
+    <button ion-button item-end color="aqua" clear (click)="hideMsg()">
+      OK, ENTENDI
+    </button>
+  </ion-item>
+
+  <!-- Product List -->
+  <div class="list-thumb-round" [ngClass]="{'safe-area-bottom': isAdmin}">
+    <!-- Spinner while loading -->
+    <ion-spinner
+      [showTimeout]="800"
+      *ngIf="loadingHelper.isLoading('products')"
+      class="page-spinner">
+    </ion-spinner>
+
+    <!-- Reorderable Product List -->
+    <ion-list *ngIf="!loadingHelper.isLoading('products')">
+      <ion-reorder-group [disabled]="!reorder" (ionItemReorder)="reorderItems($event)">
+        <ion-item *ngFor="let product of products | productFilter: {name: searchText}"
+                  (click)="goToDetail(product)">
+          <product-img item-start
+                       [enableDetail]="false"
+                       [product]="product"></product-img>
+          <ion-grid class="menu-product-item">
+            <product-details [enableDetail]="false" [product]="product"></product-details>
+          </ion-grid>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+      </ion-reorder-group>
+    </ion-list>
+  </div>
+</ion-content>

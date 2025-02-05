@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Buscar Cidade</ion-title>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      #searchBar
+      *ngIf="!loadingHelper.isLoading('items')"
+      placeholder="Buscar cidade..."
+      [(ngModel)]="searchText"
+      [debounce]="600"
+      [showCancelButton]="false"
+    >
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Mensagem de erro -->
+  <page-message-box *ngIf="searchMade && !items.length" text="Cidade não encontrada."></page-message-box>
+
+  <!-- Spinner de carregamento -->
+  <ion-spinner *ngIf="loadingHelper.isLoading('items')" class="page-spinner"></ion-spinner>
+
+  <!-- Lista de resultados -->
+  <ion-list *ngIf="!loadingHelper.isLoading('items')">
+    <ion-item *ngFor="let item of items | districtFilter: { search: searchText }" (click)="select(item)">
+      <h2>{{ item.name }}</h2>
+    </ion-item>
+  </ion-list>
+</ion-content>

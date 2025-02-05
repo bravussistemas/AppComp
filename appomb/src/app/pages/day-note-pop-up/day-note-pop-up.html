@@ -1,0 +1,53 @@
+<ion-content>
+  <ion-card class="card-full">
+    <!-- Exibe imagem se não for vídeo -->
+    <img *ngIf="note.url_image && !note.is_video" [src]="note.url_image" style="min-height: 150px; background: #f2f2f2">
+
+    <!-- Exibe vídeo se for vídeo -->
+    <iframe
+      *ngIf="note.is_video"
+      width="100%"
+      style="min-height: 150px; background: #f2f2f2"
+      [src]="noteVideoUrl()"
+      frameborder="0"
+      gesture="media"
+      allow="encrypted-media"
+      allowfullscreen>
+    </iframe>
+
+    <!-- Cabeçalho do Card -->
+    <ion-card-header>
+      <strong class="line-break">{{ note.title }}</strong>
+    </ion-card-header>
+
+    <!-- Conteúdo do Card -->
+    <ion-card-content style="font-size: 1.55rem; text-align: justify;" [innerHTML]="note.message">
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <!-- Botões para Usuário Normal -->
+  <div *ngIf="role === 'normal'" class="footer-buttons">
+    <ion-button
+      *ngIf="note && note.is_app_update_notice"
+      color="medium"
+      expand="block"
+      (click)="openAppUpdate()">
+      <strong>ATUALIZAR</strong>
+    </ion-button>
+    <ion-button color="primary" expand="block" (click)="closeView()">
+      <strong>FECHAR</strong>
+    </ion-button>
+  </div>
+
+  <!-- Botões para Administrador -->
+  <div *ngIf="role === 'admin_review'" class="footer-buttons">
+    <ion-button color="danger" expand="block" (click)="dismiss(false)">
+      <strong>Continuar editando</strong>
+    </ion-button>
+    <ion-button color="success" expand="block" (click)="dismiss(true)">
+      <strong>Salvar</strong>
+    </ion-button>
+  </div>
+</ion-footer>

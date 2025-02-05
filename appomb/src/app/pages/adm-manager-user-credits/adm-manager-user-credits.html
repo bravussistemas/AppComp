@@ -1,0 +1,61 @@
+<ion-header>
+    <ion-toolbar color="primary" class="m-app-header">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Crédito</ion-title>
+    </ion-toolbar>
+  
+    <ion-toolbar color="primary">
+      <ion-searchbar
+        #searchBar
+        [(ngModel)]="searchTextToAdd"
+        [showCancelButton]="true"
+        placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}"
+        (ionInput)="onInputSearchToAdd($event)"
+        animated="true">
+      </ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <!-- Spinner de carregamento -->
+    <ion-spinner *ngIf="loadingHelper.isLoading('usersList')" class="page-spinner" name="crescent"></ion-spinner>
+  
+    <!-- Lista de Usuários -->
+    <ion-list *ngIf="!loadingHelper.isLoading('usersList')">
+      <ion-item
+        button
+        detail
+        *ngFor="let user of usersList"
+        (click)="detail(user.id)">
+        <ion-avatar slot="start">
+          <img *ngIf="user.profile?.user_photo" [src]="user.profile?.user_photo">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+          <p>{{ user.email }}</p>
+        </ion-label>
+        <div class="ion-text-end">
+          <strong>{{ user.credit_missing | currency: "BRL": true }}</strong>
+        </div>
+      </ion-item>
+    </ion-list>
+  
+    <!-- Botão de Carregar Mais -->
+    <ion-button
+      expand="block"
+      color="light"
+      *ngIf="usersList && usersList.length > 0 && canLoadMore"
+      [disabled]="loadingHelper.isLoading('usersListMore')"
+      (click)="loadMore()">
+      <ng-container *ngIf="!loadingHelper.isLoading('usersListMore')">
+        carregar mais
+        <ion-icon name="arrow-dropdown" slot="end"></ion-icon>
+      </ng-container>
+      <ng-container *ngIf="loadingHelper.isLoading('usersListMore')">
+        <ion-spinner color="light" name="crescent"></ion-spinner>
+      </ng-container>
+    </ion-button>
+  </ion-content>
+  

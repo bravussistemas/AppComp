@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar class="m-app-header" [ngClass]="{'enableBackButton': enableBackButton}">
+    <ion-title class="logo">{{ appName }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="no-scroll">
+  <form id="myForm" class="icon-form" [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+    <ion-list>
+      <ion-item [ngClass]="{'has-error': formErrors.getErrors().mobilePhone?.length}">
+        <ion-icon name="call" item-start></ion-icon>
+        <ion-input placeholder="{{ 'PHONE_PLACEHOLDER' | translate }}"
+                   formControlName="mobilePhone"
+                   #inputPhone
+                   type="tel"
+                   id="inputPhone">
+        </ion-input>
+      </ion-item>
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().mobilePhone?.length">
+        <li *ngFor="let error of formErrors.getErrors().mobilePhone">
+          {{ error }}
+        </li>
+      </ul>
+      <ion-item>
+        <ion-icon item-start></ion-icon>
+        <ion-label class="tip-input">{{ 'INPUT_YOUR_PHONE' | translate }}</ion-label>
+      </ion-item>
+      <button ion-button full block type="submit">{{ 'SEND' | translate }}</button>
+    </ion-list>
+  </form>
+</ion-content>

@@ -1,0 +1,34 @@
+<ion-header>
+  <app-header title="CADASTRAR CPF/CNPJ"></app-header>
+</ion-header>
+<ion-content padding>
+  <div class="main-content">
+    <!-- Formulário -->
+    <form id="myForm" [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+      <!-- Campo CPF/CNPJ -->
+      <ion-item>
+        <ion-label color="primary" floating>CPF/CNPJ</ion-label>
+        <ion-input
+          #input
+          id="input"
+          formControlName="document"
+          type="text"
+          placeholder="Digite seu CPF ou CNPJ"
+        ></ion-input>
+      </ion-item>
+
+      <!-- Mensagens de Erro -->
+      <div *ngIf="formErrors.submitted && formErrors.getErrors()?.document?.length" class="error-messages">
+        <p *ngFor="let error of formErrors.getErrors()?.document" class="error-message">
+          {{ error }}
+        </p>
+      </div>
+
+      <!-- Espaçamento -->
+      <div class="space-small"></div>
+
+      <!-- Botão de Submissão -->
+      <button ion-button full block type="submit" [disabled]="form.invalid"><strong>Salvar</strong></button>
+    </form>
+  </div>
+</ion-content>

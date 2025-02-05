@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar class="m-app-header">
+    <ion-title class="logo">
+      Criar uma conta
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form id="myForm" class="icon-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <ion-list>
+      
+      <!-- Campo Nome -->
+      <ion-item>
+        <ion-icon name="person" slot="start"></ion-icon>
+        <ion-input
+          placeholder="{{ 'USER_NAME' | translate }}"
+          formControlName="name"
+          type="text"
+        ></ion-input>
+      </ion-item>
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.name?.length">
+        <li *ngFor="let error of formErrors.getErrors().name">
+          {{ error }}
+        </li>
+      </ul>
+
+      <!-- Campo Sobrenome -->
+      <ion-item>
+        <ion-icon name="people" slot="start"></ion-icon>
+        <ion-input
+          placeholder="{{ 'LAST_NAME' | translate }}"
+          formControlName="lastName"
+          type="text"
+        ></ion-input>
+      </ion-item>
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.lastName?.length">
+        <li *ngFor="let error of formErrors.getErrors().lastName">
+          {{ error }}
+        </li>
+      </ul>
+
+      <!-- Campo E-mail -->
+      <ion-item>
+        <ion-icon name="mail" slot="start"></ion-icon>
+        <ion-input
+          placeholder="{{ 'EMAIL' | translate }}"
+          formControlName="email"
+          type="email"
+        ></ion-input>
+      </ion-item>
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.email?.length">
+        <li *ngFor="let error of formErrors.getErrors().email">
+          {{ error }}
+        </li>
+      </ul>
+
+      <!-- Campo Senha -->
+      <ion-item>
+        <ion-icon name="lock-closed" slot="start"></ion-icon>
+        <ion-input
+          placeholder="{{ 'PASSWORD' | translate }}"
+          formControlName="password"
+          type="password"
+        ></ion-input>
+      </ion-item>
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.password?.length">
+        <li *ngFor="let error of formErrors.getErrors().password">
+          {{ error }}
+        </li>
+      </ul>
+
+      <!-- Campo Confirmar Senha -->
+      <ion-item>
+        <ion-icon name="lock-closed" slot="start"></ion-icon>
+        <ion-input
+          placeholder="{{ 'CONFIRM_PASSWORD' | translate }}"
+          formControlName="confirmPassword"
+          type="password"
+        ></ion-input>
+      </ion-item>
+      <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.confirmPassword?.length">
+        <li *ngFor="let error of formErrors.getErrors().confirmPassword">
+          {{ error }}
+        </li>
+      </ul>
+
+      <div class="space-small"></div>
+      
+      <!-- Botão de Enviar -->
+      <ion-button expand="block" type="submit">Enviar</ion-button>
+
+    </ion-list>
+  </form>
+</ion-content>

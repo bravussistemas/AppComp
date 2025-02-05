@@ -1,0 +1,50 @@
+<ion-searchbar
+  *ngIf="items?.length"
+  [(ngModel)]="searchText"
+  [showCancelButton]="true"
+  [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+  [animated]="true">
+</ion-searchbar>
+
+<ion-progress-bar type="indeterminate" *ngIf="loadingHelper.isLoading('productsInventory')"></ion-progress-bar>
+
+<div *ngIf="!hasError() && notHasBreads() && !loadingHelper.isLoading('productsInventory')">
+  <page-message-box [text]="'EMPTY_PRODUCT_LIST_DAY' | translate"></page-message-box>
+</div>
+
+<ion-list *ngIf="!loadingHelper.isLoading('productsInventory')">
+  <ion-reorder-group [disabled]="!canReorder" (ionItemReorder)="reorderItems($event)">
+    <ion-item *ngFor="let item of items | productInventoryDayFilter: { name: searchText }">
+      <ion-grid class="menu-product-item">
+        <ion-row>
+          <ion-col size="2" class="clear-spacing left-item-icons col-side-icon-item">
+            <ion-row>
+              <ion-col size="12" class="clear-spacing">
+                <ion-progress-bar type="indeterminate" *ngIf="item.loading"></ion-progress-bar>
+                <button (click)="toggleProductDay(item)"
+                        *ngIf="!item.loading && !canReorder"
+                        ion-button
+                        item-start
+                        color="primary"
+                        fill="clear">
+                  <ion-icon [name]="item.is_visible ? 'eye' : 'eye-off'"></ion-icon>
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="10">
+            <product-details [product]="item.product"
+                            [alwaysShowNextBatch]="true"
+                            [enableDetail]="!canReorder"
+                            [nextBatch]="item.next_batch"></product-details>
+            <adm-product-amount-control
+              *ngIf="!canReorder"
+              [enableDetail]="!canReorder"
+              [day]="day"
+              [item]="item"></adm-product-amount-control>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-reorder-group>
+</ion-list>

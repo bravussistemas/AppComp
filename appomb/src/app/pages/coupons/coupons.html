@@ -1,0 +1,76 @@
+<ion-header>
+  <app-header title="CUPONS CADASTRADOS"></app-header>
+</ion-header>
+
+<ion-content>
+  <!-- Spinner de carregamento -->
+  <div class="main-content" *ngIf="loadingCoupons">
+    <ion-spinner class="page-spinner"></ion-spinner>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="main-content" *ngIf="!loadingCoupons">
+    <!-- Lista de cupons -->
+    <ng-container *ngIf="items && items.length; else noItems">
+      <ng-container *ngFor="let item of items">
+        <ion-card [ngClass]="{ 'invalid-coupon': isInvalid(item.id) }">
+          <ion-card-content>
+            <div class="coupon-box">
+              <!-- Ícone do cupom -->
+              <div class="coupon-icon">
+                <img src="assets/svg/icons/coupon.svg" alt="Cupom">
+              </div>
+              <!-- Detalhes do cupom -->
+              <div class="coupon-details">
+                <h1>
+                  {{ item.coupon.code }}
+                  <small *ngIf="item.coupon.title">{{ item.coupon.title }}</small>
+                </h1>
+              </div>
+            </div>
+
+            <!-- Descrição e regras -->
+            <div>
+              <div class="desc" *ngIf="item.coupon.description">
+                {{ item.coupon.description }}
+              </div>
+              <ul class="details-coupon" *ngIf="item.coupon.rules">
+                <li *ngFor="let rule of item.coupon.rules" [innerHTML]="rule"></li>
+              </ul>
+            </div>
+          </ion-card-content>
+
+          <!-- Mensagem de cupom inválido -->
+          <div class="warning-coupon-invalid" *ngIf="isInvalid(item.id)">
+            <small class="invalid-label">INVÁLIDO</small>
+            {{ gerCouponErrorMessage(item.id) }}
+          </div>
+        </ion-card>
+
+        <!-- Botão de exclusão -->
+        <div class="action-center">
+          <ion-button color="danger" (click)="delete(item.id)">
+            <strong>Remover cupom</strong>
+          </ion-button>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- Template para quando não há cupons -->
+    <ng-template #noItems>
+      <div class="page-icon">
+        <div class="icon-content">
+          <img src="assets/svg/icons/coupon.svg" alt="Sem cupons">
+        </div>
+        <div class="icon-legend">
+          Nenhum cupom ativo no momento
+        </div>
+      </div>
+      <div class="action-center">
+        <ion-button (click)="goToRegister()">
+          <strong>Cadastrar cupom</strong>
+        </ion-button>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

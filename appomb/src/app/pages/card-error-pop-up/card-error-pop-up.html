@@ -1,0 +1,64 @@
+<ion-content>
+  <ion-card class="card-full" *ngIf="!alreadyCheckSuccess">
+    <img src="assets/img/bg-error-card.jpg">
+    <ng-container *ngIf="!hasCustomMessage">
+      <ion-card-header>
+        <div class="line-break">
+          Ops, cartão recusado pela adquirente. Mas não se preocupe, acontece!
+        </div>
+      </ion-card-header>
+      <ion-card-content style="font-size: 1.55rem;text-align: justify;">
+        <strong style="font-size: 0.8em;">Verifique por favor</strong>
+        <ul id="ion-card-contentul">
+          <li>se os dados digitados estão corretos</li>
+          <li>se o cartão está na data de validade</li>
+          <li>se há limite de saldo</li>
+        </ul>
+        <br>
+        <div style="font-size: 0.9em; text-align: left;">
+          Ou consulte seu banco para saber se o cartão está habilitado para compras
+          online ou se foi bloqueado por motivos de segurança.
+        </div>
+      </ion-card-content>
+    </ng-container>
+    <ng-container *ngIf="hasCustomMessage">
+      <ion-card-header>
+        <div class="line-break">
+          Transação não aprovada =(
+        </div>
+      </ion-card-header>
+      <ion-card-content style="font-size: 1.55rem;text-align: justify;">
+        <strong style="font-size: 0.8em;">Motivo:</strong>
+        <br>
+        <div style="font-size: 0.9em; text-align: left;">
+          {{message}}
+        </div>
+      </ion-card-content>
+
+    </ng-container>
+  </ion-card>
+
+  <ion-card class="card-full" *ngIf="!hasCustomMessage && alreadyCheckSuccess">
+    <ion-card-header>
+      <div class="line-break">
+        Ok, vamos verificar o ocorrido e em breve entraremos em contato
+      </div>
+    </ion-card-header>
+  </ion-card>
+</ion-content>
+
+
+<ion-footer padding *ngIf="alreadyCheckSuccess || hasCustomMessage">
+  <button ion-button color="primary" block (click)="close()">
+    <strong>Fechar</strong>
+  </button>
+</ion-footer>
+
+<ion-footer padding *ngIf="!hasCustomMessage && !alreadyCheckSuccess">
+  <button ion-button color="darkGray" clear block (click)="alreadyCheck()">
+    <strong>Já verifiquei</strong>
+  </button>
+  <button ion-button color="primary" block (click)="close()">
+    <strong>Ok, vou verificar</strong>
+  </button>
+</ion-footer>

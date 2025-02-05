@@ -1,0 +1,77 @@
+page-coupons {
+  .desc {
+    color: color($colors, secondary);
+    margin: 5px 22px;
+    padding: 5px -4px;
+    text-transform: initial;
+    font-size: 11px;
+  }
+
+  h2 {
+    color: color($colors, primary);
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .warning-coupon-invalid {
+    display: none;
+    text-align: center;
+    color: color($colors, error);
+  }
+
+  .invalid-label {
+    display: none;
+    font-weight: bold;
+    color: color($colors, error);
+  }
+
+  .invalid-coupon {
+    .card-content {
+      opacity: 0.5;
+    }
+
+    .warning-coupon-invalid {
+      display: block;
+      padding: 20px;
+    }
+
+    .coupon-box {
+      text-decoration: line-through !important;
+    }
+
+    .invalid-label {
+      display: block;
+    }
+  }
+
+  .coupon-box {
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+
+    h1 {
+      color: color($colors, primary);
+      font-size: 2rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin: 0;
+      margin-left: 10px;
+
+      small {
+        display: block;
+        color: color($colors, gray);
+      }
+    }
+
+    .coupon-icon {
+      width: 50px;
+      padding: 5px;
+    }
+
+  }
+
+  .details-coupon {
+    margin: 0;
+    padding: 10px 0 10px 15px;
+  }
+}

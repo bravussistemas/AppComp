@@ -1,0 +1,11 @@
+page-list-user-sales {
+  ion-item-divider {
+    &.footer-total {
+      background-color: #e0e0e0 !important;
+    }
+  }
+  padding-top: 200px;
+  ion-label {
+    overflow: initial;
+  }
+}

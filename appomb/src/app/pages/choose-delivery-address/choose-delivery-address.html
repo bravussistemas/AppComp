@@ -1,0 +1,65 @@
+<ion-header #header [ngClass]="{'hide-back-button': loadingHelper.isLoading('addressList')}">
+  <ion-navbar color="light">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Endereço de entrega</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content id="scroll-fancy" [header-scrollable]="header">
+  <div class="choose-delivery-content safe-area-bottom">
+    <ion-spinner [showTimeout]="800" class="page-spinner" *ngIf="loadingHelper.isLoading('addressList')"></ion-spinner>
+
+    <ng-container *ngIf="!loadingHelper.isLoading('addressList')">
+
+      <div class="page-icon">
+        <div class="icon-content">
+          <img src="assets/icon/moto-location.svg">
+        </div>
+        <div class="icon-legend">
+          Onde entregaremos <br> o seu pedido?
+        </div>
+      </div>
+
+      <ng-container *ngIf="hasAddress">
+        <ion-item-divider sticky>
+          Seus endereços
+        </ion-item-divider>
+        <ng-container *ngIf="!addressAcceptableList || !addressAcceptableList.length">
+          <div style="text-align: center; margin: 25px auto;">
+            <button (click)="addAddress()" ion-button><strong>Cadastrar endereço</strong></button>
+          </div>
+        </ng-container>
+        <user-address-row *ngFor="let item of addressAcceptableList; trackBy: trackByFn;"
+                          [userAddress]="item"
+                          (click)="onSelectAddress(item)"
+                          (onDeleteAddress)="onDeleteAddress($event)"
+        ></user-address-row>
+        <ng-container *ngIf="addressNotAcceptableList && addressNotAcceptableList.length">
+          <ion-item-divider style="margin-top: 50px;" sticky>
+            Seus endereços <strong>sem cobertura pela loja</strong>
+          </ion-item-divider>
+          <user-address-row *ngFor="let item of addressNotAcceptableList; trackBy: trackByFn;"
+                            [userAddress]="item"
+                            (click)="onSelectAddress(item)"
+                            (onDeleteAddress)="onDeleteAddress($event)"
+          ></user-address-row>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!hasAddress">
+        <div style="text-align: center;">
+          <button (click)="addAddress()" ion-button><strong>Cadastrar endereço</strong></button>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  </div>
+
+  <ion-fab bottom right #fab *ngIf="hasAddress">
+    <button (click)="addAddress()" color="light-button" ion-fab>
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

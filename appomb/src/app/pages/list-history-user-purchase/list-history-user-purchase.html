@@ -1,0 +1,36 @@
+<ion-header>
+  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address"></app-header>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let item of items" tappable (click)="goToSaleDetail(item)">
+      <ion-label>
+        <h2>{{ item.price | currency: 'BRL': true }}</h2>
+        <h3>{{ item.transaction_identifier }}</h3>
+        <p>{{ item.date_sale | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</p>
+      </ion-label>
+      <ion-button
+        slot="end"
+        fill="clear"
+        [color]="item.status | transactionStatusColor"
+        class="disable-ripple"
+      >
+        <strong>{{ item.status_text }}</strong>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- Spinner de carregamento -->
+  <ion-spinner *ngIf="loadingHelper.isLoading('items')" class="page-spinner"></ion-spinner>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Mensagem de itens vazios -->
+  <div *ngIf="!loadingHelper.isLoading('items') && (!items || items.length === 0)">
+    <page-message-box [text]="'Nenhuma compra até o momento.'"></page-message-box>
+  </div>
+</ion-content>

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Buscar Estado</ion-title>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      #searchBar
+      *ngIf="!loadingHelper.isLoading('states')"
+      placeholder="Digite o nome do estado"
+      [(ngModel)]="searchText"
+      [debounce]="600"
+      [showCancelButton]="false"
+    >
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Mensagem quando nenhum estado é encontrado -->
+  <page-message-box *ngIf="searchMade && !items.length" text="Estado não encontrado."></page-message-box>
+
+  <!-- Spinner de carregamento -->
+  <ion-spinner *ngIf="loadingHelper.isLoading('states')" class="page-spinner"></ion-spinner>
+
+  <!-- Lista de estados -->
+  <ion-list *ngIf="!loadingHelper.isLoading('states')">
+    <ion-item *ngFor="let item of items | stateFilter: { search: searchText }" (click)="select(item)">
+      <h2>{{ item.abbr }}</h2>
+      <p>{{ item.name }}</p>
+    </ion-item>
+  </ion-list>
+</ion-content>

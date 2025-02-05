@@ -1,0 +1,14 @@
+<ion-card *ngIf="!closed" color="warningLight" class="text-medium">
+    <ion-card-header>
+        {{title}}
+    </ion-card-header>
+    <ion-card-content>
+        {{text}}
+    </ion-card-content>
+    <ion-item color="warningLight">
+        <button (click)="close()" ion-button icon-left clear item-end color="dark">
+            <ion-icon name="checkmark"></ion-icon>
+            {{ 'OK' | translate }}
+        </button>
+    </ion-item>
+</ion-card>
