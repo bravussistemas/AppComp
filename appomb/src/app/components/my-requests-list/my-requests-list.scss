@@ -1,3 +1,5 @@
+@import '../../../theme/variables.scss';
+
 my-requests-list {
   .req-item {
     display: flex;
@@ -68,7 +70,7 @@ my-requests-list {
     }
 
     h3 {
-      color: color($colors, 'primary');
+      color: map-get($colors, 'primary');
       font-weight: bold;
       font-size: 1.2em;
       text-transform: uppercase;

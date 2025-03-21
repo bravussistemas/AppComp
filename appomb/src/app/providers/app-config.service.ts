@@ -59,7 +59,7 @@ export class AppConfigService extends CachedServiceBase {
   
     return this.cacheRequest(key, request, 60 * 3).pipe(
       map((res: any) => {
-        const result = <AppConfigResponse>res.json();
+        const result = <AppConfigResponse>res;
         if (result) {
           this.getActive$.next(result.data);
         }

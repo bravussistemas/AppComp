@@ -17,15 +17,15 @@ const routes: Routes = [
   },
   {
     path: 'AdmManageProductPage',
-    component: AdmManageProductPage,
+    loadChildren: () => import('../adm-manage-product/adm-manage-product.module').then( m => m.AdmManageProductPageModule)
   },
   {
     path: 'ListDispatchDeliveryPage',
-    component: ListDispatchDeliveryPage,
+    loadChildren: () => import('../list-dispatch-delivery/list-dispatch-delivery.module').then( m => m.ListDispatchDeliveryPageModule),
   },
   {
     path: 'ChooseDeliveryAddressPage',
-    component: ChooseDeliveryAddressPage,
+    loadChildren: () => import('../choose-delivery-address/choose-delivery-address.module').then( m => m.ChooseDeliveryAddressPageModule),
   },
 ];
 

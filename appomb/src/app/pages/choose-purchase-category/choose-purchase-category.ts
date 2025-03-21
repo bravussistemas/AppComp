@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ActionSheetController, NavController, NavParams, ModalController, Platform} from '@ionic/angular';
+import { ActionSheetController, ModalController} from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingHelper } from '../../utils/loading-helper';
 import { LoadStoreStateResponse, StoreService } from '../../providers/store-service';
@@ -40,7 +40,6 @@ export class ChoosePurchaseCategory implements OnDestroy {
   store: Store;
 
   constructor(public modalCtrl: ModalController,
-              navParams: NavParams,
               public storeService: StoreService,
               private appConfigService: AppConfigService,
               private trackHelper: TrackHelper,
@@ -164,7 +163,7 @@ export class ChoosePurchaseCategory implements OnDestroy {
   }
 
   goToChooseStore(params) {
-    this.router.navigate(['/ChooseStore'],{queryParams:params});
+    this.router.navigate(['/ChooseStore'], {queryParams:params});
   }
 
   chooseLastRequest() {

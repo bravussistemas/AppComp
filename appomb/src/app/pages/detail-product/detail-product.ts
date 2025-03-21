@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from '../../shared/models/product.model';
 

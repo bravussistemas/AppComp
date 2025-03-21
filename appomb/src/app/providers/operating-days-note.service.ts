@@ -34,13 +34,12 @@ export enum NoteTypeEnum {
 export class OperatingDaysNoteService {
   deviceId: string;
   noteShowedList = [];
-  private platform: Platform; // Declare a propriedade da classe
 
   constructor(private authUserHttp: AuthUserHttp,
               private appConfig: AppConfig,
               private appConfigService: AppConfigService,
               private storage: Storage,
-              platform: Platform,
+              private platform: Platform,
             ) {
                 this.initializeDeviceId();
               }

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams,IonInput } from '@ionic/angular';
+import { NavController, IonInput } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '../../utils/form-errors';
 import { AppConfig } from '../../../configs';
@@ -11,6 +11,7 @@ import { Store } from '../../shared/models/store.model';
 import { SettingsService } from '../../providers/settings-service';
 import { IUserSettings } from '../../shared/interfaces';
 import { EventService } from 'src/app/providers/event.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'page-coupons-register',
@@ -28,7 +29,6 @@ export class CouponsRegisterPage {
 
   constructor(
     public fb: FormBuilder,
-    private navParams: NavParams,
     private appConfig: AppConfig,
     private loadingHelper: LoadingHelper,
     private navCtrl: NavController,
@@ -36,12 +36,16 @@ export class CouponsRegisterPage {
     private events: EventService,
     private alertHelper: AlertHelper,
     private couponsService: CouponsService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private route: ActivatedRoute,
   ) {
     this.dataForm = {
       coupon: '',
     };
-    this.redirectAfter = navParams.get('redirectAfter');
+
+    this.route.queryParams.subscribe(params => {
+      this.redirectAfter = params['redirectAfter'];
+    })
     this.buildForm();
   }
 
@@ -75,7 +79,7 @@ export class CouponsRegisterPage {
           this.loadingHelper.hide();
           let data = null;
           try {
-            data = e.json()
+            data = e
           } catch (e) {
             console.warn(e)
           }

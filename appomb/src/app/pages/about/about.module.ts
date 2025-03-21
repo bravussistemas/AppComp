@@ -16,9 +16,9 @@ import { SharedModule } from '../../shared/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    AboutRoutingModule, // Import the routing module
-    TranslateModule.forChild(),   // Import TranslateModule if needed
-    SharedModule,                 // Import SharedModule if needed
+    AboutRoutingModule, 
+    TranslateModule.forChild(),   
+    SharedModule,                 
   ],
 })
-export class ListBreadsPageModule {}
+export class AboutPageModule {}

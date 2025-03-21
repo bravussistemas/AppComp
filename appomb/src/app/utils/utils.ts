@@ -261,7 +261,7 @@ export class Utils {
   }
 
   static mapToJson(resp) {
-    return resp.json();
+    return resp;
   }
 
   static isAdminOrStoreSeller(user: User, store: Store) {

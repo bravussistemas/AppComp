@@ -1,5 +1,5 @@
 import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
-import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
+import { ErrorHandler, LOCALE_ID, NgModule, Injectable } from '@angular/core';
 import { IonApp, IonicModule } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -62,6 +62,17 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { AppRoutingModule } from './app-routing.module';
 import { CacheService } from 'ionic-cache';
 import { CacheModule } from 'ionic-cache';
+import { SharedModule } from './shared/shared.module';
+import { HomePage } from './pages/home/home';
+import { HomePageModule } from './pages/home/home.module';
+import { ListHistoryUserPurchaseModule } from './pages/list-history-user-purchase/list-history-user-purchase.module';
+import { EditInventoryDayItemsPageModule } from './pages/edit-inventory-day-items/edit-inventory-day-items.module';
+import { DetailHistoryUserPurchasePage } from './pages/detail-history-user-purchase/detail-history-user-purchase';
+import { DetailHistoryUserPurchaseModule } from './pages/detail-history-user-purchase/detail-history-user-purchase.module';
+import { DayNotePopUpPageModule } from './pages/day-note-pop-up/day-note-pop-up.module';
+import { ChooseDeliveryEmployeePageModule } from './pages/choose-delivery-employee/choose-delivery-employee.module';
+import { ChooseDeliveryAddressPageModule } from './pages/choose-delivery-address/choose-delivery-address.module';
+import { AdminBalanceStorePageModule } from './pages/admin-balance-store/admin-balance-store.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -78,6 +89,7 @@ export const firebaseConfig = {
 };
 
 // Correção: Removido '@override'
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   override overrides = {
     // Sobrescreva a configuração padrão do HammerJS
@@ -92,6 +104,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
+    SharedModule,
     CreditCardDirectivesModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
@@ -99,6 +112,14 @@ export class MyHammerConfig extends HammerGestureConfig {
     IonicStorageModule.forRoot(),
     CacheModule.forRoot(),
     AppRoutingModule,
+    HomePageModule,
+    ListHistoryUserPurchaseModule,
+    EditInventoryDayItemsPageModule,
+    DetailHistoryUserPurchaseModule,
+    DayNotePopUpPageModule,
+    ChooseDeliveryEmployeePageModule,
+    ChooseDeliveryAddressPageModule,
+    AdminBalanceStorePageModule,
     // Removido: CacheInterceptor,
     // Removido: HttpClient do array de imports
     TranslateModule.forRoot({

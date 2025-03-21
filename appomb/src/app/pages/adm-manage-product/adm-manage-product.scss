@@ -1,3 +1,6 @@
+
+@import '../../../theme/variables.scss';
+
 page-adm-manage-product {
 
   .swiper-slide {
@@ -29,7 +32,7 @@ page-adm-manage-product {
   }
 
   #bottom-btn-content {
-    background-color: color($colors, dark);
+    background-color: map-get($colors, dark);
     position: fixed;
     bottom: 0;
     left: 0;
@@ -38,7 +41,7 @@ page-adm-manage-product {
     text-align: center;
     z-index: 100;
     * {
-      color: color($colors, light);
+      color: map-get($colors, light);
     }
     .reservation-wrapper-inner {
       width: 100%;

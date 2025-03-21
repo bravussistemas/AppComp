@@ -1,0 +1,128 @@
+<ion-header>
+  <app-header
+    [title]="store?.name"
+    [subTitle]="store?.address?.get_simple_address"
+    [buttonIcon]="getHeaderAction()?.icon"
+    (headerBtnClick)="getHeaderAction()?.handler($event)"
+    [iconClass]="getHeaderAction()?.iconClass"
+  ></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-toolbar>
+    <div class="toolbar-lines-content">
+      <div class="toolbar-line half-line note-subtitle" *ngIf="noteSubtitle && noteSubtitle?.message">
+        <span>{{ noteSubtitle.message }}</span>
+      </div>
+      <div class="toolbar-line half-line note-subtitle note-request" *ngIf="hasOpenSaleToday" (click)="goToUserRequests()">
+        <span>pedido do dia</span>
+      </div>
+      <div class="toolbar-line">
+        <ion-segment
+          [(ngModel)]="section"
+          (ionChange)="onSegmentChanged($event)"
+        >
+          <ion-segment-button value="breads">
+            <ng-container *ngIf="store?.id">
+              {{ primaryTabLabel | translate }}
+            </ng-container>
+          </ion-segment-button>
+          <ion-segment-button value="others" [ngClass]="{ 'hidden': !store.has_others_products }">
+            {{ secondaryTabLabel | translate }}
+          </ion-segment-button>
+          <ion-segment-button [ngClass]="{ 'hidden': !isAdminOrStoreSeller(user, store) }" value="dispatch">
+            {{ 'DISPATCH' | translate }}
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+    </div>
+  </ion-toolbar>
+
+  <page-message-box *ngIf="hasError()" [text]="'REQUEST_SERVER_ERROR' | translate"></page-message-box>
+  <page-message-box *ngIf="!hasError() && notHasDays()" [text]="'Essa loja não possuí dias de funcionamento no momento.'"></page-message-box>
+
+  <div class="list-thumb-round">
+    <!-- Substituindo ion-slides por swiper -->
+    <swiper-container
+      #mySlider
+      [speed]="200"
+      [slides-per-view]="'auto'"
+      (swiperSlideChangeTransitionStart)="onSlideWillChange($event)"
+      (swiperSlideChange)="onSlideChanged($event)"
+    >
+      <!-- Slide 1 -->
+      <swiper-slide>
+        <div [hidden]="section !== 'breads'">
+          <div class="slide-content-ctrl">
+            <ion-spinner
+              [showTimeout]="800"
+              *ngIf="loadingHelper.isLoading('products') && !dayMessage"
+              class="page-spinner"
+            ></ion-spinner>
+            <div *ngIf="dayMessage">
+              <page-message-box [text]="dayMessage"></page-message-box>
+            </div>
+            <div *ngIf="!dayMessage && !hasError() && !notHasDays() && notHasPrimaryItems()">
+              <page-message-box [text]="'EMPTY_PRODUCT_LIST_DAY' | translate"></page-message-box>
+            </div>
+            <ion-list *ngIf="!dayMessage && !loadingHelper.isLoading('products')">
+              <ng-container *ngFor="let item of items">
+                <ion-item [ngClass]="{ 'product-disable': !item.is_visible }">
+                  <product-img item-start [product]="item.product"></product-img>
+                  <ion-grid class="menu-product-item">
+                    <product-details
+                      [enableAdminView]="enableAdminView"
+                      [simpleView]="!item.amount"
+                      [product]="item.product"
+                      [nextBatch]="item.next_batch"
+                    >
+                      <button ion-button [disabled]="true" *ngIf="item.loading">
+                        <ion-spinner></ion-spinner>
+                      </button>
+                      <ion-button
+                        (click)="toggleProductDay(item)"
+                        *ngIf="!item.loading"
+                        ion-button
+                        item-start
+                        [color]="item.is_visible ? 'primary' : 'danger'"
+                        clear
+                      >
+                        <ion-icon [name]="item.is_visible ? 'eye' : 'eye-off'"></ion-icon>
+                      </ion-button>
+                      <button ion-button [disabled]="true" *ngIf="item.loadingNextBatch">
+                        <ion-spinner></ion-spinner>
+                      </button>
+                      <button ion-button clear (click)="openTimePicker(item)" *ngIf="!item.loadingNextBatch">
+                        <span *ngIf="item.next_batch">{{ item.next_batch | batchHour }}</span>
+                        <span *ngIf="!item.next_batch">--:--</span>
+                      </button>
+                    </product-details>
+                    <item-cart-amount [enableAdminView]="enableAdminView" [item]="item"></item-cart-amount>
+                  </ion-grid>
+                </ion-item>
+              </ng-container>
+            </ion-list>
+          </div>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 2 -->
+      <swiper-slide>
+        <div *ngIf="section === 'others' || othersAlreadyOpen" [hidden]="section !== 'others'">
+          <!-- Conteúdo do Slide 2 -->
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 3 -->
+      <swiper-slide *ngIf="isAdminOrStoreSeller(user, store)">
+        <div *ngIf="section === 'dispatch'">
+          <div class="slide-content-ctrl">
+            <adm-list-dispatch-orders [data]="dataDispatchOrders" [user]="user"></adm-list-dispatch-orders>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+  <reservation-bar [canGoCheckout]="canGoCheckout" class="hide-open-keyboard" ion-fixed></reservation-bar>
+</ion-content>

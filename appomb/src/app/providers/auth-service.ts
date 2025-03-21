@@ -340,7 +340,7 @@ export class AuthService {
 
   onLoginError(error) {
     if (error instanceof Response) {
-      const body: any = error.json() || {};
+      const body: any = error|| {};
       if (body.error === 'invalid_grant') {
         // user was input invalid credentials
         console.debug('Invalid login:');
@@ -391,7 +391,7 @@ export class AuthService {
       email: credentials.email
     }).pipe(
       map((resp: any) => {
-      return resp.json();
+      return resp;
     }));               
   }
 
@@ -760,7 +760,7 @@ export class AuthService {
         });
         let body: any = {};
         try {
-          body = error.json() || {};
+          body = error|| {};
         } catch (e) {
           body = {}
         }

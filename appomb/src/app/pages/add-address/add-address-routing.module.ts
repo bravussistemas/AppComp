@@ -4,7 +4,7 @@ import { AddAddressPage } from './add-address';
 
 const routes: Routes = [
   {
-    path: 'add-address',
+    path: '',
     component: AddAddressPage
   },
   // other routes

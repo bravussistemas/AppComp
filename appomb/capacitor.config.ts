@@ -8,6 +8,8 @@ const config: CapacitorConfig = {
 
   // Configurações específicas de servidor
   server: {
+    "url": "http://localhost",
+    "cleartext": true,
     allowNavigation: [
       '*', // Permite navegação para qualquer origem
       'http://ionic.local/*',

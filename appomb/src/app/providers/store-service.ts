@@ -91,7 +91,7 @@ export class StoreService extends CachedServiceBase {
     );
     return this.cacheRequest(key, request, 60 * 60).pipe(
       map((res: any) => {
-      return <StoreCitiesResponse>res.json();
+      return <StoreCitiesResponse>res;
       })
     );
   }

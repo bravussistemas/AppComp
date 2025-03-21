@@ -21,5 +21,5 @@ import { CommonModule } from '@angular/common';
     CommonModule,
   ],
 })
-export class ListBreadsPageModule {
+export class CuponsPageModule {
 }

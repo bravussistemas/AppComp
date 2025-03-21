@@ -37,7 +37,7 @@ export class SalesService extends CachedServiceBase {
     const request = this.authUserHttp.get(url, params);
     return this.cacheRequest(url, request, 10).pipe(
       map((resp: Response) => {
-      return resp.json();
+      return resp;
       })
     );
   }
@@ -50,7 +50,7 @@ export class SalesService extends CachedServiceBase {
     const request = this.authUserHttp.get(url, params);
     return request.pipe(
       map((resp: Response) => {
-      return resp.json();
+      return resp;
       })
     );
   }

@@ -35,7 +35,7 @@ export class ProductInventory {
       params
     ).pipe(
       map((res: any) => {
-        return <ProductInventoryDay[]>res.json().results;
+        return <ProductInventoryDay[]>res.results;
       })
     );
   }

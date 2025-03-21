@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, NavController, NavParams } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { Store } from '../../shared/models/store.model';
 import { SettingsService } from '../../providers/settings-service';
 import { IUserSettings } from '../../shared/interfaces';
@@ -71,7 +71,6 @@ export class AddOperatingDayNotePage {
               private router: Router,
               private operatingDaysNoteService: OperatingDaysNoteService,
               //private datePicker: DatePicker,
-              private navParams: NavParams,
               private authService: AuthService,
               private trans: TranslateService,
               private loadingHelper: LoadingHelper,
@@ -91,7 +90,7 @@ export class AddOperatingDayNotePage {
     this.selectedRepeatPeriod = this.periods[0].value;
     this.selectedPopupType = this.popupTypes[0].value;
   
-    // Obtenha parâmetros da rota (substituindo NavParams)
+    // Obtenha parâmetros da rota
     const routeParams = this.route.snapshot.queryParams;
     this.day = (routeParams['day'] || moment()).toDate();
     this.noteType = noteType || routeParams['noteType'] || NoteTypeEnum.NORMAL;

@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, IonInput } from '@ionic/angular';
+import { NavController, IonInput } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '../../utils/form-errors';
 import { AuthService, loginCredentials } from '../../providers/auth-service';
 import { LoadingHelper } from '../../utils/loading-helper';
 import { AlertHelper } from '../../utils/alert-helper';
 import { AppConfig } from '../../../configs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'page-sign-in',
@@ -27,21 +27,22 @@ export class SignIn {
               private alertHelper: AlertHelper,
               private loadingHelper: LoadingHelper,
               public navCtrl: NavController,
-              public navParams: NavParams,
               private appConfig: AppConfig,
-              private router: Router) {
-    if (appConfig.DEBUG) {
+              private router: Router,
+              private route: ActivatedRoute,
+            ) {
+
+    
+    this.route.queryParams.subscribe(params => {
+      const email = params['email'] || this.appConfig.DEBUG_EMAIL || '';
+
       this.dataForm = {
-        email: navParams.get('email') || appConfig.DEBUG_EMAIL,
-        password: appConfig.DEBUG_PASSWORD
+        email: this.appConfig.DEBUG ? email : '',
+        password: this.appConfig.DEBUG ? this.appConfig.DEBUG_PASSWORD : ''
       };
-    } else {
-      this.dataForm = {
-        email: navParams.get('email') || '',
-        password: ''
-      };
-    }
-    this.buildForm();
+
+      this.buildForm();
+    });
   }
 
   get appName() {

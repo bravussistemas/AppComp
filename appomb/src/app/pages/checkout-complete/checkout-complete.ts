@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import {EventService} from '../../providers/event.service';
-import { IonContent, ModalController, Platform } from '@ionic/angular'; // IonContent substitui Content
-import { Router, ActivatedRoute } from '@angular/router'; // Substitui NavController e NavParams
+import { IonContent, ModalController, Platform } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CheckoutService, DayInventory } from '../../providers/checkout-service';
 import { CartManagerTable } from '../../providers/database/cart-manager-table';
 import { Store, StoreTypeEnum } from '../../shared/models/store.model';
@@ -170,7 +170,6 @@ export class CheckoutComplete implements OnInit, OnDestroy {
   constructor(private cartManagerTable: CartManagerTable,
               private creditCardService: CreditCardService,
               private adminStoreService: AdminStoreService,
-              private navParams: NavParams,
               public platform: Platform,
               public loadingHelper: LoadingHelper,
               private appConfig: AppConfig,

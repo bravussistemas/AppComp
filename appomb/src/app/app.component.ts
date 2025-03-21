@@ -52,7 +52,6 @@ declare let cordova: any;
 })
 
 export class AppComponent implements OnDestroy, OnInit {
-  private backButtonSubscription: Subscription;
   private keyboardWillShowListener: PluginListenerHandle;
   private keyboardWillHideListener: PluginListenerHandle;
   versaoApp: String;
@@ -188,9 +187,6 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    if (this.backButtonSubscription) {
-      this.backButtonSubscription.unsubscribe();
-    }
     if (this.keyboardWillShowListener) {
       this.keyboardWillShowListener.remove();
     }
@@ -204,29 +200,39 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   initializeBackButtonCustomHandler(): void {
-    this.platform.backButton.subscribeWithPriority(10, async () => {
-      const currentUrl = this.router.url;
-      const rootUrl = '/home'; // Altere para sua rota inicial
-  
-      if (currentUrl === rootUrl) {
-        if (!this.showedAlert) {
-          this.showedAlert = true;
-          await this.presentExitConfirm();
-        } else if (this.confirmAlert) {
-          // Se o alerta já estiver visível, feche-o
-          await this.confirmAlert.dismiss();
-          this.showedAlert = false;
-        }
-      } else {
-        // Se puder voltar para a página anterior
-        if (window.history.length > 1) {
+    this.platform.ready().then(() => {
+      App.addListener('backButton', ({ canGoBack }) => {
+        if (canGoBack) {
           window.history.back();
         } else {
-          // Se não houver histórico, sai do app
-          navigator['app'].exitApp();
+          App.exitApp();
         }
-      }
+      });
     });
+  
+    // this.platform.backButton.subscribeWithPriority(10, async () => {
+    //   const currentUrl = this.router.url;
+    //   const rootUrl = '/home'; // Altere para sua rota inicial
+  
+    //   if (currentUrl === rootUrl) {
+    //     if (!this.showedAlert) {
+    //       this.showedAlert = true;
+    //       await this.presentExitConfirm();
+    //     } else if (this.confirmAlert) {
+    //       // Se o alerta já estiver visível, feche-o
+    //       await this.confirmAlert.dismiss();
+    //       this.showedAlert = false;
+    //     }
+    //   } else {
+    //     // Se puder voltar para a página anterior
+    //     if (window.history.length > 1) {
+    //       window.history.back();
+    //     } else {
+    //       // Se não houver histórico, sai do app
+    //       navigator['app'].exitApp();
+    //     }
+    //   }
+    // });
   }
 
   initializeApp(firstInit = false) {

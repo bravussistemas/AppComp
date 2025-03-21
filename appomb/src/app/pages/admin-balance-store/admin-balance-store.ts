@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { Store, StoreTypeEnum } from '../../shared/models/store.model';
 import { SettingsService } from '../../providers/settings-service';
 import { IUserSettings } from '../../shared/interfaces';
@@ -97,7 +97,7 @@ export class AdminBalanceStorePage {
               public adminStoreService: AdminStoreService,
               private trans: TranslateService,
               private sanitizer: DomSanitizer,
-              public navParams: NavParams) {
+            ) {
     this.trans.get('TODAY').subscribe((val) => this.todayTxt = val);
   }
 

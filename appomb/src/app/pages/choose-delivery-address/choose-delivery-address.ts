@@ -14,8 +14,8 @@ import { Store } from '../../shared/models/store.model';
 
 @Component({
   selector: 'app-choose-delivery-address',
-  templateUrl: './choose-delivery-address.page.html',
-  styleUrls: ['./choose-delivery-address.page.scss'],
+  templateUrl: './choose-delivery-address.html',
+  styleUrls: ['./choose-delivery-address.scss'],
 })
 export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
   @ViewChild(IonContent, { static: false }) content: IonContent;
@@ -43,6 +43,34 @@ export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
     public authService: AuthService,
     public platform: Platform
   ) {}
+
+  get hasAddress() {
+    const allAddress = this.getAllAddressList();
+    return allAddress && allAddress.length > 0;
+  }
+
+  getAllAddressList(): UserAddress[] {
+    return [...this.addressAcceptableList, ...this.addressNotAcceptableList];
+  };  
+
+  trackByFn(index, item: UserAddress) {
+    return index;
+  } 
+
+  onSelectAddress(address: UserAddress) {
+    if (!this.isValidSelectAddress(this.addressAcceptableList, address)) {
+      this.toastHelper.show({
+        message: 'A loja escolhida não oferece cobertura para este endereço.'
+      });
+      return;
+    }
+    this.selectAddress(address);
+  }  
+
+  onDeleteAddress(address: UserAddress) {
+    this.addressAcceptableList = this.addressAcceptableList.filter((addr) => addr.id !== address.id);
+    this.addressNotAcceptableList = this.addressNotAcceptableList.filter((addr) => addr.id !== address.id);
+  }
 
   ngOnInit(): void {
     this.goToAfter = this.route.snapshot.queryParamMap.get('goToAfter') || undefined;

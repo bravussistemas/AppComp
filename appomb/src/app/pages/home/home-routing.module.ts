@@ -20,7 +20,7 @@ const routes: Routes = [
     component: ListHistoryUserPurchasePage,
   },
   {
-    path: FIRST_PAGE_APP,
+    path: 'ChoosePurchaseCategory',
     component: ChoosePurchaseCategory,
   },
 ];

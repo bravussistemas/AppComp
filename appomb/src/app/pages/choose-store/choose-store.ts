@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonHeader, MenuController, NavController, NavParams, ModalController  } from '@ionic/angular';
+import { IonHeader, MenuController, NavController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, StoreTypeEnum } from '../../shared/models/store.model';
 import { StoreService } from '../../providers/store-service';
@@ -83,10 +83,10 @@ export class ChooseStore implements OnInit {
   menuSwipeEnabled = true;
   showBackButton = true;
 
-  cityId: number = this.navParams.get('cityId');
-  storeType: number = this.navParams.get('storeType');
-  deliveryType: number = this.navParams.get('deliveryType');
-  storeId: number = this.navParams.get('storeId');
+  cityId: number;
+  storeType: number;
+  deliveryType: number;
+  storeId: number;
 
   appConfigServiceSub: Subscription;
   bannerSrc: string;
@@ -98,7 +98,6 @@ export class ChooseStore implements OnInit {
   }
 
   constructor(public navCtrl: NavController,
-              private navParams: NavParams,
               private loadingHelper: LoadingHelper,
               private adminStoreService: AdminStoreService,
               private settingsService: SettingsService,
@@ -115,7 +114,6 @@ export class ChooseStore implements OnInit {
               private storeService: StoreService,
               private router: Router,
               private route: ActivatedRoute,) {
-    this.afterCurrentStoreDeleted = navParams.get('afterCurrentStoreDeleted');
   }
 
   get subtitle() {
@@ -126,7 +124,15 @@ export class ChooseStore implements OnInit {
     this.reorder = true;
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {        
+    this.route.queryParams.subscribe(params => {
+      this.cityId = params['cityId'];
+      this.storeType = params['storeType'];
+      this.deliveryType = params['deliveryType'];
+      this.storeId = params['storeId'];
+      this.afterCurrentStoreDeleted = params['afterCurrentStoreDeleted'] === 'true'; // Convertendo para booleano
+    });
+
     this.loadingHelper.clear();
     this.loadingHelper.setLoading('storesList', true);
   }

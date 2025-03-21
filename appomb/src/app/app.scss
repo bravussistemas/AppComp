@@ -198,7 +198,7 @@ body {
     }
 
     .toolbar-background {
-      background-color: color($colors, mainHeaderBackground);
+      background-color: map-get($colors, mainHeaderBackground);
     }
 
     &.header-title-centered {
@@ -476,7 +476,7 @@ body {
     .name-product {
       span {
         width: 100%;
-        color: color($colors, dark);
+        color: map-get($colors, dark);
         font-size: 15px;
       }
 

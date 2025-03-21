@@ -1,11 +1,12 @@
 import { Component, Renderer2 } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { OperatingDaysNote } from '../../shared/models/operating-day-note.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Utils } from '../../utils/utils';
 import { Browser } from '@capacitor/browser';
 import { AppConfigService } from '../../providers/app-config.service';
 import { LoadingHelper } from '../../utils/loading-helper';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'page-day-note-pop-up',
@@ -17,13 +18,17 @@ export class DayNotePopUpPage {
 
   constructor(public navCtrl: NavController,
               private renderer: Renderer2,
-              private navParams: NavParams,
               private sanitizer: DomSanitizer,
               private appConfig: AppConfigService,
-              private loading: LoadingHelper,) {
+              private loading: LoadingHelper,
+              private router: Router,
+              private route: ActivatedRoute,
+            ) {
     this.renderer.addClass(document.body, 'custom-popup');
-    this.note = navParams.get('note');
-    this.role = navParams.get('role') || 'normal';
+    this.route.queryParams.subscribe(params => {
+      this.note = params['note'];
+      this.role = params['role'] || 'normal';
+    });
   }
 
   async openAppUpdate() {

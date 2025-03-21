@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "139965212713-fqk9phl0u397vki1p9enha68ehbp6hsc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.com.ohmybread",
-            "certificate_hash": "329489dd141154dda3004474afcce23cd5cdf736"
-          }
-        },
-        {
           "client_id": "139965212713-jepi9j6fdlmuqklke74pgtaucmv99g1d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -39,7 +31,19 @@
           }
         },
         {
+          "client_id": "139965212713-sj27q75fjsqg1o2ppcbpelbjdmgqciao.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "139965212713-kalau9qj9r7jvvlmao17q6ggcq9hbsrp.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "139965212713-ao0h9i4m65g15g2khjc67jipa3lno79g.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "139965212713-iqapbo26798e0ltqmefdg5921cnugc8q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -49,10 +53,14 @@
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 1
+        },
         "appinvite_service": {
+          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "139965212713-ao0h9i4m65g15g2khjc67jipa3lno79g.apps.googleusercontent.com",
+              "client_id": "139965212713-sj27q75fjsqg1o2ppcbpelbjdmgqciao.apps.googleusercontent.com",
               "client_type": 3
             },
             {
@@ -63,6 +71,9 @@
               }
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
         }
       }
     }

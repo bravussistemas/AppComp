@@ -89,7 +89,7 @@ export class AdminStoreService extends CachedServiceBase {
     return this.authUserHttp
       .post<Sales>(this.getUrl(this.appConfig.API_ADMIN_CREATE_SALE), saleData)
       .pipe(
-        map((resp: any) => <Sales>resp.json()),
+        map((resp: any) => <Sales>resp),
         catchError((e) => this.handleHttpError(e))
       );
   }
@@ -100,7 +100,7 @@ export class AdminStoreService extends CachedServiceBase {
     return this.authUserHttp
       .get<Sales>(this.getUrl(this.appConfig.API_STORE_GENERAL_BALANCE), params)
       .pipe(
-        map((resp: any) => <Sales>resp.json()),
+        map((resp: any) => <Sales>resp),
         catchError((e) => this.handleHttpError(e))
       );
   }
@@ -108,7 +108,7 @@ export class AdminStoreService extends CachedServiceBase {
   listDeliveryEmployee() {
     const request = this.authUserHttp.get(this.getUrl(this.appConfig.API_LIST_DELIVERY_EMPLOYEE));
     return this.cacheRequest('listDeliveryEmployee', request, 60 * 60 * 8).pipe(
-      map((resp: any) => <DeliveryEmployeeSimple[]>resp.json()),
+      map((resp: any) => <DeliveryEmployeeSimple[]>resp),
       catchError((e) => this.handleHttpError(e))
     );
   }
@@ -123,14 +123,14 @@ export class AdminStoreService extends CachedServiceBase {
     return this.authUserHttp
       .get<any>(this.getUrl(this.appConfig.API_STORE_GENERAL_BALANCE_CONTENT),  params)
       .pipe(
-        map((resp: any) => <any>resp.json()),
+        map((resp: any) => <any>resp),
         catchError((e) => this.handleHttpError(e))
       );
   }
 
   listDeliveryEmployees() {
     return this.authUserHttp.get(this.getUrl(this.appConfig.API_LIST_DELIVERY_EMPLOYEES)).pipe(
-      map((resp: any) => <any>resp.json()),
+      map((resp: any) => <any>resp),
       catchError((e) => this.handleHttpError(e))
     );
   }

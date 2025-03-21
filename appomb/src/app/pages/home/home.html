@@ -21,7 +21,7 @@
         <ion-segment
           [(ngModel)]="section"
           (ionChange)="onSegmentChanged($event)"
-        >
+        >ionic
           <ion-segment-button value="breads">
             <ng-container *ngIf="store?.id">
               {{ primaryTabLabel | translate }}
@@ -123,6 +123,3 @@
       </swiper-slide>
     </swiper-container>
   </div>
-
-  <reservation-bar [canGoCheckout]="canGoCheckout" class="hide-open-keyboard" ion-fixed></reservation-bar>
-</ion-content>

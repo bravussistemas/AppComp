@@ -31,7 +31,7 @@ module.exports = {
       util: false,
       events: false,
       vm: false,
-      "dtrace-provider": false,
+      dtrace-provider: false,
     },
   },
 };

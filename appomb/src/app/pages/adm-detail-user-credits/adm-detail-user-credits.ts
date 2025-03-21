@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { IonInput } from '@ionic/angular'; // Substitui o TextInput
-import { ActivatedRoute, Router } from '@angular/router'; // Substitui NavParams
+import { IonInput } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserCreditService } from '../../providers/user-credit.service';
 import { LoadingHelper } from '../../utils/loading-helper';
 import { ToastHelper } from '../../utils/toast-helper';

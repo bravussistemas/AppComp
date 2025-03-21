@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { ChooseStore } from './pages/choose-store/choose-store';
 
 const routes: Routes = [
   {
@@ -10,6 +11,15 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },
+  {
+    path: 'ChoosePurchaseCategory',
+    loadChildren: () => import('./pages/choose-purchase-category/choose-purchase-category.module').then( m => m.ChoosePurchaseCategoryModule)
+  },
+  {
+    path: 'ChooseStore',
+    loadChildren: () => import('./pages/choose-store/choose-store.module').then( m => m.ChooseStoreModule)
+    //component: ChooseStore,
   },
 ];
 

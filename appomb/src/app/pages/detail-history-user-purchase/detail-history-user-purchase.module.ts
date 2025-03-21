@@ -24,5 +24,5 @@ import { IonicModule } from "@ionic/angular";
     DetailHistoryUserPurchasePage
   ]
 })
-export class ListHistoryUserPurchaseModule {
+export class DetailHistoryUserPurchaseModule {
 }

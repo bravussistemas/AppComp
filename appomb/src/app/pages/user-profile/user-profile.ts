@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from '../../providers/auth-service';
 import { User } from '../../shared/models/user.model';
@@ -24,7 +24,6 @@ export class UserProfilePage {
   userProfile: IUserProfile;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
               private alertHelper: AlertHelper,
               private toastHelper: ToastHelper,
               private loadingHelper: LoadingHelper,              

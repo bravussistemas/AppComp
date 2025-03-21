@@ -22,5 +22,5 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
   ],
 })
-export class ListBreadsPageModule {
+export class CouponsRegisterPageModule {
 }

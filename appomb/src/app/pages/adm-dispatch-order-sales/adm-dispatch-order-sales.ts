@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { DispatchOrderService } from '../../providers/dispatch-order.service';
 import { LoadingHelper } from '../../utils/loading-helper';
 import { ToastHelper } from '../../utils/toast-helper';
 import { Sales } from '../../shared/models/sales.model';
 import { AlertHelper } from '../../utils/alert-helper';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'page-adm-dispatch-order-sales',
@@ -22,8 +22,10 @@ export class AdmDispatchOrderSalesPage {
               protected loadingHelper: LoadingHelper,
               private alertHelper: AlertHelper,
               private toastHelper: ToastHelper,
-              public navParams: NavParams) {
-    this.id = navParams.get('id');
+              private route: ActivatedRoute ) {
+    this.route.queryParams.subscribe(params => {
+      this.id = params['id'];
+    })
   }
 
   ionViewDidLoad() {

@@ -60,7 +60,7 @@ export class AdmManagerUserCreditsPage implements OnInit {
     this.userCreditService.list(this.page, this.limit, this.searchTextToAdd)
       .subscribe((resp) => {
         this.loadingHelper.setLoading(loaderName, false);
-        const data = resp.json();
+        const data = resp;
         const users = data.users;
         const pages = data.pages;
         this.canLoadMore = this.page < pages;
