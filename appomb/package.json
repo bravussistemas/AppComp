@@ -76,7 +76,6 @@
     "ngx-mask": "^13.1.0",
     "ngx-moment": "^6.0.2",
     "onesignal": "^0.1.2",
-    "onesignal-cordova-plugin": "^5.2.9",
     "os": "^0.1.2",
     "os-browserify": "^0.3.0",
     "path": "^0.12.7",

@@ -164,8 +164,8 @@ $toolbar-fixed-height: 56px;
 $body-background-color: #f5f5f5;
 
 $j-units-1-1: 56px;
-$j-units-1-2: $j-units-1-1 / 2;
-$j-units-1-4: $j-units-1-1 / 4;
+$j-units-1-2: calc($j-units-1-1 / 2);
+$j-units-1-4: calc($j-units-1-1 / 4);
 
 // App iOS Variables
 // --------------------------------------------------

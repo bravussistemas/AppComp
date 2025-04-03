@@ -15,30 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "139965212713-7pajubokobc0rn4o3973eld7581tvrk4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.com.ohmybread",
-            "certificate_hash": "a2729528ef6ae5c6d679e66868d8f2aa39ab2fc3"
-          }
-        },
-        {
-          "client_id": "139965212713-fqk9phl0u397vki1p9enha68ehbp6hsc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.com.ohmybread",
-            "certificate_hash": "329489dd141154dda3004474afcce23cd5cdf736"
-          }
-        },
-        {
-          "client_id": "139965212713-jepi9j6fdlmuqklke74pgtaucmv99g1d.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.com.ohmybread",
-            "certificate_hash": "aafabe09dc7973d150b7dc9d63a1ca9c02971a50"
-          }
-        },
-        {
           "client_id": "139965212713-kalau9qj9r7jvvlmao17q6ggcq9hbsrp.apps.googleusercontent.com",
           "client_type": 3
         }

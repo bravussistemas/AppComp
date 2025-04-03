@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path: 'choose-store',
     redirectTo: 'ChooseStore',
-    pathMatch: 'full'
+    // pathMatch: 'full'
   },
   {
     path: 'ChooseStore',

@@ -1,10 +1,20 @@
-import { Component, OnDestroy } from '@angular/core';
-import { ActionSheetController, ModalController} from '@ionic/angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingHelper } from '../../utils/loading-helper';
-import { LoadStoreStateResponse, StoreService } from '../../providers/store-service';
-import { DeliveryTypeEnum, Store, StoreTypeEnum } from '../../shared/models/store.model';
-import { AppConfigService, IAppConfig } from '../../providers/app-config.service';
+import {
+  LoadStoreStateResponse,
+  StoreService,
+} from '../../providers/store-service';
+import {
+  DeliveryTypeEnum,
+  Store,
+  StoreTypeEnum,
+} from '../../shared/models/store.model';
+import {
+  AppConfigService,
+  IAppConfig,
+} from '../../providers/app-config.service';
 import { Subscription } from 'rxjs';
 import { ToastHelper } from '../../utils/toast-helper';
 import { LastRequestService } from '../../providers/last-request-service';
@@ -19,11 +29,12 @@ import { Utils } from '../../utils/utils';
 import { EventService } from 'src/app/providers/event.service';
 
 @Component({
-  selector: 'page-choose-purchase-category',
+  selector: 'app-page-choose-purchase-category',
   templateUrl: './choose-purchase-category.html',
   styleUrl: './choose-purchase-category.scss',
 })
-export class ChoosePurchaseCategory implements OnDestroy {
+/* eslint-disable @angular-eslint/component-class-suffix */
+export class ChoosePurchaseCategory implements OnInit, OnDestroy {
   storeType = StoreTypeEnum;
   deliveryType = DeliveryTypeEnum;
   appConfigServiceSub: Subscription;
@@ -39,23 +50,29 @@ export class ChoosePurchaseCategory implements OnDestroy {
   firstOpenModalIgnored = false;
   store: Store;
 
-  constructor(public modalCtrl: ModalController,
-              public storeService: StoreService,
-              private appConfigService: AppConfigService,
-              private trackHelper: TrackHelper,
-              private events: EventService,
-              private lastRequestService: LastRequestService,
-              private dispatchOrderService: DispatchOrderService,
-              public actionSheetCtrl: ActionSheetController,
-              private toastHelper: ToastHelper,
-              private loadingHelper: LoadingHelper,
-              public auth: AuthService,
-              private route: ActivatedRoute,
-              private router: Router) {
-  }
+  constructor(
+    public modalCtrl: ModalController,
+    public storeService: StoreService,
+    private appConfigService: AppConfigService,
+    private trackHelper: TrackHelper,
+    private events: EventService,
+    private lastRequestService: LastRequestService,
+    private dispatchOrderService: DispatchOrderService,
+    public actionSheetCtrl: ActionSheetController,
+    private toastHelper: ToastHelper,
+    private loadingHelper: LoadingHelper,
+    public auth: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   isDeliveryEmployee() {
-    return this.user && this.store && this.user.delivery_employee_id && this.store.store_type == StoreTypeEnum.DELIVERY;
+    return (
+      this.user &&
+      this.store &&
+      this.user.delivery_employee_id &&
+      this.store.store_type == StoreTypeEnum.DELIVERY
+    );
   }
 
   isAdminOrStoreSeller(user: User, store: Store) {
@@ -63,14 +80,17 @@ export class ChoosePurchaseCategory implements OnDestroy {
   }
 
   getHeaderAction() {
-    if (this.isAdminOrStoreSeller(this.user, this.store) || this.isDeliveryEmployee()) {
+    if (
+      this.isAdminOrStoreSeller(this.user, this.store) ||
+      this.isDeliveryEmployee()
+    ) {
       return {
         icon: 'barcode',
         iconClass: '',
         handler: (event) => {
           this.router.navigate(['/AdmManageProductPage']);
-        }
-      }
+        },
+      };
     }
     if (this.hasPendingSalesToday) {
       return {
@@ -78,40 +98,48 @@ export class ChoosePurchaseCategory implements OnDestroy {
         handler: (event) => {
           this.router.navigate(['/UserRequestsHistoryPage']);
         },
-        iconClass: 'pending-sale-icon'
-      }
+        iconClass: 'pending-sale-icon',
+      };
     }
     return {};
   }
 
   loadAppConfig() {
-    this.appConfigServiceSub = this.appConfigService.getActive$.subscribe((config) => {
-      if (!config) {
-        return;
+    this.appConfigServiceSub = this.appConfigService.getActive$.subscribe(
+      (config) => {
+        if (!config) {
+          return;
+        }
+        this.appConfig = config;
       }
-      this.appConfig = config;
-    });
+    );
   }
 
   loadUserSales() {
     this.loadingHelper.setLoading('listUserSales', true);
-    this.auth.getUser().then((user) => {
-      this.user = user;
-      if (!user || user.is_staff || user.is_store_seller) {
+    this.auth.getUser().then(
+      (user) => {
+        this.user = user;
+        if (!user || user.is_staff || user.is_store_seller) {
+          this.loadingHelper.setLoading('listUserSales', false);
+          return;
+        }
+        this.dispatchOrderService.listUserSales().subscribe(
+          (resp) => {
+            this.loadingHelper.setLoading('listUserSales', false);
+            this.hasPendingSales = resp.has_any_open;
+            this.hasPendingSalesToday = resp.has_any_open_today;
+            this.userSales = resp.data;
+          },
+          () => {
+            this.loadingHelper.setLoading('listUserSales', false);
+          }
+        );
+      },
+      () => {
         this.loadingHelper.setLoading('listUserSales', false);
-        return;
       }
-      this.dispatchOrderService.listUserSales().subscribe((resp) => {
-        this.loadingHelper.setLoading('listUserSales', false);
-        this.hasPendingSales = resp.has_any_open;
-        this.hasPendingSalesToday = resp.has_any_open_today;
-        this.userSales = resp.data;
-      }, () => {
-        this.loadingHelper.setLoading('listUserSales', false);
-      });
-    }, () => {
-      this.loadingHelper.setLoading('listUserSales', false);
-    });
+    );
   }
 
   updateUserStore = (store: Store) => {
@@ -123,10 +151,10 @@ export class ChoosePurchaseCategory implements OnDestroy {
     this.events.onEvent('userChooseStore').subscribe((store) => {
       this.updateUserStore(store);
     });
-  
+
     this.disableBtns = false;
     this.loadingHelper.setLoading('loadStoreState', true);
-  
+
     // Carregando estado da loja
     this.storeService.loadStoreState().subscribe(
       (resp) => {
@@ -142,13 +170,12 @@ export class ChoosePurchaseCategory implements OnDestroy {
         this.loadUserSales();
       }
     );
-  
+
     // Carregando configurações do último pedido
-    this.lastRequestService.getSettings().then(
-      (settings) => (this.lastRequestSettings = settings)
-    );
+    this.lastRequestService
+      .getSettings()
+      .then((settings) => (this.lastRequestSettings = settings));
   }
-  
 
   isValidLastRequestSettings() {
     return LastRequestService.isValidSettings(this.lastRequestSettings);
@@ -159,19 +186,33 @@ export class ChoosePurchaseCategory implements OnDestroy {
   }
 
   get loading() {
-    return this.loadingHelper.isLoading('setSettings') || this.loadingHelper.isLoading('storesList') || this.loadingHelper.isLoading('listUserSales') || this.loadingHelper.isLoading('loadStoreState');
+    return (
+      this.loadingHelper.isLoading('setSettings') ||
+      this.loadingHelper.isLoading('storesList') ||
+      this.loadingHelper.isLoading('listUserSales') ||
+      this.loadingHelper.isLoading('loadStoreState')
+    );
   }
 
   goToChooseStore(params) {
-    this.router.navigate(['/ChooseStore'], {queryParams:params});
+    this.router.navigate(['/ChooseStore'], { queryParams: params });
   }
 
   chooseLastRequest() {
-    const {cityId, storeType, storeId, deliveryType} = this.lastRequestSettings;
-    this.goToChooseStore({cityId, storeType, storeId, deliveryType});
+    const { cityId, storeType, storeId, deliveryType } =
+      this.lastRequestSettings;
+
+    this.goToChooseStore({ cityId, storeType, storeId, deliveryType });
     try {
-      const data = {store_id: storeId, city_id: cityId, store_type: storeType};
-      this.trackHelper.trackByName(TrackHelper.EVENTS.HOME_LAST_REQUEST_SHORTCUT, data);
+      const data = {
+        store_id: storeId,
+        city_id: cityId,
+        store_type: storeType,
+      };
+      this.trackHelper.trackByName(
+        TrackHelper.EVENTS.HOME_LAST_REQUEST_SHORTCUT,
+        data
+      );
     } catch (e) {
       console.error(e);
     }
@@ -182,41 +223,51 @@ export class ChoosePurchaseCategory implements OnDestroy {
     const timout = setTimeout(() => {
       this.loadingHelper.show();
     }, 500);
-    this.storeService.getStoresCities(storeType, deliveryType).subscribe(async (resp) => {
-      clearTimeout(timout);
-      this.loadingHelper.hide();
-      this.disableBtns = false;
-      const buttons = resp.data.map((item) => {
-        return {
-          text: item.label,
-          handler: () => {
-            this.goToChooseStore({cityId: item.city_id, storeType: storeType, deliveryType: deliveryType});
-          }
-        }
-      });
+    this.storeService.getStoresCities(storeType, deliveryType).subscribe(
+      async (resp) => {
       
-      if (buttons.length === 1 && deliveryType != DeliveryTypeEnum.PIZZA) {
-        buttons[0].handler();
-      } else {
-        const actionSheet = this.actionSheetCtrl.create({
-          header: 'Escolha um local',
-          buttons: [
-            ...buttons, {
-              text: 'Cancelar',
-              role: 'cancel'
-            }
-          ]
+        
+        clearTimeout(timout);
+        this.loadingHelper.hide();
+        this.disableBtns = false;
+        const buttons = resp.data.map((item) => {
+          return {
+            text: item.label,
+            handler: () => {
+              this.goToChooseStore({
+                cityId: item.city_id,
+                storeType: storeType,
+                deliveryType: deliveryType,
+              });
+            },
+          };
         });
-        (await actionSheet).present();
+
+        if (buttons.length === 1 && deliveryType != DeliveryTypeEnum.PIZZA) {
+          buttons[0].handler();
+        } else {
+          const actionSheet = this.actionSheetCtrl.create({
+            header: 'Escolha um local',
+            buttons: [
+              ...buttons,
+              {
+                text: 'Cancelar',
+                role: 'cancel',
+              },
+            ],
+          });
+          (await actionSheet).present();
+        }
+      },
+      (e) => {
+        clearTimeout(timout);
+        this.loadingHelper.hide();
+        this.disableBtns = false;
+        this.toastHelper.connectionError();
+        console.error(e);
       }
-    }, (e) => {
-      clearTimeout(timout);
-      this.loadingHelper.hide();
-      this.disableBtns = false;
-      this.toastHelper.connectionError();
-      console.error(e);
-    });
-  }  
+    );
+  }
 
   ngOnDestroy(): void {
     if (this.appConfigServiceSub) {
@@ -226,11 +277,13 @@ export class ChoosePurchaseCategory implements OnDestroy {
   }
 
   onOpenSheet() {
-    if (!this.hasPendingSales || (this.hasPendingSales && this.firstOpenModalIgnored)) {
+    if (
+      !this.hasPendingSales ||
+      (this.hasPendingSales && this.firstOpenModalIgnored)
+    ) {
       this.trackHelper.trackByName(TrackHelper.EVENTS.OPEN_LAST_REQUESTS_MODAL);
     } else {
       this.firstOpenModalIgnored = true;
     }
   }
-
 }

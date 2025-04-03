@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Oh My Bread!</string>
-    <string name="title_activity_main">Oh My Bread!</string>
-    <string name="package_name">br.com.ohmybread</string>
-    <string name="custom_url_scheme">br.com.ohmybread</string>
+  <string name="app_name">Oh My Bread!</string>
+  <string name="title_activity_main">Oh My Bread!</string>
+  <string name="package_name">br.com.ohmybread</string>
+  <string name="custom_url_scheme">br.com.ohmybread</string>
 </resources>

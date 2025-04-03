@@ -1,21 +1,20 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Input,
+} from '@angular/core';
 
 @Component({
   selector: 'app-hero-banner',
   templateUrl: './hero-banner.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./hero-banner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroBannerComponent implements OnInit {
+export class HeroBannerComponent {
   @Input() src: string;
 
-  get url(): string {
-    return `url("${this.src}")`;
-  }
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
-
+  // get url(): string {
+  //   return `url("${this.src}")`;
+  // }
 }
