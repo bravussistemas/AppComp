@@ -1,4 +1,11 @@
-import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+import {
+  BrowserModule,
+  HAMMER_GESTURE_CONFIG,
+  HammerGestureConfig,
+} from '@angular/platform-browser';
 import { ErrorHandler, LOCALE_ID, NgModule, Injectable } from '@angular/core';
 import { IonApp, IonicModule } from '@ionic/angular';
 import { AppComponent } from './app.component';
@@ -38,7 +45,11 @@ import { DispatchOrderService } from './providers/dispatch-order.service';
 import { SalesService } from './providers/sales.service';
 import { SentryErrorHandler } from './utils/sentry-error-handler';
 import { AngularFireModule } from '@angular/fire/compat';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  provideHttpClient,
+} from '@angular/common/http';
 import { ProductInventoryChangesHandler } from './utils/product-inventory-changes-handler';
 import { UserCreditService } from './providers/user-credit.service';
 import { DatePipe } from '@angular/common';
@@ -53,7 +64,7 @@ import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
 import { AppConfigService } from './providers/app-config.service';
 import { LastRequestService } from './providers/last-request-service';
 import { AmplitudeService } from './providers/amplitude.service';
-import { StoreSellerService } from "./providers/store-seller.service";
+import { StoreSellerService } from './providers/store-seller.service';
 import { StoreOptionsMenuPopoverComponent } from './components/store-options-menu-popover/store-options-menu-popover';
 import * as Hammer from 'hammerjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -85,7 +96,7 @@ export const firebaseConfig = {
   databaseURL: 'https://fir-oh-my-bread.firebaseio.com',
   projectId: 'firebase-oh-my-bread',
   storageBucket: 'firebase-oh-my-bread.appspot.com',
-  messagingSenderId: '139965212713'
+  messagingSenderId: '139965212713',
 };
 
 // Correção: Removido '@override'
@@ -97,6 +108,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     pan: { direction: Hammer.DIRECTION_ALL },
   };
 }
+
+registerLocaleData(localePt);
 
 @NgModule({
   imports: [
@@ -126,15 +139,15 @@ export class MyHammerConfig extends HammerGestureConfig {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
+        deps: [HttpClient],
+      },
+    }),
   ],
   declarations: [
     AppComponent,
     AppMenuItemComponent,
     AppMenuSecondaryItemComponent,
-    StoreOptionsMenuPopoverComponent
+    StoreOptionsMenuPopoverComponent,
   ],
   bootstrap: [AppComponent],
   providers: [
@@ -142,7 +155,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     provideHttpClient(),
     {
       provide: HAMMER_GESTURE_CONFIG,
-      useClass: MyHammerConfig
+      useClass: MyHammerConfig,
     },
     {
       provide: HTTP_INTERCEPTORS,
@@ -189,16 +202,15 @@ export class MyHammerConfig extends HammerGestureConfig {
     { provide: ErrorHandler, useClass: SentryErrorHandler },
     {
       provide: LOCALE_ID,
-      useValue: 'pt-BR'
+      useValue: 'pt-BR',
     },
     TrackHelper,
     UserAddressProvider,
     DeliveryState,
     GeoServiceProvider,
     LaunchNavigator,
-    CouponsService,    
+    CouponsService,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
-  ]
+  ],
 })
-export class AppModule { }
-
+export class AppModule {}

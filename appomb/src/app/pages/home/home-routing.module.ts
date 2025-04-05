@@ -8,7 +8,7 @@ import { FIRST_PAGE_APP } from '../../shared/constants';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'HomeList',
     component: HomePage,
   },
   {

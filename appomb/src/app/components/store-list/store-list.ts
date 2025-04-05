@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '../../shared/models/store.model';
 
 @Component({
-  selector: 'store-list',
+  selector: 'app-store-list',
   templateUrl: './store-list.html',
   styleUrls: ['./store-list.scss'],
 })
@@ -12,7 +12,7 @@ export class StoreListComponent {
   @Input() stores: Store[];
   @Input() title: string;
   @Input() reordering: boolean;
-  defaultThumb: string = "assets/img/logo.png";
+  defaultThumb: string = 'assets/img/logo.png';
 
   constructor() {}
 
@@ -26,5 +26,10 @@ export class StoreListComponent {
     }
 
     event.detail.complete();
+  }
+
+  onChoose(store: Store) {
+    if (this.reordering) return;
+    this.chooseStore.emit(store);
   }
 }

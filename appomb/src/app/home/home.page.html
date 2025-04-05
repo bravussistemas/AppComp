@@ -126,10 +126,10 @@
                     R$ <reseller-amount [resellerId]="resellerId" class="feature"></reseller-amount>
                   </span>
                 </ion-item-divider>
-                <div [ngClass]="{'hidden': resellerOpen != resellerId}">
+                <div [ngClass]="{'hidden': resellerOpen !== resellerId}">
                   <ng-container *ngFor="let item of itemsPerReseller[resellerId]">
                     <ion-item [hidden]="!(item.is_visible && item.is_active)">
-                      <product-img *ngIf="resellerOpen == resellerId" item-start [product]="item.product"></product-img>
+                      <product-img *ngIf="resellerOpen === resellerId" item-start [product]="item.product"></product-img>
                       <ion-grid class="menu-product-item">
                         <product-details [product]="item.product"></product-details>
                         <item-cart-amount [item]="item"></item-cart-amount>

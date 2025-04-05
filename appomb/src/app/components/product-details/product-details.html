@@ -2,7 +2,7 @@
   <ion-col class="title-product line-break">
     <h4 class="name-product" tappable (click)="goToDetail()">
       <span [innerHTML]="product?.name_formatted || product?.name"></span>
-      <strong class="price-product">{{ product?.price | currency: "BRL": true }}</strong>
+      <strong class="price-product">{{ product?.price | currency:'BRL':'symbol' }}</strong>
     </h4>
   </ion-col>
 

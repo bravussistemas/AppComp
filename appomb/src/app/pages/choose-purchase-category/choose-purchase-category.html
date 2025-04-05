@@ -1,10 +1,5 @@
-<ion-header>
-  <app-header
-    [buttonIcon]="getHeaderAction()?.icon"
-    [iconClass]="getHeaderAction()?.iconClass"
-    (headerBtnClick)="getHeaderAction()?.handler($event)"
-  ></app-header>
-</ion-header>
+<app-header [buttonIcon]="getHeaderAction()?.icon" [iconClass]="getHeaderAction()?.iconClass" (headerBtnClick)="getHeaderAction()?.handler($event)"></app-header>
+
 
 <ion-content>
   <ng-container *ngIf="loading; else mainContent">
@@ -14,10 +9,8 @@
   </ng-container>
 
   <ng-template #mainContent>
-    <app-hero-banner
-      *ngIf="appConfig?.choose_category_store_bg?.thumbnail"
-      [src]="appConfig?.choose_category_store_bg?.thumbnail"
-    >
+    <app-hero-banner *ngIf="appConfig?.choose_category_store_bg?.thumbnail"
+      [src]="appConfig?.choose_category_store_bg?.thumbnail">
       <div class="logo-hero"
         *ngIf="appConfig?.choose_category_store_bg_subtitle || appConfig?.choose_category_store_bg_title">
         {{ appConfig?.choose_category_store_bg_title }}
@@ -30,12 +23,7 @@
     <ion-list>
       <!-- Lojas -->
       <ng-container *ngIf="storesState?.has_normal_stores || hasErrorLoadStoreState">
-        <ion-item
-          id="btn-stores"
-          [disabled]="disableBtns"
-          class="store-item gray-item-new"
-          (click)="chooseStores()"
-        >
+        <ion-item id="btn-stores" [disabled]="disableBtns" class="store-item gray-item-new" (click)="chooseStores()">
           <img slot="start" src="assets/svg/icons/shop.svg" class="main-menu-fa-icon svg-icon-flat" />
           <ion-label>
             <h1>Lojas</h1>
@@ -47,12 +35,8 @@
 
       <!-- Entrega de pães -->
       <ng-container *ngIf="storesState?.has_delivery_main || hasErrorLoadStoreState">
-        <ion-item
-          id="btn-delivery"
-          [disabled]="disableBtns"
-          class="store-item gray-item-new"
-          (click)="chooseStores(storeType.DELIVERY, deliveryType.MAIN)"
-        >
+        <ion-item id="btn-delivery" [disabled]="disableBtns" class="store-item gray-item-new"
+          (click)="chooseStores(storeType.DELIVERY, deliveryType.MAIN)">
           <img slot="start" src="assets/svg/icons/delivery_2.svg" class="main-menu-fa-icon svg-icon-flat" />
           <ion-label>
             <h1>Entrega de pães</h1>
@@ -64,11 +48,8 @@
 
       <!-- Entrega de pizzas -->
       <ng-container *ngIf="storesState?.has_delivery_pizza || hasErrorLoadStoreState">
-        <ion-item
-          [disabled]="disableBtns"
-          class="store-item gray-item-new"
-          (click)="chooseStores(storeType.DELIVERY, deliveryType.PIZZA)"
-        >
+        <ion-item [disabled]="disableBtns" class="store-item gray-item-new"
+          (click)="chooseStores(storeType.DELIVERY, deliveryType.PIZZA)">
           <img slot="start" src="assets/svg/icons/pizza.svg" class="main-menu-fa-icon svg-icon-flat" />
           <ion-label>
             <h1>Entrega de pizzas</h1>
@@ -85,11 +66,7 @@
         Atalho
       </ion-item-divider>
       <ion-list>
-        <ion-item
-          [disabled]="disableBtns"
-          class="store-item gray-item-new"
-          (click)="chooseLastRequest()"
-        >
+        <ion-item [disabled]="disableBtns" class="store-item gray-item-new" (click)="chooseLastRequest()">
           <img slot="start" src="assets/svg/icons/previous.svg" class="main-menu-fa-icon svg-icon-flat" />
           <ion-label>
             <h1>{{ lastRequestSettings.title }}</h1>

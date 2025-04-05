@@ -5,8 +5,8 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <!-- Título dinâmico -->
-    <ion-title></ion-title>
-  </ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>  
 </ion-header>
 
 <ion-content id="store-list">
@@ -37,32 +37,32 @@
 
   <!-- Lista de lojas -->
   <div class="wrapper-login-page fadeIn" *ngIf="mustShowStoreList()">
-    <store-list
+    <app-store-list
       [stores]="storesByType?.delivery"
       [title]="sectionTitles.delivery"
       [reordering]="reorder"
       (chooseStore)="chooseStore($event)"
-    ></store-list>
+    ></app-store-list>
 
-    <store-list
+    <app-store-list
       [stores]="storesByType?.normal"
       [title]="sectionTitles.normal"
       [reordering]="reorder"
       (chooseStore)="chooseStore($event)"
-    ></store-list>
+    ></app-store-list>
 
-    <store-list
+    <app-store-list
       [stores]="storesByType?.points"
       [title]="sectionTitles.points"
       [reordering]="reorder"
       (chooseStore)="chooseStore($event)"
-    ></store-list>
+    ></app-store-list>
 
-    <store-list
+    <app-store-list
       [stores]="storesByType?.others"
       [title]="sectionTitles.others"
       [reordering]="reorder"
       (chooseStore)="chooseStore($event)"
-    ></store-list>
+    ></app-store-list>
   </div>
 </ion-content>

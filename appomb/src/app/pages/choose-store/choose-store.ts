@@ -232,7 +232,7 @@ export class ChooseStore implements OnInit, OnDestroy {
 
   getRedirectFunc(store: Store, autoSelect = false): Promise<any> {
     if (!this.user) {
-      return this.router.navigate(['/HomePage']);
+      return this.router.navigate(['/HomeList']);
     }
     if (this.isAdmin || Utils.canAdminStore(this.user, store)) {
       return this.router.navigate(['/AdmManageProductPage']);
@@ -241,7 +241,7 @@ export class ChooseStore implements OnInit, OnDestroy {
       this.user.is_store_seller &&
       this.user.stores_seller_ids.indexOf(store.id) !== -1
     ) {
-      return this.router.navigate(['/HomePage']);
+      return this.router.navigate(['/HomeList']);
     }
     if (this.user.delivery_employee_id) {
       return this.router.navigate(['/ListDispatchDeliveryPage']);
@@ -266,7 +266,7 @@ export class ChooseStore implements OnInit, OnDestroy {
         }
       }
     }
-    return this.router.navigateByUrl('/HomePage');
+    return this.router.navigateByUrl('/HomeList');
   }
 
   createRedirectToChooseAddressPromise(params?) {
@@ -296,13 +296,9 @@ export class ChooseStore implements OnInit, OnDestroy {
   }
 
   setStoreList(stores: any) {
-    console.log('🚀 Recebido em setStoreList:', stores);
+    this.stores = stores.results;
 
-    this.stores = stores.results; // Agora this.stores será um array de lojas
-    console.log('✅ this.stores após atribuição:', this.stores);
-
-    this.storesByType = orderStoresByType(this.stores); // Agora passamos apenas o array
-    console.log('📌 this.storesByType:', this.storesByType);
+    this.storesByType = orderStoresByType(this.stores);
 
     if (this.storesByType.delivery && this.storesByType.delivery.length) {
       this.sectionTitles = {
@@ -339,7 +335,8 @@ export class ChooseStore implements OnInit, OnDestroy {
   }
 
   get title() {
-    return this.loadingHelper.isLoadingAny() ? '' : 'oh my bread!';
+    const name = 'oh my bread!';
+    return this.loadingHelper.isLoadingAny() ? '' : name.toUpperCase();
   }
 
   mustShowStoreList() {

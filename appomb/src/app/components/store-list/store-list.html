@@ -4,8 +4,8 @@
   </ion-item-divider>
 
   <ion-reorder-group [disabled]="!reordering" (ionItemReorder)="reorderItems($event)">
-    <ion-item *ngFor="let store of stores">
-      <ion-thumbnail slot="start" *ngIf="store?.image?.thumbnail">
+    <ion-item *ngFor="let store of stores" (click)="!reordering && onChoose(store)">
+      <ion-thumbnail slot="start" *ngIf="store?.image">
         <img [src]="store?.image?.thumbnail || defaultThumb" />
       </ion-thumbnail>
       <ion-label>

@@ -225,8 +225,6 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
     }, 500);
     this.storeService.getStoresCities(storeType, deliveryType).subscribe(
       async (resp) => {
-      
-        
         clearTimeout(timout);
         this.loadingHelper.hide();
         this.disableBtns = false;

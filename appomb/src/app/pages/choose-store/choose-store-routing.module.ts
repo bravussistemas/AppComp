@@ -12,8 +12,8 @@ const routes: Routes = [
     component: ChooseStore,
   },
   {
-    path: 'HomePage',
-    component: HomePage,
+    path: 'HomeList',
+    loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
   },
   {
     path: 'AdmManageProductPage',

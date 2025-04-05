@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'item-cart-amount',
-  templateUrl: 'item-cart-amount.html'
+  templateUrl: 'item-cart-amount.html',
 })
 export class ItemCartAmount implements OnInit {
   _item: ProductInventoryDay;
@@ -27,7 +27,7 @@ export class ItemCartAmount implements OnInit {
     this._item = val;
     this.resellerId = Utils.safeAttr(this._item, 'reseller.id');
     this.update();
-  };
+  }
 
   maxAmount: number;
 
@@ -39,43 +39,46 @@ export class ItemCartAmount implements OnInit {
 
   @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private cartManagerTable: CartManagerTable,
-              private navCtrl: NavController,
-              private trans: TranslateService,
-              private toastHelper: ToastHelper,
-              private alertHelper: AlertHelper,
-              private router: Router,) {
-  }
+  constructor(
+    private cartManagerTable: CartManagerTable,
+    private navCtrl: NavController,
+    private trans: TranslateService,
+    private toastHelper: ToastHelper,
+    private alertHelper: AlertHelper,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   private changeCartAmount(operation: CartOperationsEnum, amount: number) {
     this.loading = true;
-    this.cartManagerTable.makeOperation(operation, {
-      day: this.item.day,
-      inventory_day_id: this.item.id,
-      product_id: this.item.product.id,
-      amount: amount,
-      price: this.item.product.price,
-      next_batch: this.item.next_batch,
-    }).then(() => {
-      this.loading = false;
-      let newAmount = this.amount;
-      if (operation == CartOperationsEnum.ADD) {
-        newAmount += amount;
-      }
-      if (operation == CartOperationsEnum.REMOVE) {
-        newAmount -= amount;
-      }
-      if (operation == CartOperationsEnum.SET) {
-        newAmount = amount;
-      }
-      this.onChange.emit(newAmount);
-      this.update();
-    }).catch((error) => {
-      this.handlerError(error);
-    });
+    this.cartManagerTable
+      .makeOperation(operation, {
+        day: this.item.day,
+        inventory_day_id: this.item.id,
+        product_id: this.item.product.id,
+        amount: amount,
+        price: this.item.product.price,
+        next_batch: this.item.next_batch,
+      })
+      .then(() => {
+        this.loading = false;
+        let newAmount = this.amount;
+        if (operation == CartOperationsEnum.ADD) {
+          newAmount += amount;
+        }
+        if (operation == CartOperationsEnum.REMOVE) {
+          newAmount -= amount;
+        }
+        if (operation == CartOperationsEnum.SET) {
+          newAmount = amount;
+        }
+        this.onChange.emit(newAmount);
+        this.update();
+      })
+      .catch((error) => {
+        this.handlerError(error);
+      });
   }
 
   addAmount() {
@@ -91,7 +94,11 @@ export class ItemCartAmount implements OnInit {
     if (amount < 0) {
       this.loading = false;
       this.trans.get('INSERT_POSITIVE_VALUE').subscribe((val) => {
-        this.toastHelper.show({message: val, position: 'middle', cssClass: 'toast-custom-white'});
+        this.toastHelper.show({
+          message: val,
+          position: 'middle',
+          cssClass: 'toast-custom-white',
+        });
       });
       return;
     }
@@ -102,20 +109,19 @@ export class ItemCartAmount implements OnInit {
     if (this.item) {
       this.updateMaxAmount();
       this.loading = true;
-      this.cartManagerTable.getByInventoryDayId(this.item.id)
-        .then((data) => {
-          // without data yet
-          this.loading = false;
-          if (!data) {
-            return this.reset();  // this return avoid recursive
-          }
-          // requested amount greater than permitted
-          if (data.amount > this.maxAmount) {
-            return this.onRequestedAmountGreater();
-          }
-          // set buy resume in view
-          this.updateBuyResumeInView(data.amount);
-        });
+      this.cartManagerTable.getByInventoryDayId(this.item.id).then((data) => {
+        // without data yet
+        this.loading = false;
+        if (!data) {
+          return this.reset(); // this return avoid recursive
+        }
+        // requested amount greater than permitted
+        if (data.amount > this.maxAmount) {
+          return this.onRequestedAmountGreater();
+        }
+        // set buy resume in view
+        this.updateBuyResumeInView(data.amount);
+      });
     }
   }
 
@@ -125,7 +131,7 @@ export class ItemCartAmount implements OnInit {
     if (this.item.product && this.item.product.name) {
       msg = `O valor máximo produto ${this.item.product.name} nesse dia é de ${this.maxAmount}`;
     }
-    this.toastHelper.show({message: msg});
+    this.toastHelper.show({ message: msg });
     this.loading = false;
     return;
   }
@@ -163,13 +169,14 @@ export class ItemCartAmount implements OnInit {
             placeholder: 'Quantidade',
             value: amount,
             min: 0,
-            max: this.maxAmount
-          }
-        ]
-      }).then((data: any) => {
-      this.loading = true;
-      this.setAmount(data.amount);
-    });
+            max: this.maxAmount,
+          },
+        ],
+      })
+      .then((data: any) => {
+        this.loading = true;
+        this.setAmount(data.amount);
+      });
   }
 
   reset() {
@@ -178,13 +185,12 @@ export class ItemCartAmount implements OnInit {
   }
 
   handlerError(error) {
-    this.toastHelper.show({message: 'Desculpe, ocorreu um erro.'});
+    this.toastHelper.show({ message: 'Desculpe, ocorreu um erro.' });
     this.loading = false;
     throw error;
   }
 
   goToDetail() {
-    this.router.navigate(['DetailProduct', {product: this.item.product}]);
+    this.router.navigate(['DetailProduct', { product: this.item.product }]);
   }
-
 }

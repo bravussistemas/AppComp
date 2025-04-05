@@ -1,5 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { OperatingDaysNote } from '../../shared/models/operating-day-note.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Utils } from '../../utils/utils';
@@ -16,16 +16,18 @@ export class DayNotePopUpPage {
   note: OperatingDaysNote;
   role: string;
 
-  constructor(public navCtrl: NavController,
-              private renderer: Renderer2,
-              private sanitizer: DomSanitizer,
-              private appConfig: AppConfigService,
-              private loading: LoadingHelper,
-              private router: Router,
-              private route: ActivatedRoute,
-            ) {
+  constructor(
+    public navCtrl: NavController,
+    private renderer: Renderer2,
+    private sanitizer: DomSanitizer,
+    private modalCtrl: ModalController,
+    private appConfig: AppConfigService,
+    private loading: LoadingHelper,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.renderer.addClass(document.body, 'custom-popup');
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.note = params['note'];
       this.role = params['role'] || 'normal';
     });
@@ -72,7 +74,6 @@ export class DayNotePopUpPage {
     return typeof (window as any).MSStream !== 'undefined';
   }
 
-
   noteVideoUrl() {
     if (Utils.isNullOrUndefined(this.note)) {
       return;
@@ -82,12 +83,12 @@ export class DayNotePopUpPage {
 
   closeView() {
     // Retorna à página anterior
-    this.router.navigate(['..']);
+    // this.router.navigate(['..']);
+    this.modalCtrl.dismiss();
   }
 
   dismiss(save: boolean) {
     console.log('Dismiss with save:', save);
     // Adicione a lógica necessária para o encerramento ou salvamento
   }
-
 }
