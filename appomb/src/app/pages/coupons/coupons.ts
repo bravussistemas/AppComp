@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'page-coupons',
   templateUrl: './coupons.html',
-  styles: './coupons.scss',
+  styleUrl: './coupons.scss',
 })
 export class CouponsPage implements OnDestroy {
   items: CouponUserRegister[];

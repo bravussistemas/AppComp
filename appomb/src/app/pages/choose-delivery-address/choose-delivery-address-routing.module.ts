@@ -4,7 +4,7 @@ import { ChooseDeliveryAddressPage } from './choose-delivery-address';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'ChooseDeliveryAddressPage',
     component: ChooseDeliveryAddressPage,
   },
 ];

@@ -1,24 +1,21 @@
-reservation-bar {
-  //bottom: 0;
+.reservation-wrapper-inner {
   left: 0;
   width: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
   bottom: -100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: bottom 400ms;
 
-  .reservation-wrapper-inner {
+  h2 {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+  }
 
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
-    bottom: -100px;
-    transition: bottom 400ms;
-
-    h2 {
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap !important;
-    }
-
-    &.btn-reservation-visible {
-      bottom: 99px;
-    }
+  &.btn-reservation-visible {
+    bottom: 99px;
   }
 }

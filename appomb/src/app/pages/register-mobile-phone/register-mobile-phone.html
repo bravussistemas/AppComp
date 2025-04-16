@@ -9,11 +9,8 @@
     <ion-list>
       <ion-item [ngClass]="{'has-error': formErrors.getErrors().mobilePhone?.length}">
         <ion-icon name="call" item-start></ion-icon>
-        <ion-input placeholder="{{ 'PHONE_PLACEHOLDER' | translate }}"
-                   formControlName="mobilePhone"
-                   #inputPhone
-                   type="tel"
-                   id="inputPhone">
+        <ion-input placeholder="{{ 'PHONE_PLACEHOLDER' | translate }}" formControlName="mobilePhone" #inputPhone
+          type="tel" id="inputPhone">
         </ion-input>
       </ion-item>
       <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().mobilePhone?.length">

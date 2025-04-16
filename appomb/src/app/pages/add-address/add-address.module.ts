@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular'; // Import IonicModule for Ionic 8+
 import { AddAddressPage } from './add-address';
 import { SharedModule } from '../../shared/shared.module';
 import { Swiper} from 'swiper';
+import { AddAddressPageRoutingModule } from './add-address-routing.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { Swiper} from 'swiper';
     ReactiveFormsModule,
     IonicModule, // Use IonicModule instead of IonicPageModule
     SharedModule,
+    AddAddressPageRoutingModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Adicione o schema aqui

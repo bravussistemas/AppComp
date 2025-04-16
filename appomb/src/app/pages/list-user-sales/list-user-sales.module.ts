@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { SharedModule } from "../../shared/shared.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { ListUserSalesPage } from "./list-user-sales";
@@ -22,7 +22,8 @@ import { IonicModule } from "@ionic/angular";
   ],
   exports: [
     ListUserSalesPage
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ListUserSalesPageModule {
 }

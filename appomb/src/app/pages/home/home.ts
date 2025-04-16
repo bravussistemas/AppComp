@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -49,6 +50,8 @@ import { EventService } from 'src/app/providers/event.service';
 import { DayNotePopUpPage } from '../day-note-pop-up/day-note-pop-up';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
+import type { Swiper as SwiperType } from 'swiper';
+import { register } from 'swiper/element/bundle';
 
 declare let $: any;
 
@@ -93,6 +96,7 @@ export class HomePage implements OnInit, OnDestroy {
   canRenderOthers = false;
 
   @ViewChild(IonContent) content: IonContent;
+  @ViewChild('mySlider', { static: true }) sliderRef: ElementRef;
 
   slides: any;
   items: ProductInventoryDay[] = [];
@@ -123,8 +127,6 @@ export class HomePage implements OnInit, OnDestroy {
   firebaseInventoryDay = new Subscription();
 
   slideChanging = false;
-
-  @ViewChild('mySlider') slider: Swiper;
 
   constructor(
     private router: Router,
@@ -160,6 +162,8 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadingHelper.setLoading('products', true);
     this.serverReturned = false;
+
+    register();
   }
 
   eventStoreChanged = (store: Store) => {
@@ -228,25 +232,6 @@ export class HomePage implements OnInit, OnDestroy {
     return 'HOME_TABS.OTHERS';
   }
 
-  canGoCheckout = () => {
-    if (
-      this.section == 'breads' &&
-      !this.isAdminOrStoreSeller(this.user, this.store)
-    ) {
-      try {
-        this.trackHelper.trackByName(
-          TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
-          { store_id: this.store.id }
-        );
-      } catch (e) {
-        console.error(e);
-      }
-      this.slider.slideTo(1);
-      return false;
-    }
-    return true;
-  };
-
   init(store?: Store) {
     if (store) {
       this.setStore(store);
@@ -268,6 +253,29 @@ export class HomePage implements OnInit, OnDestroy {
   get hasOpenSaleToday() {
     return this.saleState && this.saleState.client_has_open_dispatch_today;
   }
+
+  canGoCheckout = () => {
+    if (
+      this.section == 'breads' &&
+      !this.isAdminOrStoreSeller(this.user, this.store)
+    ) {
+      try {
+        this.trackHelper.trackByName(
+          TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
+          { store_id: this.store.id }
+        );
+      } catch (e) {
+        console.error(e);
+      }
+
+      const swiperInstance = this.sliderRef?.nativeElement?.swiper;
+      swiperInstance.slideTo(1);
+      //aqui é false
+      return false;
+    }
+
+    return true;
+  };
 
   setStore(store: Store) {
     this.store = store;
@@ -309,7 +317,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   onSegmentChanged(segmentButton) {
     this.content.scrollToTop(0);
-    if (segmentButton.value === 'others') {
+    if (segmentButton.detail.value === 'others') {
       this.othersAlreadyOpen = true;
       setTimeout(() => {
         this.canRenderOthers = true;
@@ -319,15 +327,17 @@ export class HomePage implements OnInit, OnDestroy {
       );
     }
 
-    const selectedIndex = this.slides.findIndex((slide) => {
-      return slide.id === segmentButton.value;
+    const selectedIndex = this.slides.findIndex((slide: any) => {
+      return slide.id === segmentButton.detail.value;
     });
-    this.slider.slideTo(selectedIndex);
+
+    const swiperInstance = this.sliderRef?.nativeElement?.swiper;
+    swiperInstance?.slideTo(selectedIndex);
   }
 
   onSlideWillChange(e) {}
 
-  onSlideChanged(slider) {
+  onSlideChanged(slider: any) {
     const currentSlide = this.slides[slider.getActiveIndex()];
     if (currentSlide) {
       this.section = currentSlide.id;

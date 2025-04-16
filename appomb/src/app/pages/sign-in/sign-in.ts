@@ -13,32 +13,31 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.scss',
 })
+/* eslint-disable @angular-eslint/component-class-suffix */
 export class SignIn {
-
   loginForm: FormGroup;
-  dataForm: { email: string; password: string; };
+  dataForm: { email: string; password: string };
   formErrors: FormErrors;
   inputType = 'password';
 
   @ViewChild('input') inputPassword: IonInput;
 
-  constructor(public fb: FormBuilder,
-              public auth: AuthService,
-              private alertHelper: AlertHelper,
-              private loadingHelper: LoadingHelper,
-              public navCtrl: NavController,
-              private appConfig: AppConfig,
-              private router: Router,
-              private route: ActivatedRoute,
-            ) {
-
-    
-    this.route.queryParams.subscribe(params => {
+  constructor(
+    public fb: FormBuilder,
+    public auth: AuthService,
+    private alertHelper: AlertHelper,
+    private loadingHelper: LoadingHelper,
+    public navCtrl: NavController,
+    private appConfig: AppConfig,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.route.queryParams.subscribe((params) => {
       const email = params['email'] || this.appConfig.DEBUG_EMAIL || '';
 
       this.dataForm = {
         email: this.appConfig.DEBUG ? email : '',
-        password: this.appConfig.DEBUG ? this.appConfig.DEBUG_PASSWORD : ''
+        password: this.appConfig.DEBUG ? this.appConfig.DEBUG_PASSWORD : '',
       };
 
       this.buildForm();
@@ -60,7 +59,7 @@ export class SignIn {
     if (this.loginForm.valid) {
       this.login({
         email: this.loginForm.controls['email'].value,
-        password: this.loginForm.controls['password'].value
+        password: this.loginForm.controls['password'].value,
       });
     }
   }
@@ -71,56 +70,63 @@ export class SignIn {
 
   buildForm(): void {
     this.loginForm = this.fb.group({
-      'email': [this.dataForm.email, [
-        Validators.required,
-        Validators.email
-      ]],
-      'password': [this.dataForm.password, [
-        Validators.required,
-        Validators.minLength(this.appConfig.MIN_LENGTH_PASSWORD),
-        Validators.maxLength(this.appConfig.MAX_LENGTH_PASSWORD)
-      ]]
+      email: [this.dataForm.email, [Validators.required, Validators.email]],
+      password: [
+        this.dataForm.password,
+        [
+          Validators.required,
+          Validators.minLength(this.appConfig.MIN_LENGTH_PASSWORD),
+          Validators.maxLength(this.appConfig.MAX_LENGTH_PASSWORD),
+        ],
+      ],
     });
     this.formErrors = new FormErrors(this.loginForm, this.validationMessages);
-
   }
 
   validationMessages = {
-    'email': {
-      'required': 'Digite o seu e-mail cadastrado.',
-      'minlength': 'O e-mail está muito curto.',
-      'maxlength': 'O e-mail está muito longo.'
+    email: {
+      required: 'Digite o seu e-mail cadastrado.',
+      minlength: 'O e-mail está muito curto.',
+      maxlength: 'O e-mail está muito longo.',
     },
-    'password': {
-      'required': 'Digite a sua senha.',
-      'minlength': 'Campo senha está muito curto.',
-      'maxlength': 'Campo senha está muito longo.'
-    }
+    password: {
+      required: 'Digite a sua senha.',
+      minlength: 'Campo senha está muito curto.',
+      maxlength: 'Campo senha está muito longo.',
+    },
   };
 
   login(credentials: loginCredentials): Promise<any> {
     this.formErrors.setSubmitted();
     this.loadingHelper.show(null, 20000);
-    return this.auth.login(credentials).then(
-      () => {        
-        this.navCtrl.navigateRoot('/HomePage');
-      },
-      (err) => {
+    return this.auth
+      .login(credentials)
+      .then(
+        () => {
+          this.navCtrl.navigateRoot('/HomePage');
+        },
+        (err) => {
+          this.loadingHelper.hide();
+          this.alertHelper.show(
+            'Erro',
+            'Verifique o seu e-mail e senha e tente novamente.'
+          );
+          console.debug(err);
+        }
+      )
+      .catch((error) => {
         this.loadingHelper.hide();
-        this.alertHelper.show('Erro', 'Verifique o seu e-mail e senha e tente novamente.');
-        console.debug(err);
-      }).catch((error) => {
-      this.loadingHelper.hide();
-      this.alertHelper.show('Erro', 'Não foi possível efetuar o login no momento.');
-      console.debug(error);
-    });
-
+        this.alertHelper.show(
+          'Erro',
+          'Não foi possível efetuar o login no momento.'
+        );
+        console.debug(error);
+      });
   }
 
   logout() {
     this.auth.logout();
   }
-
 
   goToForgotPassword() {
     const email = this.loginForm.get('email')?.value || '';
@@ -130,5 +136,4 @@ export class SignIn {
   goToSignUp() {
     this.router.navigate(['/SignUp']);
   }
-
 }

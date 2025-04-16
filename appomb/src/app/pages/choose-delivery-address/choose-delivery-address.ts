@@ -1,7 +1,24 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { IonContent, ModalController, NavController, Platform } from '@ionic/angular';
+import { AddAddressPage } from './../add-address/add-address';
+
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
+import {
+  IonContent,
+  ModalController,
+  NavController,
+  Platform,
+} from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserAddressProvider, UserAddress } from '../../providers/user-address/user-address';
+import {
+  UserAddressProvider,
+  UserAddress,
+} from '../../providers/user-address/user-address';
 import { AuthService } from '../../providers/auth-service';
 import { DeliveryState } from '../../providers/delivery-state/delivery-state';
 import { DeliveryMethod } from '../../shared/interfaces';
@@ -11,14 +28,22 @@ import { LoadingHelper } from '../../utils/loading-helper';
 import { SettingsService } from '../../providers/settings-service';
 import { LastRequestService } from '../../providers/last-request-service';
 import { Store } from '../../shared/models/store.model';
+import { AddAddressSimplePage } from '../add-address-simple/add-address-simple';
 
 @Component({
   selector: 'app-choose-delivery-address',
   templateUrl: './choose-delivery-address.html',
   styleUrls: ['./choose-delivery-address.scss'],
 })
-export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
+export class ChooseDeliveryAddressPage
+  implements OnInit, OnDestroy, AfterViewInit
+{
   @ViewChild(IonContent, { static: false }) content: IonContent;
+
+  @ViewChild('header', { static: false, read: ElementRef })
+  headerRef: ElementRef;
+
+  headerEl: HTMLElement;
 
   addressAcceptableList: UserAddress[] = [];
   addressNotAcceptableList: UserAddress[] = [];
@@ -46,36 +71,48 @@ export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
 
   get hasAddress() {
     const allAddress = this.getAllAddressList();
-    return allAddress && allAddress.length > 0;
-  }
+    return allAddress && allAddress.length > 0;
+  }
 
   getAllAddressList(): UserAddress[] {
     return [...this.addressAcceptableList, ...this.addressNotAcceptableList];
-  };  
+  }
 
   trackByFn(index, item: UserAddress) {
     return index;
-  } 
+  }
 
   onSelectAddress(address: UserAddress) {
     if (!this.isValidSelectAddress(this.addressAcceptableList, address)) {
       this.toastHelper.show({
-        message: 'A loja escolhida não oferece cobertura para este endereço.'
+        message: 'A loja escolhida não oferece cobertura para este endereço.',
       });
       return;
     }
     this.selectAddress(address);
-  }  
+  }
 
   onDeleteAddress(address: UserAddress) {
-    this.addressAcceptableList = this.addressAcceptableList.filter((addr) => addr.id !== address.id);
-    this.addressNotAcceptableList = this.addressNotAcceptableList.filter((addr) => addr.id !== address.id);
+    this.addressAcceptableList = this.addressAcceptableList.filter(
+      (addr) => addr.id !== address.id
+    );
+    this.addressNotAcceptableList = this.addressNotAcceptableList.filter(
+      (addr) => addr.id !== address.id
+    );
+  }
+
+  ngAfterViewInit() {
+    this.headerEl = this.headerRef.nativeElement;
   }
 
   ngOnInit(): void {
-    this.goToAfter = this.route.snapshot.queryParamMap.get('goToAfter') || undefined;
-    this.redirectType = this.route.snapshot.queryParamMap.get('redirectType') || undefined;
-    this.userAddressId = Number(this.route.snapshot.queryParamMap.get('userAddressId')) || undefined;
+    this.goToAfter =
+      this.route.snapshot.queryParamMap.get('goToAfter') || undefined;
+    this.redirectType =
+      this.route.snapshot.queryParamMap.get('redirectType') || undefined;
+    this.userAddressId =
+      Number(this.route.snapshot.queryParamMap.get('userAddressId')) ||
+      undefined;
     this.load();
     this.initializeBackButtonCustomHandler();
   }
@@ -85,10 +122,11 @@ export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
   }
 
   initializeBackButtonCustomHandler(): void {
-    this.unregisterBackButtonAction = this.platform.backButton.subscribeWithPriority(10, () => {
-      this.router.navigate(['/previous-page']); // Substitua '/previous-page' pela rota anterior.
-      this.executeOnCancelCallback();
-    });
+    this.unregisterBackButtonAction =
+      this.platform.backButton.subscribeWithPriority(10, () => {
+        this.router.navigate(['/previous-page']); // Substitua '/previous-page' pela rota anterior.
+        this.executeOnCancelCallback();
+      });
   }
 
   executeOnCancelCallback(): void {
@@ -111,24 +149,27 @@ export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
 
   loadAddressList(store: Store): void {
     this.loadingHelper.setLoading('addressList', true);
-    this.userAddressProvider
-      .list({ store_id: store.id.toString() })
-      .subscribe(
-        (resp) => {
-          if (resp.acceptable.length && this.userAddressId) {
-            const autoSelected = this.autoSelectWithId(resp.acceptable, this.userAddressId);
-            if (autoSelected) return;
-          }
-          this.addressAcceptableList = resp.acceptable;
-          this.addressNotAcceptableList = resp.not_acceptable;
-          this.loadingHelper.setLoading('addressList', false);
-        },
-        () => this.toastHelper.connectionError()
-      );
+    this.userAddressProvider.list({ store_id: store.id.toString() }).subscribe(
+      (resp) => {
+        if (resp.acceptable.length && this.userAddressId) {
+          const autoSelected = this.autoSelectWithId(
+            resp.acceptable,
+            this.userAddressId
+          );
+          if (autoSelected) return;
+        }
+        this.addressAcceptableList = resp.acceptable;
+        this.addressNotAcceptableList = resp.not_acceptable;
+        this.loadingHelper.setLoading('addressList', false);
+      },
+      () => this.toastHelper.connectionError()
+    );
   }
 
   autoSelectWithId(userAddressList: UserAddress[], id: number): boolean {
-    const selected = userAddressList.find((userAddress) => userAddress.id === id);
+    const selected = userAddressList.find(
+      (userAddress) => userAddress.id === id
+    );
     if (selected && this.isValidSelectAddress(userAddressList, selected)) {
       this.selectAddress(selected);
       return true;
@@ -136,7 +177,10 @@ export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
     return false;
   }
 
-  isValidSelectAddress(addressAcceptableList: UserAddress[], userAddress: UserAddress): boolean {
+  isValidSelectAddress(
+    addressAcceptableList: UserAddress[],
+    userAddress: UserAddress
+  ): boolean {
     return addressAcceptableList.some((addr) => addr.id === userAddress.id);
   }
 
@@ -161,7 +205,9 @@ export class ChooseDeliveryAddressPage implements OnInit, OnDestroy {
 
   async addAddress(): Promise<void> {
     const modal = await this.modalCtrl.create({
-      component: this.deliveryState.store.accept_delivery_by_district ? 'AddAddressSimplePage' : 'AddAddressPage',
+      component: this.deliveryState.store.accept_delivery_by_district
+        ? AddAddressSimplePage
+        : AddAddressPage,
       componentProps: { goToAfter: this.goToAfter },
     });
     await modal.present();

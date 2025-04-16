@@ -1,6 +1,8 @@
+@import "../../../theme/variables.scss";
+
 page-coupons-register {
   p {
-    color: color($colors, secondary);
+    color: map-get($colors, secondary);
     margin: 30px 10px;
     font-size: 1.7rem;
     line-height: 2.5rem;
@@ -8,7 +10,7 @@ page-coupons-register {
   }
 
   h2 {
-    color: color($colors, primary);
+    color: map-get($colors, primary);
     text-align: center;
     font-weight: 700;
   }

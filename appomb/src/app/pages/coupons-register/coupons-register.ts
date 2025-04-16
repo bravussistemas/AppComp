@@ -16,7 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'page-coupons-register',
   templateUrl: './coupons-register.html',
-  styles: './coupons-register.scss',
+  styleUrl: './coupons-register.scss',
 })
 export class CouponsRegisterPage {
   form: FormGroup;
@@ -37,15 +37,15 @@ export class CouponsRegisterPage {
     private alertHelper: AlertHelper,
     private couponsService: CouponsService,
     private settingsService: SettingsService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.dataForm = {
       coupon: '',
     };
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.redirectAfter = params['redirectAfter'];
-    })
+    });
     this.buildForm();
   }
 
@@ -53,10 +53,9 @@ export class CouponsRegisterPage {
     setTimeout(() => {
       this.input.setFocus();
     }, 500);
-    this.settingsService.getSettings()
-      .then((result: IUserSettings) => {
-        this.store = result.store;
-      });
+    this.settingsService.getSettings().then((result: IUserSettings) => {
+      this.store = result.store;
+    });
   }
 
   onSubmit(valid) {
@@ -65,10 +64,11 @@ export class CouponsRegisterPage {
       return;
     }
     this.loadingHelper.show('Validando cupom, aguarde...');
-    this.couponsService.register({
-      coupon: this.form.get('coupon').value.toString().toUpperCase(),
-      storeId: this.store.id
-    })
+    this.couponsService
+      .register({
+        coupon: this.form.get('coupon').value.toString().toUpperCase(),
+        storeId: this.store.id,
+      })
       .subscribe(
         () => {
           this.events.emitEvent('loadCouponsList');
@@ -79,35 +79,42 @@ export class CouponsRegisterPage {
           this.loadingHelper.hide();
           let data = null;
           try {
-            data = e
+            data = e;
           } catch (e) {
-            console.warn(e)
+            console.warn(e);
           }
           if (data && data.error_code == 'invalid_coupon_to_store') {
-            this.alertHelper.show('Cupom não disponível para a loja atual', data.detail)
+            this.alertHelper.show(
+              'Cupom não disponível para a loja atual',
+              data.detail
+            );
           } else if (data && data.error_code == 'already_register') {
-            this.alertHelper.show(data.detail, 'Primeiro exclua o existente para poder utilizar esse.')
+            this.alertHelper.show(
+              data.detail,
+              'Primeiro exclua o existente para poder utilizar esse.'
+            );
           } else if (e && e.status == 400) {
-            this.alertHelper.show('Cupom inválido', 'Verifique o cupom digitado ou se ainda é válido')
+            this.alertHelper.show(
+              'Cupom inválido',
+              'Verifique o cupom digitado ou se ainda é válido'
+            );
           } else {
             this.toastHelper.connectionError();
           }
-        });
+        }
+      );
   }
 
   buildForm(): void {
     this.form = this.fb.group({
-      'coupon': [this.dataForm.coupon, [
-        Validators.required
-      ]],
+      coupon: [this.dataForm.coupon, [Validators.required]],
     });
     this.formErrors = new FormErrors(this.form, this.validationMessages);
   }
 
   validationMessages = {
-    'coupon': {
-      'required': 'Digite o cupom'
+    coupon: {
+      required: 'Digite o cupom',
     },
   };
-
 }

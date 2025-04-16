@@ -8,7 +8,7 @@
 </ion-header>
 
 
-<ion-content id="scroll-fancy" [header-scrollable]="header">
+<ion-content *ngIf="headerEl" id="scroll-fancy" [header-scrollable]="headerEl">
   <div class="choose-delivery-content safe-area-bottom">
     <ion-spinner [showTimeout]="800" class="page-spinner" *ngIf="loadingHelper.isLoading('addressList')"></ion-spinner>
 
@@ -32,22 +32,17 @@
             <button (click)="addAddress()" ion-button><strong>Cadastrar endereço</strong></button>
           </div>
         </ng-container>
-        <user-address-row *ngFor="let item of addressAcceptableList; trackBy: trackByFn;"
-                          [userAddress]="item"
-                          (click)="onSelectAddress(item)"
-                          (onDeleteAddress)="onDeleteAddress($event)"
-        ></user-address-row>
+        <user-address-row *ngFor="let item of addressAcceptableList; trackBy: trackByFn;" [userAddress]="item"
+          (click)="onSelectAddress(item)" (onDeleteAddress)="onDeleteAddress($event)"></user-address-row>
         <ng-container *ngIf="addressNotAcceptableList && addressNotAcceptableList.length">
           <ion-item-divider style="margin-top: 50px;" sticky>
             Seus endereços <strong>sem cobertura pela loja</strong>
           </ion-item-divider>
-          <user-address-row *ngFor="let item of addressNotAcceptableList; trackBy: trackByFn;"
-                            [userAddress]="item"
-                            (click)="onSelectAddress(item)"
-                            (onDeleteAddress)="onDeleteAddress($event)"
-          ></user-address-row>
+          <user-address-row *ngFor="let item of addressNotAcceptableList; trackBy: trackByFn;" [userAddress]="item"
+            (click)="onSelectAddress(item)" (onDeleteAddress)="onDeleteAddress($event)"></user-address-row>
         </ng-container>
       </ng-container>
+      
       <ng-container *ngIf="!hasAddress">
         <div style="text-align: center;">
           <button (click)="addAddress()" ion-button><strong>Cadastrar endereço</strong></button>

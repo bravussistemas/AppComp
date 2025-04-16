@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '../../utils/form-errors';
 import { AlertHelper } from '../../utils/alert-helper';
@@ -7,16 +7,17 @@ import { AuthService } from '../../providers/auth-service';
 import { Utils } from '../../utils/utils';
 import { UserProfileService } from '../../providers/user-profile.service';
 import { AppConfig } from '../../../configs';
+import { IonInput } from '@ionic/angular';
 
 @Component({
   selector: 'app-register-mobile-phone',
   templateUrl: './register-mobile-phone.html',
   styleUrls: ['./register-mobile-phone.scss'],
 })
-export class RegisterMobilePhone {
+export class RegisterMobilePhone implements AfterViewInit {
   form: FormGroup;
 
-  @ViewChild('inputPhone', { static: false }) inputPhone: ElementRef;
+  @ViewChild('inputPhone', { static: false }) inputPhone: IonInput;
 
   dataForm: {
     mobilePhone: string;
@@ -25,6 +26,16 @@ export class RegisterMobilePhone {
   enableBackButton = false;
 
   formErrors: FormErrors;
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.inputPhone
+        ?.getInputElement()
+        .then((nativeInput: HTMLInputElement) => {
+          nativeInput.focus();
+        });
+    });
+  }
 
   constructor(
     public fb: FormBuilder,
@@ -50,17 +61,17 @@ export class RegisterMobilePhone {
   }
 
   setupMask() {
-    const inputElement = this.inputPhone?.nativeElement as HTMLInputElement;
-    if (inputElement) {
-      inputElement.addEventListener('input', () => {
-        const val = inputElement.value;
+    this.inputPhone?.getInputElement().then((nativeInput: HTMLInputElement) => {
+      nativeInput.focus();
+      nativeInput.addEventListener('input', () => {
+        const val = nativeInput.value;
         const mask =
           Utils.cleanNonDigits(val).length === 11
             ? '(00) 00000-0000'
             : '(00) 0000-00009';
-        inputElement.value = Utils.applyMask(val, mask);
+        nativeInput.value = Utils.applyMask(val, mask);
       });
-    }
+    });
   }
 
   ionViewWillEnter() {
@@ -69,17 +80,9 @@ export class RegisterMobilePhone {
 
   buildForm(): void {
     this.form = this.fb.group({
-      mobilePhone: [
-        this.dataForm.mobilePhone,
-        [Validators.required],
-      ],
+      mobilePhone: [this.dataForm.mobilePhone, [Validators.required]],
     });
     this.formErrors = new FormErrors(this.form, this.validationMessages);
-    setTimeout(() => {
-      if (this.inputPhone) {
-        this.inputPhone.nativeElement.focus();
-      }
-    });
   }
 
   validationMessages = {

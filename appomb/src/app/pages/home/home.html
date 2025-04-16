@@ -7,6 +7,7 @@
 <ion-content>
   <ion-toolbar>
     <div class="toolbar-lines-content">
+
       <div class="toolbar-line half-line note-subtitle" *ngIf="noteSubtitle && noteSubtitle?.message">
         <span>{{ noteSubtitle.message }}</span>
       </div>
@@ -14,21 +15,28 @@
         (click)="goToUserRequests()">
         <span>pedido do dia</span>
       </div>
+
       <div class="toolbar-line">
         <ion-segment [(ngModel)]="section" (ionChange)="onSegmentChanged($event)">
+
           <ion-segment-button value="breads">
             <ng-container *ngIf="store?.id">
               {{ primaryTabLabel | translate }}
             </ng-container>
           </ion-segment-button>
+
           <ion-segment-button value="others" [ngClass]="{ 'hidden': !store.has_others_products }">
             {{ secondaryTabLabel | translate }}
           </ion-segment-button>
+
           <ion-segment-button [ngClass]="{ 'hidden': !isAdminOrStoreSeller(user, store) }" value="dispatch">
             {{ 'DISPATCH' | translate }}
           </ion-segment-button>
+
         </ion-segment>
       </div>
+
+
     </div>
   </ion-toolbar>
 
@@ -87,6 +95,49 @@
       <swiper-slide>
         <div *ngIf="section === 'others' || othersAlreadyOpen" [hidden]="section !== 'others'">
           <!-- Conteúdo do Slide 2 -->
+
+          <div class="slide-content-ctrl">
+            <ion-spinner [showTimeout]="800"
+              *ngIf="(loadingHelper.isLoading('products') || !canRenderOthers) && !dayMessage"
+              class="page-spinner"></ion-spinner>
+            <div *ngIf="dayMessage">
+              <page-message-box [text]="dayMessage"></page-message-box>
+            </div>
+            <div *ngIf="!dayMessage && !hasError() && !notHasDays() && notHasSecondaryItems()">
+              <page-message-box [text]="'EMPTY_PRODUCT_LIST_DAY' | translate"></page-message-box>
+            </div>
+            <ion-list *ngIf="!dayMessage && !loadingHelper.isLoading('othersProducts') && canRenderOthers">
+              <ng-container *ngFor="let resellerId of sellersIds">
+                <ion-item-divider class="light-divider reseller-divider"
+                  (click)="openReseller($event, resellerId, itemsPerReseller[resellerId][0].reseller?.name)"
+                  [ngClass]="{'opened': resellerOpen === resellerId}" *ngIf="itemsPerReseller[resellerId]">
+                  <div class="reseller-divider-wrapper">
+                    <div class="logo">
+                      <img src="{{itemsPerReseller[resellerId][0].reseller?.logo?.original}}" />
+                    </div>
+                    <div class="name" [innerHTML]="itemsPerReseller[resellerId][0].reseller?.name"></div>
+                  </div>
+                  <span item-end class="total-price-reseller">
+                    R$ <reseller-amount [resellerId]="resellerId" class="feature"></reseller-amount>
+                  </span>
+                </ion-item-divider>
+                <div [ngClass]="{'hidden': resellerOpen !== resellerId}">
+                  <ng-container *ngFor="let item of itemsPerReseller[resellerId]">
+                    <ion-item [hidden]="!(item.is_visible && item.is_active)">
+                      <product-img *ngIf="resellerOpen === resellerId" item-start
+                        [product]="item.product"></product-img>
+                      <ion-grid class="menu-product-item">
+                        <product-details [product]="item.product"></product-details>
+                        <item-cart-amount [item]="item"></item-cart-amount>
+                      </ion-grid>
+                    </ion-item>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </ion-list>
+          </div>
+
+
         </div>
       </swiper-slide>
 
@@ -100,3 +151,6 @@
       </swiper-slide>
     </swiper-container>
   </div>
+
+</ion-content>
+<reservation-bar [canGoCheckout]="canGoCheckout" class="hide-open-keyboard" ion-fixed></reservation-bar>

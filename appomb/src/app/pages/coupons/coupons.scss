@@ -1,6 +1,8 @@
+@import "../../../theme/variables.scss";
+
 page-coupons {
   .desc {
-    color: color($colors, secondary);
+    color: map-get($colors, secondary);
     margin: 5px 22px;
     padding: 5px -4px;
     text-transform: initial;
@@ -8,7 +10,7 @@ page-coupons {
   }
 
   h2 {
-    color: color($colors, primary);
+    color: map-get($colors, primary);
     text-align: center;
     font-weight: 700;
   }
@@ -16,13 +18,13 @@ page-coupons {
   .warning-coupon-invalid {
     display: none;
     text-align: center;
-    color: color($colors, error);
+    color: map-get($colors, error);
   }
 
   .invalid-label {
     display: none;
     font-weight: bold;
-    color: color($colors, error);
+    color: map-get($colors, error);
   }
 
   .invalid-coupon {
@@ -50,7 +52,7 @@ page-coupons {
     flex-direction: row;
 
     h1 {
-      color: color($colors, primary);
+      color: map-get($colors, primary);
       font-size: 2rem;
       text-transform: uppercase;
       font-weight: 600;
@@ -59,7 +61,7 @@ page-coupons {
 
       small {
         display: block;
-        color: color($colors, gray);
+        color: map-get($colors, gray);;
       }
     }
 

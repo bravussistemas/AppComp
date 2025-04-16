@@ -87,7 +87,7 @@ export class AppConfig {
   API_USER_SALES = '/api/user-sales/';
   API_DISPATCH_ORDERS_SALES = '/api/list-dispatch-order-sales/';
   API_GET_DISPATCH_SALE = '/api/get-dispatch-sale/';
-  API_USER_DISPATCH_ORDERS = '/api/user-dispatch-orders/';
+  API_USER_DISPATCH_ORDERS = 'api/user-dispatch-orders/';
   API_CANCEL_SALE = '/api/cancel-sale/';
   API_CHANGE_DEFAULT_CARD = '/api/change-default-card/';
   API_LIST_PENDING_PURCHASE = '/api/list-pending-purchase/';

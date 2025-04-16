@@ -101,7 +101,12 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
         iconClass: 'pending-sale-icon',
       };
     }
-    return {};
+
+    return {
+      icon: '',
+      iconClass: '',
+      handler: () => {},
+    };
   }
 
   loadAppConfig() {
@@ -170,6 +175,8 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
         this.loadUserSales();
       }
     );
+
+    this.getHeaderAction();
 
     // Carregando configurações do último pedido
     this.lastRequestService

@@ -7,10 +7,7 @@ import { AuthService } from './auth-service';
 
 @Injectable()
 export class AuthUserHttp {
-
-  constructor(private http: HttpClient,
-              private storage: Storage) {
-  }
+  constructor(private http: HttpClient, private storage: Storage) {}
 
   private getAuthHeaders(): Observable<HttpHeaders> {
     return from(this.storage.get(AuthService.TOKEN_NAME)).pipe(
@@ -55,5 +52,4 @@ export class AuthUserHttp {
       })
     );
   }
-
 }

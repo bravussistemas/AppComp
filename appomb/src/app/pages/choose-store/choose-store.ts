@@ -283,7 +283,7 @@ export class ChooseStore implements OnInit, OnDestroy {
       },
     };
     console.log(routeParams);
-    return this.router.navigate(['/ChooseDeliveryAddressPages'], {
+    return this.router.navigate(['/ChooseDeliveryAddressPage'], {
       queryParams: routeParams,
     });
   }

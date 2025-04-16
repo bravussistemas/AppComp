@@ -6,6 +6,7 @@ import { ListHistoryUserPurchasePage } from '../list-history-user-purchase/list-
 import { ChoosePurchaseCategory } from '../choose-purchase-category/choose-purchase-category';
 import { FIRST_PAGE_APP } from '../../shared/constants';
 
+
 const routes: Routes = [
   {
     path: 'HomeList',
@@ -23,6 +24,7 @@ const routes: Routes = [
     path: 'ChoosePurchaseCategory',
     component: ChoosePurchaseCategory,
   },
+  
 ];
 
 @NgModule({

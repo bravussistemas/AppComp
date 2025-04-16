@@ -4,7 +4,7 @@ import { RegisterMobilePhone } from './register-mobile-phone';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'RegisterMobilePhone',
     component: RegisterMobilePhone,
   },
   ];

@@ -1,5 +1,16 @@
-import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { IonContent, ModalController, NavController, PopoverController } from '@ionic/angular';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import {
+  IonContent,
+  ModalController,
+  NavController,
+  PopoverController,
+} from '@ionic/angular';
 import { ProductInventoryDay } from '../shared/models/product-inventory-day.model';
 import { LoadingHelper } from '../utils/loading-helper';
 import { DateService } from '../providers/date-service';
@@ -8,8 +19,15 @@ import { OperatingDay } from '../shared/models/operating-day.model';
 import { IUserSettings } from '../shared/interfaces';
 import { FirebaseDbService } from '../providers/firebase-db-service';
 import { Subscription } from 'rxjs';
-import { NoteTypeEnum, OperatingDaysNoteService } from '../providers/operating-days-note.service';
-import { DeliveryTypeEnum, Store, StoreTypeEnum } from '../shared/models/store.model';
+import {
+  NoteTypeEnum,
+  OperatingDaysNoteService,
+} from '../providers/operating-days-note.service';
+import {
+  DeliveryTypeEnum,
+  Store,
+  StoreTypeEnum,
+} from '../shared/models/store.model';
 import { CartManagerTable } from '../providers/database/cart-manager-table';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -35,7 +53,10 @@ import { register } from 'swiper/element/bundle';
 
 declare let $: any;
 
-export let parseItemsWithStock = (items: ProductInventoryDay[], showInvisible = false) => {
+export let parseItemsWithStock = (
+  items: ProductInventoryDay[],
+  showInvisible = false
+) => {
   return items.filter((item) => {
     return item.is_active && (item.is_visible || showInvisible);
   });
@@ -106,25 +127,26 @@ export class HomePage implements OnInit, OnDestroy {
 
   @ViewChild('mySlider') slider: Swiper;
 
-  constructor(private router: Router,
-              private cartManagerTable: CartManagerTable,
-              private renderer: Renderer2,
-              public loadingHelper: LoadingHelper,
-              private operatingDaysNoteService: OperatingDaysNoteService,
-              private date: DateService,
-              //private datePicker: DatePicker,
-              private trans: TranslateService,
-              private modalCtrl: ModalController,
-              public popoverCtrl: PopoverController,
-              private auth: AuthService,
-              private trackHelper: TrackHelper,
-              private salesService: SalesService,
-              private toastHelper: ToastHelper,
-              private productInventory: ProductInventory,
-              public events: EventService,
-              private firebaseService: FirebaseDbService,
-              private settingsService: SettingsService) 
-  {             
+  constructor(
+    private router: Router,
+    private cartManagerTable: CartManagerTable,
+    private renderer: Renderer2,
+    public loadingHelper: LoadingHelper,
+    private operatingDaysNoteService: OperatingDaysNoteService,
+    private date: DateService,
+    //private datePicker: DatePicker,
+    private trans: TranslateService,
+    private modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
+    private auth: AuthService,
+    private trackHelper: TrackHelper,
+    private salesService: SalesService,
+    private toastHelper: ToastHelper,
+    private productInventory: ProductInventory,
+    public events: EventService,
+    private firebaseService: FirebaseDbService,
+    private settingsService: SettingsService
+  ) {
     register();
     this.slides = [
       {
@@ -134,7 +156,7 @@ export class HomePage implements OnInit, OnDestroy {
         id: 'others',
       },
     ];
-    this.trans.get('TODAY').subscribe((val) => this.todayTxt = val);
+    this.trans.get('TODAY').subscribe((val) => (this.todayTxt = val));
   }
 
   ngOnInit(): void {
@@ -144,14 +166,14 @@ export class HomePage implements OnInit, OnDestroy {
 
   eventStoreChanged = (store: Store) => {
     this.init(store);
-  };  
+  };
 
   async startSearch() {
     const contentElement = await this.content.getScrollElement();
     this.renderer.addClass(contentElement, 'content-with-fixed-toolbar-top');
     this.enableSearch = true;
   }
-  
+
   async stopSearch() {
     const contentElement = await this.content.getScrollElement();
     this.renderer.removeClass(contentElement, 'content-with-fixed-toolbar-top');
@@ -160,12 +182,14 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-
     this.events.onEvent('storeChanged').subscribe(this.eventStoreChanged);
 
-    this.cartManagerTable.init().then(() => {
-      this.init();
-    }).catch(this.handlerError.bind(this));
+    this.cartManagerTable
+      .init()
+      .then(() => {
+        this.init();
+      })
+      .catch(this.handlerError.bind(this));
 
     this.setupStyles();
     this.updateSliderProportions();
@@ -206,10 +230,16 @@ export class HomePage implements OnInit, OnDestroy {
     return 'HOME_TABS.OTHERS';
   }
 
-  canGoCheckout = () => {    
-    if (this.section == 'breads' && !this.isAdminOrStoreSeller(this.user, this.store)) {
+  canGoCheckout = () => {
+    if (
+      this.section == 'breads' &&
+      !this.isAdminOrStoreSeller(this.user, this.store)
+    ) {
       try {
-        this.trackHelper.trackByName(TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES, {store_id: this.store.id});
+        this.trackHelper.trackByName(
+          TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
+          { store_id: this.store.id }
+        );
       } catch (e) {
         console.error(e);
       }
@@ -223,14 +253,13 @@ export class HomePage implements OnInit, OnDestroy {
     if (store) {
       this.setStore(store);
     } else {
-      this.settingsService.getSettings()
-        .then((result: IUserSettings) => {
-          if (!result || !result.store) {
-            this.router.navigate(['/'+FIRST_PAGE_APP]);
-          } else {
-            this.setStore(result.store);
-          }
-        }, this.handlerError.bind(this));
+      this.settingsService.getSettings().then((result: IUserSettings) => {
+        if (!result || !result.store) {
+          this.router.navigate(['/' + FIRST_PAGE_APP]);
+        } else {
+          this.setStore(result.store);
+        }
+      }, this.handlerError.bind(this));
     }
   }
 
@@ -239,7 +268,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   get hasOpenSaleToday() {
-    return this.saleState && this.saleState.client_has_open_dispatch_today
+    return this.saleState && this.saleState.client_has_open_dispatch_today;
   }
 
   setStore(store: Store) {
@@ -254,9 +283,10 @@ export class HomePage implements OnInit, OnDestroy {
       this.auth.loggedIn().then((isLoggedIn) => {
         if (isLoggedIn) {
           // check if the client has a dispatch order today
-          this.salesService.loadUserSaleState(store.id)
+          this.salesService
+            .loadUserSaleState(store.id)
             .toPromise()
-            .then(resp => {
+            .then((resp) => {
               this.saleState = resp;
               this.setupStyles();
             })
@@ -264,9 +294,11 @@ export class HomePage implements OnInit, OnDestroy {
         }
       });
       if (this.store && this.store.operating_days) {
-        let operationDaysClosed = this.store.operating_days.filter((value: OperatingDay) => {
-          return value.is_closed === true;
-        });
+        let operationDaysClosed = this.store.operating_days.filter(
+          (value: OperatingDay) => {
+            return value.is_closed === true;
+          }
+        );
         this.closedWeekDays = [];
         for (let i = 0; i < operationDaysClosed.length; i++) {
           let operating = operationDaysClosed[i];
@@ -284,7 +316,9 @@ export class HomePage implements OnInit, OnDestroy {
       setTimeout(() => {
         this.canRenderOthers = true;
       }, 200);
-      this.trackHelper.trackByName(TrackHelper.EVENTS.CHOOSE_OTHERS_PRODUCTS_SEGMENT);
+      this.trackHelper.trackByName(
+        TrackHelper.EVENTS.CHOOSE_OTHERS_PRODUCTS_SEGMENT
+      );
     }
 
     const selectedIndex = this.slides.findIndex((slide) => {
@@ -293,8 +327,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.slider.slideTo(selectedIndex);
   }
 
-  onSlideWillChange(e) {
-  }
+  onSlideWillChange(e) {}
 
   onSlideChanged(slider) {
     const currentSlide = this.slides[slider.getActiveIndex()];
@@ -312,35 +345,42 @@ export class HomePage implements OnInit, OnDestroy {
     this.day = day;
     this.watchOperatingNotesDaysChanges(this.store.id);
     this.dayMessage = null;
-    this.dataDispatchOrders = {day: this.day, store: this.store};
-    this.operatingDaysNoteService.getDay(this.store.id, this.day)
-      .subscribe((res) => {
-          const note = OperatingDayNoteUtil.getByType(res, NoteTypeEnum.NORMAL);
-          const notePopUp = OperatingDayNoteUtil.getByType(res, NoteTypeEnum.WARNING);
-          if (this.operatingDaysNoteService.mustShowNote(notePopUp)) {
-            this.notePopUp = notePopUp;
-            this.operatingDaysNoteService.saveAsShowed(notePopUp);
-          }
-          this.noteSubtitle = OperatingDayNoteUtil.getByType(res, NoteTypeEnum.SUBTITLE);
-          if (note && note.message) {
-            this.dayMessage = note.message;
-            this.loadingHelper.setLoading('products', false);
-          } else {
-            this.getInventoryDay();
-          }
-          this.setupStyles();
-        },
-        () => {
+    this.dataDispatchOrders = { day: this.day, store: this.store };
+    this.operatingDaysNoteService.getDay(this.store.id, this.day).subscribe(
+      (res) => {
+        const note = OperatingDayNoteUtil.getByType(res, NoteTypeEnum.NORMAL);
+        const notePopUp = OperatingDayNoteUtil.getByType(
+          res,
+          NoteTypeEnum.WARNING
+        );
+        if (this.operatingDaysNoteService.mustShowNote(notePopUp)) {
+          this.notePopUp = notePopUp;
+          this.operatingDaysNoteService.saveAsShowed(notePopUp);
+        }
+        this.noteSubtitle = OperatingDayNoteUtil.getByType(
+          res,
+          NoteTypeEnum.SUBTITLE
+        );
+        if (note && note.message) {
+          this.dayMessage = note.message;
+          this.loadingHelper.setLoading('products', false);
+        } else {
           this.getInventoryDay();
         }
-      );
+        this.setupStyles();
+      },
+      () => {
+        this.getInventoryDay();
+      }
+    );
   }
 
   watchOperatingNotesDaysChanges(storeId) {
     if (!Utils.isNullOrUndefined(this.watchOperatingNotesDaysChangesSub)) {
       return;
     }
-    this.watchOperatingNotesDaysChangesSub = this.firebaseService.watchOperatingNotesDaysChanges(storeId)
+    this.watchOperatingNotesDaysChangesSub = this.firebaseService
+      .watchOperatingNotesDaysChanges(storeId)
       .subscribe((result) => {
         if (this.alreadyWatchingOperatingNotesDaysChanges) {
           this.setDay(this.day);
@@ -372,17 +412,17 @@ export class HomePage implements OnInit, OnDestroy {
 
   async scrollToItem(elem: HTMLElement) {
     if (!elem) return;
-  
+
     // Obter a posição do elemento na página
     const box = elem.getBoundingClientRect();
     const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
     const clientTop = document.documentElement.clientTop || 0;
     const top = box.top + scrollTop - clientTop;
-  
+
     // Calcular o offset ajustado
     const contentElement = await this.content.getScrollElement();
     const scrollOffset = Math.round(top) - contentElement.offsetTop - 110; // Ajuste de 110px
-  
+
     // Scroll usando scrollToPoint
     this.content.scrollToPoint(0, scrollOffset, 500);
   }
@@ -405,25 +445,30 @@ export class HomePage implements OnInit, OnDestroy {
       }
       this.trackHelper.trackByName(TrackHelper.EVENTS.OPEN_PARTNER_RESELLER, {
         reseller_id: resellerId,
-        reseller_name: resellerName
+        reseller_name: resellerName,
       });
       if (resellerName) {
-        this.trackHelper.trackByName(`${TrackHelper.EVENTS.OPEN_PARTNER_RESELLER} ${resellerName}`);
+        this.trackHelper.trackByName(
+          `${TrackHelper.EVENTS.OPEN_PARTNER_RESELLER} ${resellerName}`
+        );
       }
     } catch (e) {
       console.error(e);
     }
-
   }
 
   setItems(items: ProductInventoryDay[]) {
     let mainItems = [];
     let secondaryItems = [];
     if (items && items.length) {
-      items = parseItemsWithStock(items, this.isAdminOrStoreSeller(this.user, this.store));
+      items = parseItemsWithStock(
+        items,
+        this.isAdminOrStoreSeller(this.user, this.store)
+      );
       mainItems = parseItemsWithoutReseller(items);
       secondaryItems = filterItemsWithReseller(items);
-      const {itemsPerReseller, sellersIds} = Utils.parseProductsPerReseller(secondaryItems);
+      const { itemsPerReseller, sellersIds } =
+        Utils.parseProductsPerReseller(secondaryItems);
       this.itemsPerReseller = itemsPerReseller;
       this.sellersIds = sellersIds;
     }
@@ -457,7 +502,10 @@ export class HomePage implements OnInit, OnDestroy {
     const elClass = this.hasOpenSaleToday ? 'two-half-rows' : 'one-half';
     const contentElement = await this.content.getScrollElement(); // Obtém o elemento DOM
 
-    if (Utils.isNullOrUndefined(this.noteSubtitle) || !this.noteSubtitle.message?.length) {
+    if (
+      Utils.isNullOrUndefined(this.noteSubtitle) ||
+      !this.noteSubtitle.message?.length
+    ) {
       this.renderer.removeClass(contentElement, elClass);
     } else {
       this.renderer.addClass(contentElement, elClass);
@@ -483,17 +531,25 @@ export class HomePage implements OnInit, OnDestroy {
   handlerError(e) {
     console.error(e);
     this.trans.get('GENERIC_ERROR').subscribe((val) => {
-      this.toastHelper.show({message: val});
+      this.toastHelper.show({ message: val });
     });
     this.loadingHelper.setLoading('products', false);
   }
 
   isDeliveryEmployee() {
-    return this.user && this.store && this.user.delivery_employee_id && this.store.store_type == StoreTypeEnum.DELIVERY;
+    return (
+      this.user &&
+      this.store &&
+      this.user.delivery_employee_id &&
+      this.store.store_type == StoreTypeEnum.DELIVERY
+    );
   }
 
   getHeaderAction() {
-    if (this.isAdminOrStoreSeller(this.user, this.store) || this.isDeliveryEmployee()) {
+    if (
+      this.isAdminOrStoreSeller(this.user, this.store) ||
+      this.isDeliveryEmployee()
+    ) {
       return {
         icon: 'settings',
         iconClass: '',
@@ -529,18 +585,22 @@ export class HomePage implements OnInit, OnDestroy {
 
   toggleProductDay(item: ProductInventoryDay) {
     item.loading = true;
-    this.productInventory.changeVisibility(item.id, !item.is_visible)
-      .subscribe(() => {
+    this.productInventory.changeVisibility(item.id, !item.is_visible).subscribe(
+      () => {
         item.is_visible = !item.is_visible;
         item.loading = false;
-      }, () => {
+      },
+      () => {
         this.toastHelper.connectionError();
         item.loading = false;
-      });
+      }
+    );
   }
 
   async openTimePicker(item: ProductInventoryDay) {
-    const currentDate = item.next_batch ? moment(item.next_batch).toDate() : new Date();
+    const currentDate = item.next_batch
+      ? moment(item.next_batch).toDate()
+      : new Date();
 
     try {
       const result = await DatePicker.present({
@@ -572,5 +632,4 @@ export class HomePage implements OnInit, OnDestroy {
       console.error('Erro ao abrir o seletor de horário:', error);
     }
   }
-
 }

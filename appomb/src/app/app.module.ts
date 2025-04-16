@@ -84,6 +84,26 @@ import { DayNotePopUpPageModule } from './pages/day-note-pop-up/day-note-pop-up.
 import { ChooseDeliveryEmployeePageModule } from './pages/choose-delivery-employee/choose-delivery-employee.module';
 import { ChooseDeliveryAddressPageModule } from './pages/choose-delivery-address/choose-delivery-address.module';
 import { AdminBalanceStorePageModule } from './pages/admin-balance-store/admin-balance-store.module';
+import { LoginModule } from './pages/login/login.module';
+import { ListUserSalesPageModule } from './pages/list-user-sales/list-user-sales.module';
+import { SignInModule } from './pages/sign-in/sign-in.module';
+import { ForgotPasswordModule } from './pages/forgot-password/forgot-password.module';
+import { SignUpModule } from './pages/sign-up/sign-up.module';
+import { CheckoutCompleteModule } from './pages/checkout-complete/checkout-complete.module';
+import { CardErrorPopUpModule } from './pages/card-error-pop-up/card-error-pop-up.module';
+import { ChooseDeliveryHourPageModule } from './pages/choose-delivery-hour/choose-delivery-hour.module';
+import { ChooseScheduleDeliveryDateModule } from './pages/choose-schedule-delivery-date/choose-schedule-delivery-date.module';
+import { CouponsRegisterPageModule } from './pages/coupons-register/coupons-register.module';
+import { CuponsPageModule } from './pages/coupons/coupons.module';
+import { ListCreditCardPageModule } from './pages/list-credit-card/list-credit-card.module';
+import { RegisterCreditCardModule } from './pages/register-credit-card/register-credit-card.module';
+import { RegisterDocumentNoteModule } from './pages/register-document-note/register-document-note.module';
+import { RequestStatusPageModule } from './pages/request-status/request-status.module';
+import { RegisterMobilePhoneModule } from './pages/register-mobile-phone/register-mobile-phone.module';
+import { AddAddressPageModule } from './pages/add-address/add-address.module';
+import { SearchStatePageModule } from './pages/search-state/search-state.module';
+import { SearchAddressPageModule } from './pages/search-address/search-address.module';
+import { SearchCityPageModule } from './pages/search-city/search-city.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -130,6 +150,27 @@ registerLocaleData(localePt);
     EditInventoryDayItemsPageModule,
     DetailHistoryUserPurchaseModule,
     DayNotePopUpPageModule,
+    LoginModule,
+    ListUserSalesPageModule,
+    SignInModule,
+    ForgotPasswordModule,
+    CardErrorPopUpModule,
+    ChooseDeliveryHourPageModule,
+    ChooseDeliveryAddressPageModule,
+    RegisterMobilePhoneModule,
+    ListCreditCardPageModule,
+    RegisterCreditCardModule,
+    RegisterDocumentNoteModule,
+    RequestStatusPageModule,
+    AddAddressPageModule,
+    SearchStatePageModule,
+    SearchAddressPageModule,
+    SearchCityPageModule,
+    ChooseScheduleDeliveryDateModule,
+    CouponsRegisterPageModule,
+    CuponsPageModule,
+    SignUpModule,
+    CheckoutCompleteModule,
     ChooseDeliveryEmployeePageModule,
     ChooseDeliveryAddressPageModule,
     AdminBalanceStorePageModule,

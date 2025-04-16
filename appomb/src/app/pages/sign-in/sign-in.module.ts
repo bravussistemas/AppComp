@@ -5,6 +5,7 @@ import { SignInRoutingModule } from "./sign-in-routing.module";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
+import { SharedModule } from "src/app/shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { IonicModule } from "@ionic/angular";
     TranslateModule.forChild(),
     IonicModule,
     FormsModule,
+    SharedModule,
     CommonModule,
     ReactiveFormsModule,
   ],

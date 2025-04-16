@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { User, UserProvider } from '../shared/models/user.model';
 //import { FacebookLoginResponse } from '@capacitor-community/facebook-login';
 import { Observable, Subject, lastValueFrom, of, throwError } from 'rxjs';
@@ -26,7 +31,6 @@ import { catchError, map } from 'rxjs/operators';
 import moment from 'moment';
 import { Router } from '@angular/router';
 
-
 let Cadastrouemail: boolean = false;
 export interface loginCredentials {
   email: string;
@@ -46,8 +50,8 @@ export interface IFacebookUserData {
   picture: {
     data: {
       url: string;
-    }
-  }
+    };
+  };
   name: string;
   email: string;
 }
@@ -104,7 +108,6 @@ export interface ForgotPasswordCodeData {
 
 @Injectable()
 export class AuthService {
-
   static TOKEN_NAME = 'id_token';
   static NEXT_REFRESH_TOKEN_NAME = 'next_refresh';
   static REFRESH_TOKEN_NAME = 'id_refresh_token';
@@ -114,26 +117,28 @@ export class AuthService {
   logger: Logger;
   userChange$ = new Subject<void>();
 
-  constructor(private http: HttpClient,
-              private storage: Storage,
-              private events: EventService,
-              private loadingHelper: LoadingHelper,
-              private trackHelper: TrackHelper,
-              private alertHelper: AlertHelper,
-              loggerService: LoggerService,
-              private authHttp: AuthHttp,
-              private toastHelper: ToastHelper,
-              private db: DatabaseProvider,
-              private trans: TranslateService,
-              public cache: CacheService,
-              public userProfileService: UserProfileService,
-              private appConfig: AppConfig,
-              private navCtrl: NavController,
-              private router: Router,) {
+  constructor(
+    private http: HttpClient,
+    private storage: Storage,
+    private events: EventService,
+    private loadingHelper: LoadingHelper,
+    private trackHelper: TrackHelper,
+    private alertHelper: AlertHelper,
+    loggerService: LoggerService,
+    private authHttp: AuthHttp,
+    private toastHelper: ToastHelper,
+    private db: DatabaseProvider,
+    private trans: TranslateService,
+    public cache: CacheService,
+    public userProfileService: UserProfileService,
+    private appConfig: AppConfig,
+    private navCtrl: NavController,
+    private router: Router
+  ) {
     this.logger = loggerService.create('AuthService');
     this.GOOGLE_CONF = {
-      'webClientId': this.appConfig.GOOGLE_CLIENT_ID,
-      'offline': true,
+      webClientId: this.appConfig.GOOGLE_CLIENT_ID,
+      offline: true,
     };
   }
 
@@ -165,12 +170,15 @@ export class AuthService {
   async login(credentials: loginCredentials): Promise<void> {
     try {
       const response = await lastValueFrom(
-        this.http.post(`${this.appConfig.SERVER_API}${this.appConfig.API_GET_TOKEN}`, {
-          username: credentials.email,
-          password: credentials.password,
-          grant_type: 'password',
-          client_id: this.appConfig.SERVER_OAUTH2_CLIENT_ID
-        })
+        this.http.post(
+          `${this.appConfig.SERVER_API}${this.appConfig.API_GET_TOKEN}`,
+          {
+            username: credentials.email,
+            password: credentials.password,
+            grant_type: 'password',
+            client_id: this.appConfig.SERVER_OAUTH2_CLIENT_ID,
+          }
+        )
       );
 
       await this.setTokenWithResponse(response as IResponseToken);
@@ -183,14 +191,9 @@ export class AuthService {
     }
   }
 
-  async loginGoogle() {
-    
-  }
-  
+  async loginGoogle() {}
 
-  loginFacebook() {
-    
-  }
+  loginFacebook() {}
 
   logout() {
     // store current selected store to restore later
@@ -200,9 +203,10 @@ export class AuthService {
     Promise.all([destroyDb, destroyStorage, destroyCache])
       .then(() => {
         this.events.emitEvent('userLogOut');
-      }).catch(() => {
-      this.events.emitEvent('userLogOut');
-    });
+      })
+      .catch(() => {
+        this.events.emitEvent('userLogOut');
+      });
   }
 
   loggedIn(autoRefresh = false): Promise<boolean> {
@@ -219,11 +223,11 @@ export class AuthService {
         if (autoRefresh) {
           return this.refreshToken().then(() => {
             return true; // IS LOGGED IN
-          })
+          });
         }
         return false;
       });
-    })
+    });
   }
 
   // LOGIN CALLBACKS
@@ -244,18 +248,22 @@ export class AuthService {
   }
 
   onLoginGoogle(googleResponse: any) {
-
     console.debug('Received response from Google API...');
     console.debug(googleResponse);
 
-    this.getGoogleTokenFromIdToken(googleResponse.Authentication.idToken, googleResponse.Authentication.accessToken).subscribe(
+    this.getGoogleTokenFromIdToken(
+      googleResponse.Authentication.idToken,
+      googleResponse.Authentication.accessToken
+    ).subscribe(
       // SUCCESS - Server returns token
       (response: IResponseToken) => {
-
         console.debug('getGoogleTokenFromIdToken callback');
         console.debug(response);
 
-        this.getServerTokenFromSocialToken(response.access_token, 'google-plus').subscribe(
+        this.getServerTokenFromSocialToken(
+          response.access_token,
+          'google-plus'
+        ).subscribe(
           // SUCCESS - Server returns converted token
           (response: IResponseToken) => {
             console.debug('getServerTokenFromSocialToken callback');
@@ -264,7 +272,6 @@ export class AuthService {
 
             // this.setUserFromGoogle(googleResponse).then(() => {
             this.setTokenWithResponse(response).then(() => {
-
               this.updateUserSocialPhotoUrl(googleResponse.imageUrl);
 
               // getting User instance than was set after login with Google
@@ -283,25 +290,19 @@ export class AuthService {
               //     this.onAuthUser(user);
               //   }
               // ).catch(this.handleGoogleLoginError.bind(this));
-
             });
             // });
           },
           // ERROR - Server NOT returns converted token
           this.handleGoogleLoginError.bind(this)
         );
-
       },
       // ERROR - Server NOT returns token
       this.handleGoogleLoginError.bind(this)
     );
-
   }
 
-  savePushToken(data: {
-    userId: string;
-    pushToken: string;
-  }) {
+  savePushToken(data: { userId: string; pushToken: string }) {
     return this.userProfileService.edit(<any>{
       push_token: data.pushToken,
       push_user_id: data.userId,
@@ -310,37 +311,37 @@ export class AuthService {
 
   updateAppVersion(appVersion) {
     return this.userProfileService.edit(<any>{
-      app_version: appVersion
+      app_version: appVersion,
     });
   }
 
-  handleGoogleLoginError(error: Response | any) {
-    
-  }
+  handleGoogleLoginError(error: Response | any) {}
 
-  onLoginFacebook(res: any) {
-    
-  }
+  onLoginFacebook(res: any) {}
 
   onSocialLoginError(error) {
     console.log('onSocialLoginError');
     console.log(error);
-    if (!error || error === 12501 /* google */ || error.errorCode !== 4201 /* facebook */) {
+    if (
+      !error ||
+      error === 12501 /* google */ ||
+      error.errorCode !== 4201 /* facebook */
+    ) {
       // user dismiss the social auth pop up
       this.loadingHelper.hide();
       return;
     }
-    this.trans.get(['ERROR', 'ERROR_TRY_ANOTHER_LOGIN_WAY']).subscribe((res) => {
-      this.alertHelper.show(
-        res.ERROR, res.ERROR_TRY_ANOTHER_LOGIN_WAY
-      );
-    });
+    this.trans
+      .get(['ERROR', 'ERROR_TRY_ANOTHER_LOGIN_WAY'])
+      .subscribe((res) => {
+        this.alertHelper.show(res.ERROR, res.ERROR_TRY_ANOTHER_LOGIN_WAY);
+      });
     this.handleError(error);
   }
 
   onLoginError(error) {
     if (error instanceof Response) {
-      const body: any = error|| {};
+      const body: any = error || {};
       if (body.error === 'invalid_grant') {
         // user was input invalid credentials
         console.debug('Invalid login:');
@@ -362,14 +363,17 @@ export class AuthService {
     try {
       // Obtém os cabeçalhos de autenticação
       const header = await this.getAuthHeader();
-  
+
       // Faz a requisição para obter os dados do usuário
       const userData: any = await lastValueFrom(
-        this.http.get(`${this.appConfig.SERVER_API}${this.appConfig.API_GET_USER_DATA}`, header)
+        this.http.get(
+          `${this.appConfig.SERVER_API}${this.appConfig.API_GET_USER_DATA}`,
+          header
+        )
       );
-  
+
       let user: IJWTUser = userData.results[0];
-  
+
       // Atualiza os dados do usuário se for um socialUser
       if (socialUser) {
         user.is_social_user = true;
@@ -377,7 +381,7 @@ export class AuthService {
           user.profile.user_photo = socialUser.profile.user_photo;
         }
       }
-  
+
       // Define o usuário obtido no sistema e retorna o resultado
       return await this.setUserFromServer(user);
     } catch (error) {
@@ -387,19 +391,28 @@ export class AuthService {
   }
 
   VerifyValidatedEmail(credentials: signUpCredentials): Observable<any> {
-    return this.http.post(`${this.appConfig.SERVER_API}${this.appConfig.API_VERIFY_EMAIL_VALIDATED}`, {
-      email: credentials.email
-    }).pipe(
-      map((resp: any) => {
-      return resp;
-    }));               
+    return this.http
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_VERIFY_EMAIL_VALIDATED}`,
+        {
+          email: credentials.email,
+        }
+      )
+      .pipe(
+        map((resp: any) => {
+          return resp;
+        })
+      );
   }
 
   deleteaccount(user: User): Observable<any> {
     this.loadingHelper.show();
-  
+
     return this.authHttp
-      .post(`${this.appConfig.SERVER_API}${this.appConfig.API_DELETE_ACCOUNT}`, { iduser: user.id })
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_DELETE_ACCOUNT}`,
+        { iduser: user.id }
+      )
       .pipe(
         map((resp: any) => {
           // Retorna a resposta já desserializada
@@ -419,80 +432,99 @@ export class AuthService {
 
   signUp(credentials: signUpCredentials, PrimeiraTentativa: Boolean) {
     this.loadingHelper.show();
-    this.authHttp.post(`${this.appConfig.SERVER_API}${this.appConfig.API_SIGN_UP}`, credentials)
+    this.authHttp
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_SIGN_UP}`,
+        credentials
+      )
       .toPromise()
       .then((result) => {
-        this.VerifyValidatedEmail(credentials).subscribe((resp) => {            
-          if (resp.result){
+        this.VerifyValidatedEmail(credentials).subscribe((resp) => {
+          if (resp.result) {
             this.osSignUpSuccess(result as Response, credentials);
             return result;
-          }
-          else 
-          {
-            return null;    
+          } else {
+            return null;
             let mensagem: string;
-            if (PrimeiraTentativa){
+            if (PrimeiraTentativa) {
               mensagem = 'VERIFY_EMAIL_FIRST_MESSAGE';
               Cadastrouemail = true;
-            }
-            else
-              mensagem = 'VERIFY_EMAIL_SECOND_MESSAGE';
-            this.trans.get(['VERIFY_EMAIL_TITLE', mensagem], {email:credentials.email}).subscribe((res) => {
-              if (PrimeiraTentativa)
-                mensagem = res.VERIFY_EMAIL_FIRST_MESSAGE
-              else
-              mensagem = res.VERIFY_EMAIL_SECOND_MESSAGE
-              this.alertHelper.confirm(res.VERIFY_EMAIL_TITLE, mensagem,'Já Verifiquei', 'Cancelar').then((confirmed) => {
-                if (confirmed) {
-                  this.signUp(credentials,false) 
-                }               
-                else  
-                  this.loadingHelper.hide()
+            } else mensagem = 'VERIFY_EMAIL_SECOND_MESSAGE';
+            this.trans
+              .get(['VERIFY_EMAIL_TITLE', mensagem], {
+                email: credentials.email,
               })
-            });                     
+              .subscribe((res) => {
+                if (PrimeiraTentativa)
+                  mensagem = res.VERIFY_EMAIL_FIRST_MESSAGE;
+                else mensagem = res.VERIFY_EMAIL_SECOND_MESSAGE;
+                this.alertHelper
+                  .confirm(
+                    res.VERIFY_EMAIL_TITLE,
+                    mensagem,
+                    'Já Verifiquei',
+                    'Cancelar'
+                  )
+                  .then((confirmed) => {
+                    if (confirmed) {
+                      this.signUp(credentials, false);
+                    } else this.loadingHelper.hide();
+                  });
+              });
           }
-       })
+        });
       })
       .catch((error) => this.onSignUpError(error, credentials.email));
   }
 
   osSignUpSuccess(response: Response, credentials: signUpCredentials) {
-    this.trackHelper.trackByName(TrackHelper.EVENTS.CREATED_ACCOUNT, {email: credentials.email});
+    this.trackHelper.trackByName(TrackHelper.EVENTS.CREATED_ACCOUNT, {
+      email: credentials.email,
+    });
     console.debug('osSignUpSuccess with user info: ');
     console.debug(response);
     this.loadingHelper.show();
-    this.login({email: credentials.email, password: credentials.password});
+    this.login({ email: credentials.email, password: credentials.password });
   }
 
   onSignUpError(error: any, email: string) {
     this.loadingHelper.hide();
     console.debug('Error signUp:', error);
-  
+
     if (error instanceof Response) {
       const serverResponse = new ResponseError(error);
       if (serverResponse.isError(ERROR_USER_EXISTS)) {
-        this.trans.get(['EMAIL_ALREADY_IN_USE', 'WANT_REDIRECT_TO_LOGIN_SCREEN']).subscribe((res) => {
-          if (Cadastrouemail) {
-            this.toastHelper.show({
-              message: 'E-mail cadastrado com sucesso!',
-              cssClass: 'toast-success'
-            });
-            this.navCtrl.navigateForward('/sign-in', { state: { email } }).then(() => {
-              this.loadingHelper.hide();
-            });
-          } else {
-            this.alertHelper
-              .confirm(res.EMAIL_ALREADY_IN_USE, res.WANT_REDIRECT_TO_LOGIN_SCREEN)
-              .then((confirmed) => {
-                if (confirmed) {
-                  this.loadingHelper.show();
-                  this.navCtrl.navigateForward('/sign-in', { state: { email } }).then(() => {
-                    this.loadingHelper.hide();
-                  });
-                }
+        this.trans
+          .get(['EMAIL_ALREADY_IN_USE', 'WANT_REDIRECT_TO_LOGIN_SCREEN'])
+          .subscribe((res) => {
+            if (Cadastrouemail) {
+              this.toastHelper.show({
+                message: 'E-mail cadastrado com sucesso!',
+                cssClass: 'toast-success',
               });
-          }
-        });
+              this.navCtrl
+                .navigateForward('/sign-in', { state: { email } })
+                .then(() => {
+                  this.loadingHelper.hide();
+                });
+            } else {
+              this.alertHelper
+                .confirm(
+                  res.EMAIL_ALREADY_IN_USE,
+                  res.WANT_REDIRECT_TO_LOGIN_SCREEN
+                )
+                .then((confirmed) => {
+                  if (confirmed) {
+                    this.loadingHelper.show();
+                    this.navCtrl
+                      .navigateForward('/sign-in', { state: { email } })
+                      .then(() => {
+                        this.loadingHelper.hide();
+                      });
+                  }
+                });
+            }
+          });
       } else {
         this.handleError(error);
       }
@@ -504,7 +536,12 @@ export class AuthService {
   editPassword(data: EditPasswordData): Promise<any> {
     return this.getAuthHeader()
       .then((header) => {
-        return this.http.post(`${this.appConfig.SERVER_API}${this.appConfig.API_EDIT_PASSWORD}`, data, header)
+        return this.http
+          .post(
+            `${this.appConfig.SERVER_API}${this.appConfig.API_EDIT_PASSWORD}`,
+            data,
+            header
+          )
           .toPromise()
           .catch(this.handleError.bind(this));
       })
@@ -513,26 +550,29 @@ export class AuthService {
 
   sendResetPasswordCode(email: string): Observable<any> {
     return this.authHttp
-      .post(`${this.appConfig.SERVER_API}${this.appConfig.API_SEND_RESET_PASSWORD_CODE}`, { email })
-      .pipe(
-        catchError(this.handleError.bind(this))
-      );
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_SEND_RESET_PASSWORD_CODE}`,
+        { email }
+      )
+      .pipe(catchError(this.handleError.bind(this)));
   }
 
   confirmResetPasswordCode(data: ForgotPasswordCodeData): Observable<any> {
     return this.authHttp
-      .post(`${this.appConfig.SERVER_API}${this.appConfig.API_CONFIRM_RESET_PASSWORD_CODE}`, data)
-      .pipe(
-        catchError(this.handleError.bind(this))
-      );
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_CONFIRM_RESET_PASSWORD_CODE}`,
+        data
+      )
+      .pipe(catchError(this.handleError.bind(this)));
   }
 
   setNewPasswordReset(data: ForgotPasswordData): Observable<any> {
     return this.authHttp
-      .post(`${this.appConfig.SERVER_API}${this.appConfig.API_SET_NEW_PASSWORD_RESET}`, data)
-      .pipe(
-        catchError(this.handleError.bind(this))
-      );
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_SET_NEW_PASSWORD_RESET}`,
+        data
+      )
+      .pipe(catchError(this.handleError.bind(this)));
   }
 
   setTokenWithResponse(response: IResponseToken): Promise<void | any[]> {
@@ -540,29 +580,31 @@ export class AuthService {
     promises.push(this.setRefreshToken(response.refresh_token));
     promises.push(this.setNextRefresh(response.expires_in));
     promises.push(this.setToken(response.access_token));
-    return Promise.all(promises)
-      .catch((e) => {
-        this.handleError(e);
-      });
+    return Promise.all(promises).catch((e) => {
+      this.handleError(e);
+    });
   }
 
   setUserFromServer(userFromServer: IJWTUser): Promise<User> {
     console.debug('Setting use data with: ');
     console.debug(userFromServer);
-    return this.setUser(UserProvider.fromServer(userFromServer))
-      .then((user) => {
+    return this.setUser(UserProvider.fromServer(userFromServer)).then(
+      (user) => {
         return user;
-      })
+      }
+    );
   }
 
   updateUserSocialPhotoUrl(photoUrl: string) {
     console.debug('Setting user social photo...');
-    this.userProfileService.edit(<any>{
-      user_photo_social: photoUrl
-    }).subscribe(
-      () => console.debug(`User social photo was set: ${photoUrl}`),
-      e => console.error(e)
-    );
+    this.userProfileService
+      .edit(<any>{
+        user_photo_social: photoUrl,
+      })
+      .subscribe(
+        () => console.debug(`User social photo was set: ${photoUrl}`),
+        (e) => console.error(e)
+      );
   }
 
   setUserFromGoogle(googleResponse: IGoogleUserData) {
@@ -570,7 +612,7 @@ export class AuthService {
   }
 
   setUserFromFacebook(facebookId: string): Promise<User> {
-    return null
+    return null;
   }
 
   isTokenExpired(): Promise<boolean> {
@@ -578,7 +620,9 @@ export class AuthService {
       .then((nextRefresh) => {
         if (nextRefresh) {
           const date = moment(nextRefresh).toDate();
-          const expired = date.toString() === 'Invalid Date' || date.getTime() <= new Date().getTime();
+          const expired =
+            date.toString() === 'Invalid Date' ||
+            date.getTime() <= new Date().getTime();
           return expired;
         } else {
           // Não há próxima atualização; considera como expirado
@@ -594,7 +638,7 @@ export class AuthService {
   async refreshToken(): Promise<void> {
     try {
       const refreshToken = await this.getRefreshToken();
-  
+
       const res: IResponseToken = await lastValueFrom(
         this.http.post<IResponseToken>(
           `${this.appConfig.SERVER_API}${this.appConfig.API_REFRESH_TOKEN}`,
@@ -605,9 +649,9 @@ export class AuthService {
           }
         )
       );
-  
+
       console.debug('refreshToken: received response from server:', res);
-  
+
       await this.setTokenWithResponse(res);
     } catch (error) {
       console.error('Error during refresh token:', error);
@@ -616,17 +660,26 @@ export class AuthService {
     }
   }
 
-  getServerTokenFromSocialToken(token: string, backend: string): Observable<IResponseToken> {
+  getServerTokenFromSocialToken(
+    token: string,
+    backend: string
+  ): Observable<IResponseToken> {
     return this.http
-      .post<IResponseToken>(`${this.appConfig.SERVER_API}${this.appConfig.API_CONVERT_TOKEN_PATH}`, {
-        grant_type: 'convert_token',
-        client_id: this.appConfig.SERVER_OAUTH2_CLIENT_ID,
-        backend: backend,
-        token: token,
-      })
+      .post<IResponseToken>(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_CONVERT_TOKEN_PATH}`,
+        {
+          grant_type: 'convert_token',
+          client_id: this.appConfig.SERVER_OAUTH2_CLIENT_ID,
+          backend: backend,
+          token: token,
+        }
+      )
       .pipe(
         map((res: IResponseToken) => {
-          console.debug('getServerTokenFromSocialToken: Received response from server:', res);
+          console.debug(
+            'getServerTokenFromSocialToken: Received response from server:',
+            res
+          );
           return res; // O JSON já é retornado automaticamente
         }),
         catchError((error) => {
@@ -636,8 +689,11 @@ export class AuthService {
       );
   }
 
-  getGoogleTokenFromIdToken(idToken: string, authCode: string): Observable<IResponseToken> {
-    return null
+  getGoogleTokenFromIdToken(
+    idToken: string,
+    authCode: string
+  ): Observable<IResponseToken> {
+    return null;
   }
 
   // GETTERS & SETTERS
@@ -649,28 +705,29 @@ export class AuthService {
   }
 
   getUser(): Promise<User> {
-    return this.storage.get('userData')
-      .then((userData: string) => {
-          try {
-            return <User>JSON.parse(userData);
-          } catch (e) {
-            return null;
-          }
-        }
-      );
+    return this.storage.get('userData').then((userData: string) => {
+      try {
+        return <User>JSON.parse(userData);
+      } catch (e) {
+        return null;
+      }
+    });
   }
 
   async refreshUserProfile(): Promise<void> {
     try {
       const header = await this.getAuthHeader();
-  
+
       // Realiza a requisição com os cabeçalhos apropriados
       const resp: any = await lastValueFrom(
-        this.http.get(`${this.appConfig.SERVER_API}${this.appConfig.API_GET_USER_DATA}`, header)
+        this.http.get(
+          `${this.appConfig.SERVER_API}${this.appConfig.API_GET_USER_DATA}`,
+          header
+        )
       );
-  
+
       const user: User = resp.results?.[0] || {};
-  
+
       // Atualiza o perfil do usuário
       await this.setUserProfile(user.profile);
     } catch (error) {
@@ -680,9 +737,11 @@ export class AuthService {
   }
 
   setUserProfile(profile: IUserProfile): Promise<any> {
-    return this.storage.set('user_profile', JSON.stringify(profile)).then(() => {
-      this.notifyUserChanged();
-    });
+    return this.storage
+      .set('user_profile', JSON.stringify(profile))
+      .then(() => {
+        this.notifyUserChanged();
+      });
   }
 
   getUserProfile(): Promise<IUserProfile> {
@@ -723,12 +782,20 @@ export class AuthService {
   setNextRefresh(nextRefreshSeconds: number): Promise<any> {
     let nextRefresh = moment().add(nextRefreshSeconds, 'seconds');
     console.debug('Set next refresh date to ' + nextRefresh.toString());
-    return this.storage.set(AuthService.NEXT_REFRESH_TOKEN_NAME, nextRefresh.toISOString());
+    return this.storage.set(
+      AuthService.NEXT_REFRESH_TOKEN_NAME,
+      nextRefresh.toISOString()
+    );
   }
 
   updateName(name: string) {
-    return this.authHttp.post(`${this.appConfig.SERVER_API}${this.appConfig.API_UPDATE_USER_NAME}`, {name: name})
-      .toPromise().then(() => {
+    return this.authHttp
+      .post(
+        `${this.appConfig.SERVER_API}${this.appConfig.API_UPDATE_USER_NAME}`,
+        { name: name }
+      )
+      .toPromise()
+      .then(() => {
         return this.getUser().then((u) => {
           u.first_name = name;
           u.full_name = name;
@@ -751,8 +818,14 @@ export class AuthService {
       // handler common errors
 
       let serverResponse = new ResponseError(error);
-      if (serverResponse.getErrorMessage() || serverResponse.isFormValidationError()) {
-        this.alertHelper.show(serverResponse.getErrorMessage() || 'Verifique os erros e tente novamente.');
+      if (
+        serverResponse.getErrorMessage() ||
+        serverResponse.isFormValidationError()
+      ) {
+        this.alertHelper.show(
+          serverResponse.getErrorMessage() ||
+            'Verifique os erros e tente novamente.'
+        );
       } else {
         // GENERIC SERVER ERROR
         this.trans.get(['ERROR', 'ERROR_REQUEST']).subscribe((res: any) => {
@@ -760,9 +833,9 @@ export class AuthService {
         });
         let body: any = {};
         try {
-          body = error|| {};
+          body = error || {};
         } catch (e) {
-          body = {}
+          body = {};
         }
         // make error message
         console.debug('handlerError: error received:');
@@ -773,9 +846,7 @@ export class AuthService {
     } else {
       // GENERIC ERROR
       this.trans.get(['ERROR', 'ERROR_REQUEST']).subscribe((res) => {
-        this.alertHelper.show(
-          res.ERROR, res.ERROR_REQUEST
-        );
+        this.alertHelper.show(res.ERROR, res.ERROR_REQUEST);
       });
       errMsg = error.message ? error.message : error.toString();
     }
@@ -784,5 +855,4 @@ export class AuthService {
 
     return throwError(() => new Error(errMsg || 'Server error'));
   }
-
 }

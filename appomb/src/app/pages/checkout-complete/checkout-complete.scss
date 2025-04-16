@@ -1,3 +1,5 @@
+@import "../../../theme/variables.scss";
+
 page-checkout-complete {
   .checkout-wrapper {
     font-size: 1.6rem;
@@ -46,7 +48,7 @@ page-checkout-complete {
 
     h2 {
       font-size: 1.4rem;
-      color: color($colors, primaryDark);
+      color: map-get($colors, primaryDark);
     }
   }
 
@@ -81,7 +83,7 @@ page-checkout-complete {
       }
 
       .featured-info {
-        border: 1px solid color($colors, 'primary');
+        border: 1px solid map-get($colors, primary);
         padding: 3px 10px;
         text-align: center;
         border-radius: 50px;
@@ -113,7 +115,7 @@ page-checkout-complete {
 
   .item-md {
     label {
-      color: color($colors, primaryDark);
+      color: map-get($colors, primaryDark);
     }
   }
 
@@ -130,16 +132,16 @@ page-checkout-complete {
     font-size: 1.2em;
     text-align: center;
   }
-  .all-copy p {  
-    -webkit-user-select: all;  
-    -moz-user-select: all;     
-    -ms-user-select: all;      
-    user-select: all;           
+  .all-copy p {
+    -webkit-user-select: all;
+    -moz-user-select: all;
+    -ms-user-select: all;
+    user-select: all;
   }
   .bottom-menu {
     display: flex;
     flex-direction: row;
-    height: 50px;    
+    height: 50px;
     margin-bottom: 30px;
     &__item {
       flex: 1;
@@ -151,8 +153,9 @@ page-checkout-complete {
       border: 1px solid #ccc;
 
       &.--active {
-        background-color: color($colors, dark);
+        background-color: map-get($colors, dark);
         color: #ffffff;
+        
       }
     }
   }

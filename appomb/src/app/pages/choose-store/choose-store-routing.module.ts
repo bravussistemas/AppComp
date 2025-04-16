@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'HomeList',
-    loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+    loadChildren: () => import('../../home/home.module').then(m => m.HomePageModule)
   },
   {
     path: 'AdmManageProductPage',
