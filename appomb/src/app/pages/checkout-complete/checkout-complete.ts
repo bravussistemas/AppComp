@@ -521,7 +521,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
   }
 
   addMoreItems() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/HomeList']);
   }
 
   eventCartChangedCheckout = (data) => {

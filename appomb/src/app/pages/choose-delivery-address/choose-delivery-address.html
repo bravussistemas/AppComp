@@ -1,4 +1,4 @@
-<ion-header #header [ngClass]="{'hide-back-button': loadingHelper.isLoading('addressList')}">
+<ion-header #header [ngClass]="{'hide-back-button': showHideBackButtonClass}">
   <ion-toolbar color="light">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button> <!-- Botão para abrir o menu lateral -->
@@ -10,9 +10,9 @@
 
 <ion-content *ngIf="headerEl" id="scroll-fancy" [header-scrollable]="headerEl">
   <div class="choose-delivery-content safe-area-bottom">
-    <ion-spinner [showTimeout]="800" class="page-spinner" *ngIf="loadingHelper.isLoading('addressList')"></ion-spinner>
+    <ion-spinner [showTimeout]="800" class="page-spinner" *ngIf="isLoadingAddressList"></ion-spinner>
 
-    <ng-container *ngIf="!loadingHelper.isLoading('addressList')">
+    <ng-container *ngIf="!isLoadingAddressList">
 
       <div class="page-icon">
         <div class="icon-content">
@@ -42,7 +42,7 @@
             (click)="onSelectAddress(item)" (onDeleteAddress)="onDeleteAddress($event)"></user-address-row>
         </ng-container>
       </ng-container>
-      
+
       <ng-container *ngIf="!hasAddress">
         <div style="text-align: center;">
           <button (click)="addAddress()" ion-button><strong>Cadastrar endereço</strong></button>

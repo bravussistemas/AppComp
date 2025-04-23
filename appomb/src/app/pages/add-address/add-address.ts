@@ -281,8 +281,9 @@ export class AddAddressPage {
     await modal.present();
 
     const { data } = await modal.onDidDismiss<IPlaceInfoDO>();
+    
+
     if (data) {
-      this.loadingHelper.show();
       this.formAddress.get('district')?.setValue(data.neighborhood);
 
       if (data.street) {
@@ -293,7 +294,7 @@ export class AddAddressPage {
         this.toastHelper.show({
           message: 'Não foi possível identificar o seu endereço.',
         });
-        this.loadingHelper.hide();
+
         return;
       }
 
@@ -319,8 +320,6 @@ export class AddAddressPage {
     const formUtils = new FormHelper(this.formAddress);
 
     this.formAddress.valueChanges.subscribe((data) => {
-      console.log('valueChanges');
-      console.log(data);
       if (
         this.cleanIfAddressChanges &&
         this.formAddress.get('district').value
@@ -351,15 +350,18 @@ export class AddAddressPage {
     console.debug('onSubmitFormAddress', this.formAddress.valid);
     console.debug(this.formAddress.getRawValue());
     console.debug(this.formAddressErrors.getErrors());
+
     if (!this.formAddress.valid) {
       return;
     }
     if (!this.formAddress.get('district').value) {
       console.debug('Without district, we need list address to choose');
       this.goToChooseAddress();
+      this.modalCtrl.dismiss();
       return;
     }
-    this.loadingHelper.show();
+
+    // this.loadingHelper.show();
     const data = this.formAddress.getRawValue();
     const stateId = this.selectedState ? this.selectedState.id : null;
     const cityId = this.selectedCity ? this.selectedCity.id : null;
@@ -379,7 +381,8 @@ export class AddAddressPage {
         store: store.id,
       })
       .subscribe((resp: ResultUserAddressCreated) => {
-        this.loadingHelper.hide();
+        // this.loadingHelper.hide();
+        console.log(resp);
         this.handleSuccessResponse(resp);
       });
   }
@@ -442,11 +445,11 @@ export class AddAddressPage {
       console.error(e);
     }
 
-    this.modalCtrl
-      .dismiss({
-        user_address: response.data,
-      })
-      .catch((e) => console.error(e));
+    // this.modalCtrl
+    //   .dismiss({
+    //     user_address: response.data,
+    //   })
+    //   .catch((e) => console.error(e));
   }
 
   findAddressByAddressClicked() {

@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSearchbar } from '@ionic/angular';
+import { IonSearchbar, ModalController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GeoServiceProvider, IPlaceInfoDO, ISearchAddressResultDO } from '../../providers/geo-service/geo-service';
+import {
+  GeoServiceProvider,
+  IPlaceInfoDO,
+  ISearchAddressResultDO,
+} from '../../providers/geo-service/geo-service';
 import { Subscription } from 'rxjs';
 import { LoadingHelper } from '../../utils/loading-helper';
 
@@ -11,7 +15,7 @@ export enum SearchAddressMode {
 }
 
 @Component({
-  selector: 'page-search-address',
+  selector: 'app-search-address',
   templateUrl: './search-address.html',
   styleUrls: ['./search-address.scss'],
 })
@@ -29,8 +33,9 @@ export class SearchAddressPage implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private modalCtrl: ModalController,
     private geoServiceProvider: GeoServiceProvider,
-    public loadingHelper: LoadingHelper,
+    public loadingHelper: LoadingHelper
   ) {
     const params = this.route.snapshot.queryParams;
     if (params['mode']) {
@@ -60,9 +65,7 @@ export class SearchAddressPage implements OnInit {
     this.makeSearch();
   }
 
-  onCancel() {
-
-  }
+  onCancel() {}
 
   makeSearch() {
     this.searchMade = false;
@@ -71,40 +74,51 @@ export class SearchAddressPage implements OnInit {
     }
     this.loadingHelper.setLoading('addressList', true);
 
-    this.subGeo = this.geoServiceProvider.searchByAddress({
-      query: this.searchText,
-      city: this.city,
-    }).subscribe(
-      (resp) => {
-        this.searchMade = true;
-        this.loadingHelper.setLoading('addressList', false);
-        this.addressList = resp;
-      },
-      (err) => {
-        this.loadingHelper.setLoading('addressList', false);
-        console.error('Erro ao buscar endereços:', err);
-      }
-    );
+    this.subGeo = this.geoServiceProvider
+      .searchByAddress({
+        query: this.searchText,
+        city: this.city,
+      })
+      .subscribe(
+        (resp) => {
+          this.searchMade = true;
+          this.loadingHelper.setLoading('addressList', false);
+          this.addressList = resp;
+        },
+        (err) => {
+          this.loadingHelper.setLoading('addressList', false);
+          console.error('Erro ao buscar endereços:', err);
+        }
+      );
   }
 
   selectAddress(address: ISearchAddressResultDO) {
-    this.loadingHelper.show();
-    this.geoServiceProvider.getPlaceInfo({
-      place_id: address.id,
-      source: address.source,
-    }).subscribe(
-      (resp: IPlaceInfoDO) => {
-        this.loadingHelper.hide();
-        this.router.navigate([], { queryParams: { selectedAddress: JSON.stringify(resp) } });
-      },
-      (err) => {
-        this.loadingHelper.hide();
-        console.error('Erro ao obter informações do local:', err);
-      }
-    );
+    // this.loadingHelper.show();
+    console.log(address);
+    
+    this.geoServiceProvider
+      .getPlaceInfo({
+        place_id: address.id,
+        source: address.source,
+      })
+      .subscribe(
+        (resp: IPlaceInfoDO) => {
+          this.router.navigate(['HomeList'], {
+            queryParams: { selectedAddress: JSON.stringify(resp) },
+          });
+          console.log('recebendo a resposta ', resp);
+          
+          this.modalCtrl.dismiss(resp);
+        },
+        (err) => {
+          this.loadingHelper.hide();
+          console.error('Erro ao obter informações do local:', err);
+        }
+      );
   }
 
   dismiss() {
-    this.router.navigateByUrl('/HomePage'); // Redirecione para a página desejada
+    // Redirecione para a página desejada
+    this.modalCtrl.dismiss();
   }
 }

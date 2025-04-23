@@ -69,6 +69,7 @@
             <ion-label color="primary" position="floating">Endereço</ion-label>
             <ion-input formControlName="street" [disabled]="!streetFieldEnabled" type="text"></ion-input>
           </ion-item>
+
           <ul class="list-input-errors"
             *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.street?.length">
             <li *ngFor="let error of formAddressErrors.getErrors().street">{{ error }}</li>
@@ -78,6 +79,7 @@
             <ion-label color="primary" position="floating">Número</ion-label>
             <ion-input formControlName="number" type="text" #numberInput maxlength="16"></ion-input>
           </ion-item>
+          
           <ul class="list-input-errors"
             *ngIf="formAddressErrors.submitted && formAddressErrors.getErrors()?.number?.length">
             <li *ngFor="let error of formAddressErrors.getErrors().number">{{ error }}</li>

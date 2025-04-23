@@ -4,91 +4,101 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class AlertHelper {
-
   private alert;
 
-  constructor(private alertCtrl: AlertController, private trans: TranslateService) {
-  }
+  constructor(
+    private alertCtrl: AlertController,
+    private trans: TranslateService
+  ) {}
 
-  show(title?: string, message?: string) {
+  async show(title?: string, message?: string) {
     if (!this.alert && (title || message)) {
       if (title && !message) {
         message = title;
         title = null;
       }
-      this.alert = this.alertCtrl.create({
+
+      this.alert = await this.alertCtrl.create({
         header: title,
         subHeader: message,
-        buttons: ['OK']
+        buttons: ['OK'],
       });
-      this.present();
+
+      await this.present();
     }
   }
 
-  private present() {
-    this.alert.present({
-      keyboardClose: false
-    }).then(() => this.alert = null);
+  private async present() {
+    if (this.alert) {
+      await this.alert.present();
+      // this.alert = null;
+    }
   }
 
-  confirm(title?: string, message?: string, positiveBtn?: string, negativeBtn?: string, cssClass?: string): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (!this.alert && (title || message)) {
-        this.trans.get(['YES', 'NO']).subscribe(
-          (res) => {
-            this.alert = this.alertCtrl.create({
-              header: title,
-              subHeader: message,
-              cssClass: cssClass,
-              buttons: [
-                {
-                  text: negativeBtn || res.NO,
-                  handler: () => {
-                    resolve(false);
-                  }
-                },
-                {
-                  text: positiveBtn || res.YES,
-                  handler: () => {
-                    resolve(true);
-                  }
-                },
-              ]
-            });
-            this.present();
-          }
-        );
-      }
-    });
-  }
-
-  prompt(options: AlertOptions): Promise<{}> {
-    return new Promise((resolve) => {
-      if (!this.alert) {
-        this.alert = this.alertCtrl.create({
-          header: options.header,
-          subHeader: options.subHeader,
-          inputs: options.inputs,
+  async confirm(
+    title?: string,
+    message?: string,
+    positiveBtn?: string,
+    negativeBtn?: string,
+    cssClass?: string
+  ): Promise<boolean> {
+    if (!this.alert && (title || message)) {
+      const res = await this.trans.get(['YES', 'NO']).toPromise();
+  
+      return new Promise(async (resolve) => {
+        this.alert = await this.alertCtrl.create({
+          header: title,
+          subHeader: message,
+          cssClass: cssClass,
           buttons: [
             {
-              text: 'Cancelar',
-              handler: data => {
-              }
+              text: negativeBtn || res.NO,
+              role: 'cancel', 
             },
             {
-              text: 'Enviar',
-              handler: data => {
-                resolve(data);
-              }
-            }
-          ]
+              text: positiveBtn || res.YES,
+              role: 'confirm', 
+            },
+          ],
         });
-        this.present();
-      }
-    });
+  
+        await this.present();
+  
+        this.alert.onDidDismiss().then((result) => {
+          const wasConfirmed = result?.role === 'confirm';
+          this.alert = null; 
+          resolve(wasConfirmed);
+        });
+      });
+    }
+  
+    return Promise.resolve(false);
+  }
+  
+
+  async prompt(options: AlertOptions): Promise<any> {
+    if (!this.alert) {
+      this.alert = await this.alertCtrl.create({
+        header: options.header,
+        subHeader: options.subHeader,
+        inputs: options.inputs,
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+          },
+          {
+            text: 'Enviar',
+            handler: (data) => {
+              return data;
+            },
+          },
+        ],
+      });
+
+      await this.present();
+    }
   }
 
-  toast() {
-
-  }
+  toast() {}
 }

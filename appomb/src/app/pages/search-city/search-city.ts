@@ -1,15 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSearchbar, ModalController } from '@ionic/angular';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { IonSearchbar, ModalController, NavParams } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import { GeoServiceProvider, City } from '../../providers/geo-service/geo-service';
+import {
+  GeoServiceProvider,
+  City,
+} from '../../providers/geo-service/geo-service';
 import { LoadingHelper } from '../../utils/loading-helper';
 
 @Component({
-  selector: 'page-search-city',
+  selector: 'app-search-city',
   templateUrl: './search-city.html',
   styleUrls: ['./search-city.scss'],
 })
-export class SearchCityPage implements OnInit {
+export class SearchCityPage implements OnInit, AfterViewInit {
   @ViewChild('searchBar', { static: true }) searchBar!: IonSearchbar;
 
   searchText: string = '';
@@ -19,14 +22,15 @@ export class SearchCityPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
+    private navParams: NavParams,
     private route: ActivatedRoute,
     protected loadingHelper: LoadingHelper,
-    private geoServiceProvider: GeoServiceProvider,
+    private geoServiceProvider: GeoServiceProvider
   ) {}
 
   ngOnInit() {
     // Obtém o `stateId` dos parâmetros de rota
-    this.stateId = Number(this.route.snapshot.paramMap.get('stateId'));
+    this.stateId = this.navParams.get('stateId');
     if (!this.stateId) {
       throw new Error('Missing stateId');
     }
@@ -46,10 +50,9 @@ export class SearchCityPage implements OnInit {
     );
   }
 
-  ionViewDidEnter() {
-    // Define o foco na barra de pesquisa após carregar a página
+  ngAfterViewInit() {
     setTimeout(() => {
-      this.searchBar.setFocus();
+      this.searchBar?.setFocus();
     }, 500);
   }
 

@@ -116,7 +116,7 @@ export class GeoServiceProvider extends HttpProviderBase {
   getCities(stateId: number): Observable<City[]> {
     const url = this.buildUrl({ path: this.appConfig.API_CITIES });
     const params = new HttpParams().set('state_id', stateId.toString());
-
+    
     return this.client.get<City[]>(url,  params).pipe(
       map(Utils.mapToJson),
       catchError((e) => this.handlerHttpError(e))

@@ -8,14 +8,8 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar
-      #searchBar
-      *ngIf="!loadingHelper.isLoading('items')"
-      placeholder="Buscar cidade..."
-      [(ngModel)]="searchText"
-      [debounce]="600"
-      showCancelButton="false"
-    >
+    <ion-searchbar #searchBar *ngIf="!loadingHelper.isLoading('items')" placeholder="Buscar cidade..."
+      [(ngModel)]="searchText" [debounce]="600" showCancelButton="false">
     </ion-searchbar>
   </ion-toolbar>
 </ion-header>

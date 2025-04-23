@@ -35,15 +35,16 @@ export class OperatingDaysNoteService {
   deviceId: string;
   noteShowedList = [];
 
-  constructor(private authUserHttp: AuthUserHttp,
-              private appConfig: AppConfig,
-              private appConfigService: AppConfigService,
-              private storage: Storage,
-              private platform: Platform,
-            ) {
-                this.initializeDeviceId();
-              }
-            
+  constructor(
+    private authUserHttp: AuthUserHttp,
+    private appConfig: AppConfig,
+    private appConfigService: AppConfigService,
+    private storage: Storage,
+    private platform: Platform
+  ) {
+    this.initializeDeviceId();
+  }
+
   private async initializeDeviceId() {
     if (this.platform.is('hybrid')) {
       const info = await Device.getId();
@@ -75,14 +76,21 @@ export class OperatingDaysNoteService {
       const buildInfo = this.appConfigService.buildConfig$.getValue();
       if (!buildInfo) return false;
       const parts = note.app_version_to_update.split('.');
-      const versionNumber = parseInt(parts[0] + normalize(parts[1]) + normalize(parts[2]));
+      const versionNumber = parseInt(
+        parts[0] + normalize(parts[1]) + normalize(parts[2])
+      );
       if (!versionNumber) return false;
       if (buildInfo.versionCode >= versionNumber) return false;
     }
     return true;
   }
-  
-  getDay(storeId: number, day: Moment, ignoreUniqueSee = false, onlyVisible = true): Observable<OperatingDaysNote[]> {
+
+  getDay(
+    storeId: number,
+    day: Moment,
+    ignoreUniqueSee = false,
+    onlyVisible = true
+  ): Observable<OperatingDaysNote[]> {
     let params = new HttpParams()
       .set('day', HttpUtils.dateToUrl(day))
       .set('store_id', storeId.toString())
@@ -90,33 +98,29 @@ export class OperatingDaysNoteService {
       .set('ignore_unique_see', ignoreUniqueSee.toString())
       .set('only_visible', onlyVisible.toString())
       .set('fix_modal_appear', 'true');
-  
-    return this.authUserHttp.get<OperatingDaysNote[]>(this.getUrl(this.appConfig.API_LIST_NOTES_DAY), params).pipe(
-      map((res: any) => res as OperatingDaysNote[])
-    );
+
+    return this.authUserHttp
+      .get<OperatingDaysNote[]>(
+        this.getUrl(this.appConfig.API_LIST_NOTES_DAY),
+        params
+      )
+      .pipe(map((res: any) => res as OperatingDaysNote[]));
   }
 
   create(data: ICreateNoteData): Observable<any> {
-    return this.authUserHttp.post(
-      this.getUrl(),
-      data
-    );
+    return this.authUserHttp.post(this.getUrl(), data);
   }
 
-  delete(id: number): Observable<any> {    
-    let params = new HttpParams()
-    .set('id', id);
-    return this.authUserHttp.delete(
-      this.getUrl(),
-      params
-    );
+  delete(id: number): Observable<any> {
+    let params = new HttpParams().set('id', id);
+    return this.authUserHttp.delete(this.getUrl(), params);
   }
 
   setActive(id: number): Observable<any> {
     return this.authUserHttp.post(
       `${this.appConfig.SERVER_API}${this.appConfig.API_SET_OPERATING_NOTE_ACTIVE}`,
       {
-        id: id
+        id: id,
       }
     );
   }
@@ -124,5 +128,4 @@ export class OperatingDaysNoteService {
   getUrl(path = this.appConfig.API_NOTES_DAY): string {
     return `${this.appConfig.SERVER_API}${path}`;
   }
-
 }

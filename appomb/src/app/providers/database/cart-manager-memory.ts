@@ -13,21 +13,22 @@ export interface ICartDataMemory extends ICartDataTable {
 }
 
 function toInt(value: any) {
+  if (value === undefined || value === null) return NaN;
   return parseInt(value.toString(), 10);
 }
 
 function toIntList(values: any[]) {
-  return values.map((item) => {
-    return toInt(item);
-  });
+  return (values || []).map((item) => toInt(item)).filter((v) => !isNaN(v));
 }
 
 @Injectable()
 export class CartManagerMemory extends AbstractCartManager {
   _storage: ICartDataMemory[] = [];
 
-  constructor(public override events: EventService,
-              public override date: DateService) {
+  constructor(
+    public override events: EventService,
+    public override date: DateService
+  ) {
     super();
   }
 
@@ -57,7 +58,10 @@ export class CartManagerMemory extends AbstractCartManager {
     return Promise.resolve(success);
   }
 
-  protected performClearNotInInventoryList(ids: number[], auto: boolean): Promise<any> {
+  protected performClearNotInInventoryList(
+    ids: number[],
+    auto: boolean
+  ): Promise<any> {
     let success = true;
     try {
       this._storage = this._storage.filter((item) => {
@@ -71,7 +75,10 @@ export class CartManagerMemory extends AbstractCartManager {
     return Promise.resolve(success);
   }
 
-  protected performDeleteByInventoryDayId(inventoryDayId: number | string, auto: boolean): Promise<boolean> {
+  protected performDeleteByInventoryDayId(
+    inventoryDayId: number | string,
+    auto: boolean
+  ): Promise<boolean> {
     let success = true;
     try {
       for (let i = 0; i < this._storage.length; i++) {
@@ -89,7 +96,9 @@ export class CartManagerMemory extends AbstractCartManager {
     return Promise.resolve(success);
   }
 
-  protected performGetByInventoryDayId(inventoryDayId: number): Promise<ICartDataMemory> {
+  protected performGetByInventoryDayId(
+    inventoryDayId: number
+  ): Promise<ICartDataMemory> {
     try {
       for (let i = 0; i < this._storage.length; i++) {
         const item = this._storage[i];
@@ -111,7 +120,10 @@ export class CartManagerMemory extends AbstractCartManager {
     return Promise.resolve(result);
   }
 
-  protected async performInsert(data: ICartDataMemory, auto: boolean): Promise<boolean> {
+  protected async performInsert(
+    data: ICartDataMemory,
+    auto: boolean
+  ): Promise<boolean> {
     data.day = Utils.toSqliteDate(data.day); // normalize utils that excepts string date as return
     let exists = await this.getByInventoryDayId(data.inventory_day_id);
     if (exists) {
@@ -121,7 +133,10 @@ export class CartManagerMemory extends AbstractCartManager {
     return Promise.resolve(true);
   }
 
-  protected performUpdate(data: ICartDataMemory, auto: boolean): Promise<boolean> {
+  protected performUpdate(
+    data: ICartDataMemory,
+    auto: boolean
+  ): Promise<boolean> {
     let success = false;
     try {
       for (let i = 0; i < this._storage.length; i++) {
@@ -152,7 +167,10 @@ export class CartManagerMemory extends AbstractCartManager {
     return Promise.resolve(success);
   }
 
-  protected performUpdateAmount(data: IOperationCart, auto: boolean): Promise<boolean> {
+  protected performUpdateAmount(
+    data: IOperationCart,
+    auto: boolean
+  ): Promise<boolean> {
     let success = false;
     try {
       for (let i = 0; i < this._storage.length; i++) {
@@ -180,5 +198,4 @@ export class CartManagerMemory extends AbstractCartManager {
   protected performGet<T>(fields: string[], values: any[]): Promise<T> {
     return undefined;
   }
-
 }

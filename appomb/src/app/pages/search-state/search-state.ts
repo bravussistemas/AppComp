@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { IonSearchbar, ModalController } from '@ionic/angular';
 import { GeoServiceProvider, State } from '../../providers/geo-service/geo-service';
 import { LoadingHelper } from '../../utils/loading-helper';
 
@@ -8,9 +8,9 @@ import { LoadingHelper } from '../../utils/loading-helper';
   templateUrl: './search-state.html',
   styleUrls: ['./search-state.scss'],
 })
-export class SearchStatePage implements OnInit {
-  @ViewChild('searchBar', { static: false }) searchBar: ElementRef;
-
+export class SearchStatePage implements OnInit, AfterViewInit  {
+  @ViewChild('searchBar', { static: false }) searchBar: IonSearchbar;
+  
   searchText: string = '';
   items: State[] = [];
   searchMade = false;
@@ -25,12 +25,9 @@ export class SearchStatePage implements OnInit {
     this.loadStates();
   }
 
-  ionViewDidEnter() {
+  ngAfterViewInit() {
     setTimeout(() => {
-      const inputElement = this.searchBar?.nativeElement.querySelector('input');
-      if (inputElement) {
-        inputElement.focus();
-      }
+      this.searchBar?.setFocus();
     }, 500);
   }
 

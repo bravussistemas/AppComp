@@ -9,7 +9,7 @@ const routes: Routes = [
     component: SearchAddressPage,
   },
   {
-    path: 'HomePage',
+    path: 'HomeList',
     component: HomePage,
   },
   ];

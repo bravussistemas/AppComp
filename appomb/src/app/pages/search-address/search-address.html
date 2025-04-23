@@ -1,42 +1,35 @@
 <ion-header>
-    <ion-toolbar>
-      <ion-title *ngIf="isMode(modes.SEARCH)">Buscar endereço</ion-title>
-      <ion-title *ngIf="isMode(modes.PICK_ONE)">Escolha o endereço</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="dismiss()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  
-    <ion-toolbar *ngIf="isMode(modes.SEARCH)">
-      <ion-searchbar
-        #searchBar
-        [(ngModel)]="searchText"
-        [debounce]="600"
-        placeholder="Digite o seu endereço"
-        showCancelButton="true"
-        (ionInput)="onInput($event)"
-        (ionCancel)="onCancel()">
-      </ion-searchbar>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
-    <!-- Exibe mensagem quando nenhum endereço for encontrado -->
-    <page-message-box *ngIf="searchMade && !addressList.length" text="Endereço não encontrado."></page-message-box>
-  
-    <!-- Exibe spinner de carregamento enquanto busca -->
-    <ion-spinner *ngIf="loadingHelper.isLoading('addressList')" class="page-spinner"></ion-spinner>
-  
-    <!-- Lista de endereços encontrados -->
-    <ion-list *ngIf="!loadingHelper.isLoading('addressList') && addressList.length">
-      <ion-item *ngFor="let address of addressList" (click)="selectAddress(address)">
-        <ion-label>
-          <h2>{{ address.name }}</h2>
-          <p>{{ address.description }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-  
+  <ion-toolbar>
+    <ion-title *ngIf="isMode(modes.SEARCH)">Buscar endereço</ion-title>
+    <ion-title *ngIf="isMode(modes.PICK_ONE)">Escolha o endereço</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="isMode(modes.SEARCH)">
+    <ion-searchbar #searchBar [(ngModel)]="searchText" [debounce]="600" placeholder="Digite o seu endereço"
+      showCancelButton="true" (ionInput)="onInput($event)" (ionCancel)="onCancel()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Exibe mensagem quando nenhum endereço for encontrado -->
+  <page-message-box *ngIf="searchMade && !addressList.length" text="Endereço não encontrado."></page-message-box>
+
+  <!-- Exibe spinner de carregamento enquanto busca -->
+  <ion-spinner *ngIf="loadingHelper.isLoading('addressList')" class="page-spinner"></ion-spinner>
+
+  <!-- Lista de endereços encontrados -->
+  <ion-list *ngIf="!loadingHelper.isLoading('addressList') && addressList.length">
+    <ion-item *ngFor="let address of addressList" (click)="selectAddress(address)">
+      <ion-label>
+        <h2>{{ address.name }}</h2>
+        <p>{{ address.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

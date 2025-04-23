@@ -20,7 +20,7 @@ const routes: Routes = [
     component: CheckoutComplete,
   },
   { 
-    path: 'home', 
+    path: 'HomeList', 
     component: HomePage 
   },
   {

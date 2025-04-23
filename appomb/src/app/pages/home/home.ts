@@ -255,10 +255,11 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   canGoCheckout = () => {
-    if (
-      this.section == 'breads' &&
-      !this.isAdminOrStoreSeller(this.user, this.store)
-    ) {
+    //ENTENDER REGRA DE NEGOCIO COM O PESSOAL
+    //ACERTAR FUNCOE COM O BRAVUSS
+    console.log('User:', this.user);
+    console.log('Store:', this.store);
+    if (false) {
       try {
         this.trackHelper.trackByName(
           TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
@@ -350,10 +351,12 @@ export class HomePage implements OnInit, OnDestroy {
     if (!day) {
       return;
     }
+
     this.day = day;
     this.watchOperatingNotesDaysChanges(this.store.id);
     this.dayMessage = null;
     this.dataDispatchOrders = { day: this.day, store: this.store };
+
     this.operatingDaysNoteService.getDay(this.store.id, this.day).subscribe(
       (res) => {
         const note = OperatingDayNoteUtil.getByType(res, NoteTypeEnum.NORMAL);
@@ -405,6 +408,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.serverReturned = false;
     this.firebaseInventoryDay.unsubscribe();
     this.firebaseInventoryDay = new Subscription();
+
     this.firebaseInventoryDay.add(
       this.firebaseService.getDay(this.day, this.store.id).subscribe(
         (resp) => {

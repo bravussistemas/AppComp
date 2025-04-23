@@ -1,5 +1,14 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { UserAddress, UserAddressProvider } from '../../providers/user-address/user-address';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  UserAddress,
+  UserAddressProvider,
+} from '../../providers/user-address/user-address';
 import { AlertController } from '@ionic/angular';
 import { LoadingHelper } from '../../utils/loading-helper';
 
@@ -13,10 +22,11 @@ export class UserAddressRowComponent {
   @Input('userAddress') address: UserAddress;
   @Output() onDeleteAddress: EventEmitter<UserAddress> = new EventEmitter();
 
-  constructor(private alertCtrl: AlertController,
-              private userAddressProvider: UserAddressProvider,
-              private loadingHelper: LoadingHelper) {
-  }
+  constructor(
+    private alertCtrl: AlertController,
+    private userAddressProvider: UserAddressProvider,
+    private loadingHelper: LoadingHelper
+  ) {}
 
   async deleteAddress(event: MouseEvent, address: UserAddress) {
     event.stopPropagation();
@@ -28,23 +38,26 @@ export class UserAddressRowComponent {
           text: 'Excluir endereço',
           handler: () => {
             this.loadingHelper.show();
-            this.userAddressProvider.delete(address).subscribe(() => {
-              this.loadingHelper.hide();
-              this.onDeleteAddress.emit(address);
-            }, (e) => {
-              console.log(e);
-              this.loadingHelper.hide();
-            });
-          }
+            this.userAddressProvider.delete(address).subscribe(
+              () => {
+                this.loadingHelper.hide();
+                this.onDeleteAddress.emit(address);
+              },
+              (e) => {
+                console.log(e);
+                this.loadingHelper.hide();
+              }
+            );
+          },
         },
         {
           text: 'Cancelar',
           role: 'destructive',
           handler: () => {
             return;
-          }
+          },
         },
-      ]
+      ],
     });
     (await confirmAlert).present();
   }

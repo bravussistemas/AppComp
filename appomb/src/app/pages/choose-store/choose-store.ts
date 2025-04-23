@@ -221,6 +221,8 @@ export class ChooseStore implements OnInit, OnDestroy {
     this.settingsService
       .chooseStore(store)
       .then(() => {
+        
+
         return this.redirectSelectStore(store, autoSelect);
       })
       .catch((e) => {
@@ -231,6 +233,7 @@ export class ChooseStore implements OnInit, OnDestroy {
   }
 
   getRedirectFunc(store: Store, autoSelect = false): Promise<any> {
+    console.log(this.user);
     if (!this.user) {
       return this.router.navigate(['/HomeList']);
     }
@@ -246,6 +249,7 @@ export class ChooseStore implements OnInit, OnDestroy {
     if (this.user.delivery_employee_id) {
       return this.router.navigate(['/ListDispatchDeliveryPage']);
     }
+
     if (store.store_type == StoreTypeEnum.DELIVERY) {
       if (this.profile) {
         if (autoSelect) {
@@ -272,7 +276,7 @@ export class ChooseStore implements OnInit, OnDestroy {
   createRedirectToChooseAddressPromise(params?) {
     console.log('Chamando ChooseDeliveryAddressPage com params: ');
     const routeParams = {
-      goToAfter: 'HomePage',
+      goToAfter: 'HomeList',
       redirectType: 'setRoot',
       ...params,
       onSelect: () => {

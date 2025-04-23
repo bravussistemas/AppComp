@@ -7,6 +7,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {
   IonContent,
@@ -52,6 +53,9 @@ export class ChooseDeliveryAddressPage
   onCancel: Function | undefined;
   onSelect: Function | undefined;
   userAddressId: number | undefined;
+  showHideBackButtonClass = false;
+  isLoadingAddressList = false;
+
   private unregisterBackButtonAction: any;
 
   constructor(
@@ -66,7 +70,8 @@ export class ChooseDeliveryAddressPage
     public loadingHelper: LoadingHelper,
     public modalCtrl: ModalController,
     public authService: AuthService,
-    public platform: Platform
+    public platform: Platform,
+    private cdr: ChangeDetectorRef
   ) {}
 
   get hasAddress() {
@@ -118,7 +123,9 @@ export class ChooseDeliveryAddressPage
   }
 
   ngOnDestroy(): void {
-    this.unregisterBackButtonAction && this.unregisterBackButtonAction();
+    if (this.unregisterBackButtonAction) {
+      this.unregisterBackButtonAction.unsubscribe();
+    }
   }
 
   initializeBackButtonCustomHandler(): void {
@@ -149,6 +156,9 @@ export class ChooseDeliveryAddressPage
 
   loadAddressList(store: Store): void {
     this.loadingHelper.setLoading('addressList', true);
+    this.isLoadingAddressList = true;
+    this.cdr.detectChanges();
+
     this.userAddressProvider.list({ store_id: store.id.toString() }).subscribe(
       (resp) => {
         if (resp.acceptable.length && this.userAddressId) {
@@ -161,8 +171,17 @@ export class ChooseDeliveryAddressPage
         this.addressAcceptableList = resp.acceptable;
         this.addressNotAcceptableList = resp.not_acceptable;
         this.loadingHelper.setLoading('addressList', false);
+
+        this.isLoadingAddressList = false;
+        this.showHideBackButtonClass = true;
+        this.cdr.detectChanges();
       },
-      () => this.toastHelper.connectionError()
+      () => {
+        this.loadingHelper.setLoading('addressList', false);
+        this.isLoadingAddressList = false;
+        this.cdr.detectChanges();
+        this.toastHelper.connectionError();
+      }
     );
   }
 
