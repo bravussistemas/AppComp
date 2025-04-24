@@ -106,6 +106,8 @@ export class ReservationBar implements OnInit, OnDestroy {
   };
 
   goToCheckout() {
+    (document.activeElement as HTMLElement)?.blur();
+
     if (!this.canGoCheckout()) {
       //deve redirecionar para alguma tela de autenticacao
       this.router.navigate(['/login']);

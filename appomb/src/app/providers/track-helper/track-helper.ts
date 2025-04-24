@@ -43,10 +43,10 @@ export class TrackHelper {
     OPEN_LAST_REQUESTS_MODAL: 'Abriu modal "Meus Pedidos"',
   };
 
-  constructor(public platform: Platform,
-              private amplitudeService: AmplitudeService,
-  ) {
-  }
+  constructor(
+    public platform: Platform,
+    private amplitudeService: AmplitudeService
+  ) {}
 
   isEnabled() {
     return this.platform.is('cordova') && !ENV.DEBUG;
@@ -54,7 +54,10 @@ export class TrackHelper {
 
   track(trackEvent: TrackEvent): void {
     try {
-      console.log(`Tracking event ${trackEvent.name} with data: `, trackEvent.data);
+      console.log(
+        `Tracking event ${trackEvent.name} with data: `,
+        trackEvent.data
+      );
       // if (!this.isEnabled()) {
       //   return;
       // }

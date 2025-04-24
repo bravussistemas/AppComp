@@ -103,7 +103,8 @@ export class SignIn {
       .login(credentials)
       .then(
         () => {
-          this.navCtrl.navigateRoot('/HomePage');
+          this.navCtrl.navigateRoot('/HomeList');
+          // this.router.navigate(['/HomeList'])
         },
         (err) => {
           this.loadingHelper.hide();

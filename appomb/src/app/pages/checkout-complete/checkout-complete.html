@@ -68,7 +68,7 @@
             <ng-template #noAddress>
               <h2>Escolha...</h2>
             </ng-template>
-            <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+            <ion-icon color="darkGray" name="arrow-forward" item-end></ion-icon>
           </button>
           <!--   FIM: BOTÃO DE ENDEREÇO   -->
           <!--   INÍCIO: BOTÃO DE HORÁRIO   -->
@@ -87,7 +87,7 @@
             <ng-template #noHour>
               <h2>Escolha...</h2>
             </ng-template>
-            <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+            <ion-icon color="darkGray" name="arrow-forward" item-end></ion-icon>
           </button>
           <!--   FIM: BOTÃO DE HORÁRIO   -->
           <!--   INÍCIO: BOTÃO DE ENTREGAR NA PORTARIA   -->
@@ -119,7 +119,7 @@
             Subtotal
           </div>
           <div class="purchase-details-item__line-value">
-            {{productsPrice | currency:"BRL":true}}
+            {{productsPrice | currency:"BRL":"symbol"}}
           </div>
         </div>
         <div class="purchase-details-item" *ngIf="canApplyCoupon && !inSellerMode(user, store) && couponDiscountPrice">
@@ -127,7 +127,7 @@
             Cupom
           </div>
           <div class="purchase-details-item__line-value success">
-            -{{couponDiscountPrice | currency:"BRL":true}}
+            -{{couponDiscountPrice | currency:"BRL":"symbol"}}
           </div>
         </div>
         <div class="purchase-details-item" *ngIf="!inSellerMode(user, store) && isForDelivery">
@@ -136,7 +136,7 @@
           </div>
           <div class="purchase-details-item__line-value" [ngClass]="{'success': isFreeDeliveryByPrice}">
             <span [ngClass]="{'free-delivery-price':  isFreeDeliveryByPrice}">
-              {{deliveryAddressInfo?.delivery_price | currency:"BRL":true }}
+              {{deliveryAddressInfo?.delivery_price | currency:"BRL":"symbol" }}
             </span>
             <span *ngIf="isFreeDeliveryByPrice">
               <strong>GRÁTIS</strong>
@@ -157,7 +157,7 @@
             Total
           </div>
           <div class="purchase-details-item__line-value">
-            {{total | currency:"BRL":true}}
+            {{total | currency:"BRL":"symbol"}}
           </div>
         </div>
       </div>
@@ -195,7 +195,7 @@
               </ng-template>
             </ng-template>
           </ion-label>
-          <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+          <ion-icon color="darkGray" name="arrow-forward" item-end></ion-icon>
         </button>
         <!--   FINAL: CUPOM   -->
 
@@ -213,7 +213,7 @@
               <p>Escolher dia...</p>
             </ng-template>
           </ion-label>
-          <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+          <ion-icon color="darkGray" name="arrow-forward" item-end></ion-icon>
         </button>
         <!--   FINAL: AGENDAR ENTREGA   -->
 
@@ -289,7 +289,7 @@
               <p>Adicionar</p>
             </ng-container>
           </ion-label>
-          <ion-icon color="darkGray" name="ios-arrow-forward" item-end></ion-icon>
+          <ion-icon color="darkGray" name="arrow-forward" item-end></ion-icon>
         </button>
         <!--   FINAL: DOCUMENTO NA NOTA   -->
 

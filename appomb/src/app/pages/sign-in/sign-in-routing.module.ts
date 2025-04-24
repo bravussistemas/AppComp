@@ -19,7 +19,7 @@ const routes: Routes = [
     component: ForgotPasswordPage,
   },
   {
-    path: 'HomePage',
+    path: 'HomeList',
     component: HomePage,
   },
   
