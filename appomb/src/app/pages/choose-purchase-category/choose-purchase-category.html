@@ -1,5 +1,6 @@
-<app-header [buttonIcon]="getHeaderAction()?.icon" [iconClass]="getHeaderAction()?.iconClass" (headerBtnClick)="getHeaderAction()?.handler($event)"></app-header>
-
+<app-header [buttonIcon]="getHeaderAction()?.icon" 
+[iconClass]="getHeaderAction()?.iconClass" 
+(headerBtnClick)="getHeaderAction()?.handler($event)"></app-header>
 
 <ion-content>
   <ng-container *ngIf="loading; else mainContent">
@@ -24,7 +25,9 @@
       <!-- Lojas -->
       <ng-container *ngIf="storesState?.has_normal_stores || hasErrorLoadStoreState">
         <ion-item id="btn-stores" [disabled]="disableBtns" class="store-item gray-item-new" (click)="chooseStores()">
-          <img slot="start" src="assets/svg/icons/shop.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <i class="main-menu-fa-icon svg-icon-flat" >
+            <img slot="start" class="main-menu-fa-icon svg-icon-flat" src="assets/svg/icons/shop.svg"/>
+          </i>
           <ion-label>
             <h1>Lojas</h1>
             <h2 color="secondary">Reserve e busque na loja</h2>
@@ -37,7 +40,9 @@
       <ng-container *ngIf="storesState?.has_delivery_main || hasErrorLoadStoreState">
         <ion-item id="btn-delivery" [disabled]="disableBtns" class="store-item gray-item-new"
           (click)="chooseStores(storeType.DELIVERY, deliveryType.MAIN)">
-          <img slot="start" src="assets/svg/icons/delivery_2.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <i class="main-menu-fa-icon svg-icon-flat">
+            <img slot="start" src="assets/svg/icons/delivery_2.svg" />
+          </i>
           <ion-label>
             <h1>Entrega de pães</h1>
             <h2 color="secondary">Escolha local e hora</h2>
@@ -50,7 +55,9 @@
       <ng-container *ngIf="storesState?.has_delivery_pizza || hasErrorLoadStoreState">
         <ion-item [disabled]="disableBtns" class="store-item gray-item-new"
           (click)="chooseStores(storeType.DELIVERY, deliveryType.PIZZA)">
-          <img slot="start" src="assets/svg/icons/pizza.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <i class="main-menu-fa-icon svg-icon-flat">
+            <img slot="start" src="assets/svg/icons/pizza.svg"/>
+          </i>
           <ion-label>
             <h1>Entrega de pizzas</h1>
             <h2>Escolha local e hora</h2>
@@ -67,7 +74,9 @@
       </ion-item-divider>
       <ion-list>
         <ion-item [disabled]="disableBtns" class="store-item gray-item-new" (click)="chooseLastRequest()">
-          <img slot="start" src="assets/svg/icons/previous.svg" class="main-menu-fa-icon svg-icon-flat" />
+          <i class="main-menu-fa-icon svg-icon-flat">
+            <img slot="start" src="assets/svg/icons/previous.svg"/>
+          </i>
           <ion-label>
             <h1>{{ lastRequestSettings.title }}</h1>
             <h2>{{ lastRequestSettings.subtitle }}</h2>

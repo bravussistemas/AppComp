@@ -78,6 +78,7 @@ const orderStoresByType = (stores: Store[]): StoreByType => {
 @Component({
   selector: 'app-page-choose-store',
   templateUrl: 'choose-store.html',
+  styleUrls: ['choose-store.scss']
 })
 /* eslint-disable @angular-eslint/component-class-suffix */
 export class ChooseStore implements OnInit, OnDestroy {

@@ -58,7 +58,7 @@ import { Capacitor } from '@capacitor/core';
 declare let cordova: any;
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
+  templateUrl: 'app.html',
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
@@ -89,7 +89,7 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(
     public platform: Platform,
     public router: Router,
-    private navController: NavController,
+    public navController: NavController,
     public auth: AuthService,
     private storage: Storage,
     private trackHelper: TrackHelper,
@@ -196,6 +196,14 @@ export class AppComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.initializeBackButtonCustomHandler();
+  }  
+
+  handleHeaderClick() {
+    if (this.userIsLoggedIn) {
+      this.router.navigate(['user-profile']);
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 
   initializeBackButtonCustomHandler(): void {

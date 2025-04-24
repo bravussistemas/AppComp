@@ -12,8 +12,8 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-@import "../theme/fonts";
-@import 'src/theme/variables';
+@import "../theme/fonts.scss";
+@import 'src/theme/variables.scss';
 
 
 .svg-icon {
@@ -483,7 +483,7 @@ body {
       max-width: initial;
 
       .price-product {
-        color: color($colors, priceProductColor);
+        color: map-get($colors, priceProductColor);
       }
 
       max-width: initial;
@@ -543,7 +543,7 @@ body {
   }
 
   .tip-input {
-    color: color($colors, textGray) !important;
+    color: map-get($colors, textGray) !important;
     font-size: 1.3rem;
     padding: 6px 0;
     overflow: inherit;
@@ -582,7 +582,7 @@ body {
     }
 
     &.fixed-bottom {
-      height: $toolbar-md-height;
+      height: var(--ion-toolbar-min-height, 56px);
       position: fixed;
       bottom: 0;
     }
@@ -838,7 +838,7 @@ body {
 
     .sign-in-buttons, .icon-form {
       ion-icon {
-        color: color($colors, primary);
+        color: map-get($colors, primary);
       }
 
       padding-left: $j-units-1-4;
@@ -1140,7 +1140,7 @@ body {
     }
 
     //ion-icon {
-    //  color: color($colors, primary) !important;
+    //  color: map-get($colors, primary) !important;
     //}
     ion-footer {
       font-size: 1.4rem;
@@ -1230,7 +1230,7 @@ body {
 
   .alert-button-group button:last-child {
     font-weight: bold;
-    color: color($colors, primary) !important;
+    color: map-get($colors, primary) !important;
   }
 
   .clear {
@@ -1283,23 +1283,23 @@ body {
   .content-with-fixed-toolbar-top {
 
     .scroll-content {
-      padding-top: $toolbar-md-height !important;
+      padding-top: var(--ion-toolbar-min-height, 56px) !important;
     }
 
     ion-toolbar {
-      height: $toolbar-md-height;
+      height: var(--ion-toolbar-min-height, 56px);
       padding: 0;
 
       .toolbar-lines-content {
-        height: $toolbar-md-height;
+        height: var(--ion-toolbar-min-height, 56px);
         padding: 0;
 
         ion-segment {
           height: 100%;
 
           .segment-button {
-            height: $toolbar-md-height !important;
-            line-height: $toolbar-md-height;
+            height: var(--ion-toolbar-min-height, 56px) !important;
+            line-height: var(--ion-toolbar-min-height, 56px);
           }
         }
       }
@@ -1307,7 +1307,7 @@ body {
 
     &.row-2 {
       .scroll-content {
-        margin-top: $toolbar-md-height * 3 !important;
+        margin-top: calc(var(--ion-toolbar-min-height, 56px) * 3) !important;
       }
     }
 
@@ -1319,14 +1319,14 @@ body {
       }
 
       .scroll-content {
-        padding-top: $toolbar-md-height * 2 !important;
+        padding-top: calc(var(--ion-toolbar-min-height, 56px) * 2) !important;
       }
 
       ion-toolbar {
-        height: $toolbar-md-height * 2;
+        height: calc(var(--ion-toolbar-min-height, 56px) * 2);
 
         .toolbar-lines-content {
-          height: $toolbar-md-height * 2;
+          height: calc(var(--ion-toolbar-min-height, 56px) * 2);
         }
       }
     }
@@ -1339,13 +1339,13 @@ body {
 
     &.two-rows-bottom {
       .scroll-content {
-        margin-bottom: $toolbar-md-height * 2 !important;
+        margin-bottom: calc(var(--ion-toolbar-min-height, 56px) * 2) !important;
       }
     }
 
     &.three-rows-bottom {
       .scroll-content {
-        margin-bottom: $toolbar-md-height * 3 !important;
+        margin-bottom: calc(var(--ion-toolbar-min-height, 56px) * 3) !important;
       }
     }
   }
@@ -1515,7 +1515,7 @@ body {
   }
 
   .text-success {
-    color: color($colors, success);
+    color: map-get($colors, success);
   }
 
   .centered-text-v {
@@ -1533,28 +1533,28 @@ body {
     .content-with-fixed-toolbar-top {
       &.one-half {
         .scroll-content {
-          padding-top: $toolbar-md-height * 1.5 !important;
+          padding-top: calc(var(--ion-toolbar-min-height, 56px) * 1.5) !important;
         }
 
         ion-toolbar {
-          height: $toolbar-md-height * 1.5;
+          height: calc(var(--ion-toolbar-min-height, 56px) * 1.5);
 
           .toolbar-lines-content {
-            height: $toolbar-md-height * 1.5;
+            height: calc(var(--ion-toolbar-min-height, 56px) * 1.5);
           }
         }
       }
 
       &.two-half-rows {
         .scroll-content {
-          padding-top: $toolbar-md-height * 1.9 !important;
+          padding-top: calc(var(--ion-toolbar-min-height, 56px) * 1.9) !important;
         }
 
         ion-toolbar {
-          height: $toolbar-md-height * 1.9;
+          height: calc(var(--ion-toolbar-min-height, 56px) * 1.9);
 
           .toolbar-lines-content {
-            height: $toolbar-md-height * 1.9;
+            height: calc(var(--ion-toolbar-min-height, 56px) * 1.9);
           }
         }
       }
@@ -1655,7 +1655,7 @@ body {
       white-space: initial;
       text-transform: uppercase;
       font-size: 1.3rem;
-      color: color($colors, primaryDark);
+      color: map-get($colors, primaryDark);
       font-weight: bold;
     }
 
@@ -1736,32 +1736,32 @@ ion-app {
 
   .svg-icon-flat {
     img {
-      width: 31px;
+      width: 31px !important;;
     }
   }
 
   .main-menu-fa-icon {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 24px;
+    text-align: center !important;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    min-width: 24px!important;
     margin-right: 0 !important;
 
     svg {
       //margin-right: 14px;
-      font-size: 2rem;
+      font-size: 2rem !important;
     }
 
     &.primary-color {
       svg {
-        color: color($colors, primary);
+        color: map-get($colors, primary);
       }
     }
 
     &.dark-gray-color {
       svg {
-        color: color($colors, darkGray);
+        color: map-get($colors, darkGray);
       }
     }
 
@@ -1791,7 +1791,7 @@ ion-app {
   }
 
   .pending-sale-icon .button-inner {
-    color: color($colors, success);
+    color: map-get($colors, success);
   }
 }
 
