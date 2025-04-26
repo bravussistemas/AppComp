@@ -196,7 +196,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.initializeBackButtonCustomHandler();
-  }  
+  }
 
   handleHeaderClick() {
     if (this.userIsLoggedIn) {
@@ -403,7 +403,7 @@ export class AppComponent implements OnDestroy, OnInit {
     if (this.userIsLoggedIn) {
       this.router.navigate(['/UserProfilePage']);
     } else {
-      this.router.navigate(['/Login']);
+      this.router.navigate(['/login']);
     }
   }
 

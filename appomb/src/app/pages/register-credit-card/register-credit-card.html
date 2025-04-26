@@ -17,25 +17,15 @@
 <ion-content>
   <form style="margin-top: 0" class="icon-form form-slider" [formGroup]="form" novalidate>
     <!-- Substituindo ion-slides por swiper-container -->
-    <swiper-container
-      #mySlider
-      class="fix-slide-flip"
-      [slides-per-view]="1"
-      [space-between]="10"
-      [allow-touch-move]="false"
-    >
+    <swiper-container #mySlider class="fix-slide-flip" [slides-per-view]="1" [space-between]="10" 
+     [allow-touch-move]="false">
       <swiper-slide>
         <ion-grid>
           <ion-row class="auto-height">
             <ion-col>
               <ion-item>
                 <ion-label color="primary" position="floating">{{ 'CARD_NUMBER' | translate }}</ion-label>
-                <ion-input
-                  tabindex="-1"
-                  formControlName="cardNumber"
-                  type="tel"
-                  ccNumber
-                ></ion-input>
+                <ion-input tabindex="-1" formControlName="cardNumber" type="tel" ccNumber></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -74,14 +64,11 @@
                 <ion-label color="primary" position="floating">
                   {{ 'EXPIRATION_DATE' | translate }}
                 </ion-label>
-                <ion-input
-                  tabindex="-1"
-                  formControlName="expiration"
-                  #inputExpiration
-                  maxlength="5"
-                  type="tel"
-                  id="inputExpiration"
-                ></ion-input>
+
+                <ion-input tabindex="-1" formControlName="expiration" #inputExpiration maxlength="5" type="tel"
+                  id="inputExpiration" appMask>
+                </ion-input>
+
               </ion-item>
               <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.expiration?.length">
                 <li *ngFor="let error of formErrors.getErrors()?.expiration">
@@ -93,14 +80,7 @@
             <ion-col size="5">
               <ion-item>
                 <ion-label color="primary" position="floating">{{ 'CVV' | translate }}</ion-label>
-                <ion-input
-                  tabindex="-1"
-                  formControlName="cvv"
-                  #inputCvv
-                  maxlength="4"
-                  type="tel"
-                  ccCvc
-                ></ion-input>
+                <ion-input tabindex="-1" formControlName="cvv" #inputCvv maxlength="4" type="tel" ccCvc></ion-input>
                 <ion-icon name="card" class="cvv-indicator" slot="end"></ion-icon>
               </ion-item>
               <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cvv?.length">
@@ -112,12 +92,8 @@
           </ion-row>
           <div class="space-small"></div>
           <div class="box-submit-btn">
-            <ion-button
-              type="button"
-              (click)="goToFormStep(formSteps.STEP_HOLDER_INFO)"
-              expand="block"
-              color="default-button"
-            >
+            <ion-button type="button" (click)="goToFormStep(formSteps.STEP_HOLDER_INFO)" expand="block"
+              color="default-button">
               {{ 'CONTINUE' | translate }}
             </ion-button>
           </div>
@@ -140,12 +116,11 @@
           </ul>
           <ion-item>
             <ion-label color="primary" position="floating">{{ 'CARD_HOLDER_ID' | translate }}</ion-label>
-            <ion-input
-              tabindex="-1"
-              formControlName="cardHolderId"
-              id="inputCardHolderId"
-              type="tel"
-            ></ion-input>
+
+            <ion-input tabindex="-1" formControlName="cardHolderId" id="inputCardHolderId" type="tel" appMask>
+            </ion-input>
+
+
           </ion-item>
           <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors()?.cardHolderId?.length">
             <li *ngFor="let error of formErrors.getErrors()?.cardHolderId">

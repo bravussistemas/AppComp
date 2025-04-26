@@ -1,15 +1,10 @@
 <ion-header>
-  <app-header
-    [buttonIcon]="enableSearch ? 'close' : 'search'"
+  <app-header [buttonIcon]="enableSearch ? 'close' : 'search'"
     (headerBtnClick)="enableSearch ? stopSearch() : startSearch()">
   </app-header>
   <ion-toolbar no-border-top color="primary" *ngIf="enableSearch">
-    <ion-searchbar
-      *ngIf="products?.length"
-      [(ngModel)]="searchText"
-      [showCancelButton]="false"
-      [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-      [animated]="true">
+    <ion-searchbar *ngIf="products?.length" [(ngModel)]="searchText" [showCancelButton]="false"
+      [placeholder]="'SEARCH_PLACEHOLDER' | translate" [animated]="true">
     </ion-searchbar>
   </ion-toolbar>
 </ion-header>
@@ -56,20 +51,14 @@
   <!-- Product List -->
   <div class="list-thumb-round" [ngClass]="{'safe-area-bottom': isAdmin}">
     <!-- Spinner while loading -->
-    <ion-spinner
-      [showTimeout]="800"
-      *ngIf="loadingHelper.isLoading('products')"
-      class="page-spinner">
+    <ion-spinner [showTimeout]="800" *ngIf="loadingHelper.isLoading('products')" class="page-spinner">
     </ion-spinner>
 
     <!-- Reorderable Product List -->
     <ion-list *ngIf="!loadingHelper.isLoading('products')">
       <ion-reorder-group [disabled]="!reorder" (ionItemReorder)="reorderItems($event)">
-        <ion-item *ngFor="let product of products | productFilter: {name: searchText}"
-                  (click)="goToDetail(product)">
-          <product-img item-start
-                       [enableDetail]="false"
-                       [product]="product"></product-img>
+        <ion-item *ngFor="let product of products | productFilter: {name: searchText}" (click)="goToDetail(product)">
+          <product-img item-start [enableDetail]="false" [product]="product"></product-img>
           <ion-grid class="menu-product-item">
             <product-details [enableDetail]="false" [product]="product"></product-details>
           </ion-grid>

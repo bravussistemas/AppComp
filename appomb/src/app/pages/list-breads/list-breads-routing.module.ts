@@ -5,7 +5,7 @@ import { DetailProduct } from '../detail-product/detail-product';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'ListBreadsPage',
     component: ListBreadsPage,
   },
   {

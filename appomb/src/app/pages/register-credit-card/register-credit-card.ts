@@ -1,5 +1,16 @@
-import { Component, ViewChild } from '@angular/core';
-import { LoadingController, ModalController, NavController, IonInput } from '@ionic/angular';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+  IonInput,
+} from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '../../utils/form-errors';
 import { AppConfig } from '../../../configs';
@@ -18,17 +29,17 @@ import { CreditCardValidator } from '../../libs/angular-cc-library/src/credit-ca
 import { BrandUtils } from '../../utils/brands-utils';
 import { TrackHelper } from '../../providers/track-helper/track-helper';
 import { EventService } from 'src/app/providers/event.service';
-import {Swiper} from 'swiper';
+import { Swiper } from 'swiper';
 import { CardErrorPopUp } from '../card-error-pop-up/card-error-pop-up';
 import { ActivatedRoute, Router } from '@angular/router';
+import { register } from 'swiper/element/bundle';
 
-declare let $: any;
-const brandsMapped = BrandUtils.getBrands().map(item => {
+const brandsMapped = BrandUtils.getBrands().map((item) => {
   return {
     value: item.id,
     label: item.name,
-    icon: item.icon
-  }
+    icon: item.icon,
+  };
 });
 
 @Component({
@@ -36,8 +47,7 @@ const brandsMapped = BrandUtils.getBrands().map(item => {
   templateUrl: './register-credit-card.html',
   styleUrl: './register-credit-card.scss',
 })
-export class RegisterCreditCard {
-
+export class RegisterCreditCard implements AfterViewInit, OnInit {
   formSteps = {
     STEP_CARD_INFO: 'STEP_CARD_INFO',
     STEP_HOLDER_INFO: 'STEP_HOLDER_INFO',
@@ -46,10 +56,13 @@ export class RegisterCreditCard {
   slides: any;
   brands = BrandUtils;
   formStep = this.formSteps.STEP_CARD_INFO;
+  allowNext: any;
+  allowPrev: any;
 
   form: FormGroup;
 
-  @ViewChild('mySlider') slider: Swiper;
+  @ViewChild('mySlider', { static: false }) sliderEl!: ElementRef;
+
   @ViewChild('inputCvv') inputCvv: IonInput;
   @ViewChild('inputExpiration') inputExpiration: IonInput;
 
@@ -67,22 +80,25 @@ export class RegisterCreditCard {
 
   cardBrands = brandsMapped;
 
-  constructor(public fb: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router,
-              private navCtrl: NavController,
-              private alertHelper: AlertHelper,
-              private loadingCtrl: LoadingController,
-              private loadingHelper: LoadingHelper,
-              private trans: TranslateService,
-              private authService: AuthService,
-              private toastHelper: ToastHelper,
-              private modalCtrl: ModalController,
-              private creditCardService: CreditCardService,
-              private events: EventService,
-              private trackHelper: TrackHelper,
-              private appConfig: AppConfig) {
-    this.isFirstAccess = route.snapshot.paramMap.get('isFirstAccess') === 'true';
+  constructor(
+    public fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private navCtrl: NavController,
+    private alertHelper: AlertHelper,
+    private loadingCtrl: LoadingController,
+    private loadingHelper: LoadingHelper,
+    private trans: TranslateService,
+    private authService: AuthService,
+    private toastHelper: ToastHelper,
+    private modalCtrl: ModalController,
+    private creditCardService: CreditCardService,
+    private events: EventService,
+    private trackHelper: TrackHelper,
+    private appConfig: AppConfig
+  ) {
+    this.isFirstAccess =
+      route.snapshot.paramMap.get('isFirstAccess') === 'true';
     this.redirectAfter = route.snapshot.paramMap.get('redirectAfter');
     this.slides = [
       {
@@ -90,7 +106,7 @@ export class RegisterCreditCard {
       },
       {
         id: this.formSteps.STEP_HOLDER_INFO,
-      }
+      },
     ];
     if (appConfig.DEBUG) {
       this.dataForm = {
@@ -115,17 +131,22 @@ export class RegisterCreditCard {
     this.buildForm();
   }
 
+  ngOnInit() {
+    register();
+  }
+
   ngAfterViewInit() {
     // Desabilitar controle de teclado
-    this.slider.keyboard.disable();
-  
-    // Bloquear swipes (deslizes)
-    this.slider.allowSlideNext = false;
-    this.slider.allowSlidePrev = false;
-  
-    // Aplicar máscaras usando jQuery
-    $('#inputExpiration').find('input').mask('00/00');
-    $('#inputCardHolderId').find('input').mask('000.000.000-00');
+    // this.slider.keyboard.disable();
+
+    this.allowNext = this.sliderEl.nativeElement.swiper.allowSlideNext;
+    this.allowPrev = this.sliderEl.nativeElement.swiper.allowSlidePrev;
+    this.allowNext = false;
+    this.allowPrev = false;
+
+    // // Aplicar máscaras usando jQuery
+    // $('#inputExpiration').find('input').mask('00/00');
+    // $('#inputCardHolderId').find('input').mask('000.000.000-00');
   }
 
   ionViewWillEnter() {
@@ -142,69 +163,73 @@ export class RegisterCreditCard {
 
   buildForm(): void {
     this.form = this.fb.group({
-      'cardHolderName': [this.dataForm.cardHolderName, [
-        Validators.required,
-        Validators.minLength(this.appConfig.MIN_LENGTH_NAME),
-        Validators.maxLength(this.appConfig.MAX_LENGTH_NAME),
-        validateFullName
-      ]],
-      'cardHolderId': [this.dataForm.cardHolderId, [
-        Validators.required,
-        validateCPF
-      ]],
-      'cardNumber': [this.dataForm.cardNumber, [
-        Validators.required,
-        <any>CreditCardValidator.validateCCNumber
-      ]],
-      'cardBrandId': [this.dataForm.cardBrandId, [
-        Validators.required
-      ]],
-      'expiration': [this.dataForm.expiration, [
-        Validators.required,
-        <any>CreditCardValidator.validateExpDate
-      ]],
-      'cvv': [this.dataForm.cvv, [
-        Validators.required,
-        <any>Validators.required, <any>Validators.minLength(3), <any>Validators.maxLength(4)
-      ]],
+      cardHolderName: [
+        this.dataForm.cardHolderName,
+        [
+          Validators.required,
+          Validators.minLength(this.appConfig.MIN_LENGTH_NAME),
+          Validators.maxLength(this.appConfig.MAX_LENGTH_NAME),
+          validateFullName,
+        ],
+      ],
+      cardHolderId: [
+        this.dataForm.cardHolderId,
+        [Validators.required, validateCPF],
+      ],
+      cardNumber: [
+        this.dataForm.cardNumber,
+        [Validators.required, <any>CreditCardValidator.validateCCNumber],
+      ],
+      cardBrandId: [this.dataForm.cardBrandId, [Validators.required]],
+      expiration: [
+        this.dataForm.expiration,
+        [Validators.required, <any>CreditCardValidator.validateExpDate],
+      ],
+      cvv: [
+        this.dataForm.cvv,
+        [
+          Validators.required,
+          <any>Validators.required,
+          <any>Validators.minLength(3),
+          <any>Validators.maxLength(4),
+        ],
+      ],
     });
     this.formErrors = new FormErrors(this.form, this.validationMessages);
 
-    this.form.controls['expiration'].valueChanges.subscribe(
-      () => {
-        if (this.form.controls['expiration'].dirty && this.form.controls['expiration'].valid) {
-          this.inputCvv.setFocus();
-        }
+    this.form.controls['expiration'].valueChanges.subscribe(() => {
+      if (
+        this.form.controls['expiration'].dirty &&
+        this.form.controls['expiration'].valid
+      ) {
+        this.inputCvv.setFocus();
       }
-    );
+    });
 
-    this.form.controls['cardNumber'].valueChanges.subscribe(
-      (newValue) => {
-        const brandId = BrandUtils.getBrandId(newValue);
-        if (brandId) {
-          this.form.controls['cardBrandId'].setValue(brandId)
-        } else {
-          this.form.controls['cardBrandId'].setValue(null)
-        }
+    this.form.controls['cardNumber'].valueChanges.subscribe((newValue) => {
+      const brandId = BrandUtils.getBrandId(newValue);
+      if (brandId) {
+        this.form.controls['cardBrandId'].setValue(brandId);
+      } else {
+        this.form.controls['cardBrandId'].setValue(null);
       }
-    );
-
+    });
   }
 
   get currentBrandId() {
-    return this.form.value.cardBrandId
+    return this.form.value.cardBrandId;
   }
 
   validationMessages = {
-    'cardNumber': {
-      'minlength': `O nome deve ter no mínimo ${this.appConfig.MIN_LENGTH_NAME} caracteres.`,
-      'maxlength': `O nome deve ter no máximo ${this.appConfig.MAX_LENGTH_PASSWORD} caracteres.`
+    cardNumber: {
+      minlength: `O nome deve ter no mínimo ${this.appConfig.MIN_LENGTH_NAME} caracteres.`,
+      maxlength: `O nome deve ter no máximo ${this.appConfig.MAX_LENGTH_PASSWORD} caracteres.`,
     },
-    'cardBrandId': {},
-    'cardHolderName': {},
-    'cardHolderId': {},
-    'expiration': {},
-    'cvv': {}
+    cardBrandId: {},
+    cardHolderName: {},
+    cardHolderId: {},
+    expiration: {},
+    cvv: {},
   };
 
   formCardInfoIsValid() {
@@ -226,45 +251,55 @@ export class RegisterCreditCard {
       this.loadingHelper.show();
       // Paggcard rules: split request data in two request.
       // 1 - create card with principal data (first request)
-      this.creditCardService.create({
-        card_number: this.form.value.cardNumber,
-        brand: this.form.value.cardBrandId,
-        card_holder_name: this.form.value.cardHolderName,
-        card_holder_id: Utils.cleanNonDigits(this.form.value.cardHolderId)
-      }).subscribe((res: any) => {
-        let cardId = res.id;
-        // 2 - update card with another information.
-        this.creditCardService.finishCreate({
-          card: cardId,
-          cvv: this.form.value.cvv,
-          valid_date: this.form.value.expiration,
-        }).subscribe((res: any) => {
-          // 3 - validate card.
-          this.creditCardService.validate(cardId)
-            .subscribe((res: any) => {
-              if (res.is_valid) {
-                this.onValidCard({id: cardId});
-              } else {
-                this.onInvalidCard();
-              }
-            }, (e) => {
-              this.handlerRegisterCard(e);
-            });
-        }, (e) => {
-          this.handlerRegisterCard(e);
-        });
-      }, (e) => {
-        this.handlerRegisterCard(e);
-      });
+      this.creditCardService
+        .create({
+          card_number: this.form.value.cardNumber,
+          brand: this.form.value.cardBrandId,
+          card_holder_name: this.form.value.cardHolderName,
+          card_holder_id: Utils.cleanNonDigits(this.form.value.cardHolderId),
+        })
+        .subscribe(
+          (res: any) => {
+            let cardId = res.id;
+            // 2 - update card with another information.
+            this.creditCardService
+              .finishCreate({
+                card: cardId,
+                cvv: this.form.value.cvv,
+                valid_date: this.form.value.expiration,
+              })
+              .subscribe(
+                (res: any) => {
+                  // 3 - validate card.
+                  this.creditCardService.validate(cardId).subscribe(
+                    (res: any) => {
+                      if (res.is_valid) {
+                        this.onValidCard({ id: cardId });
+                      } else {
+                        this.onInvalidCard();
+                      }
+                    },
+                    (e) => {
+                      this.handlerRegisterCard(e);
+                    }
+                  );
+                },
+                (e) => {
+                  this.handlerRegisterCard(e);
+                }
+              );
+          },
+          (e) => {
+            this.handlerRegisterCard(e);
+          }
+        );
     } else {
-      this.trans.get('CHECK_FORM_ERRORS').subscribe(
-        (res: any) => {
-          this.alertHelper.show(res);
-        }
-      );
+      this.trans.get('CHECK_FORM_ERRORS').subscribe((res: any) => {
+        this.alertHelper.show(res);
+      });
     }
   }
-  
+
   setupBackButton(handler: () => void): void {
     // Define o evento de retorno do botão "Voltar" do navegador
     window.onpopstate = handler;
@@ -272,7 +307,7 @@ export class RegisterCreditCard {
 
   goToFormStep(formStep: string) {
     console.debug('Segment changed to: ', formStep);
-  
+
     // Validação da etapa atual antes de prosseguir
     if (this.formStep === this.formSteps.STEP_CARD_INFO) {
       this.formErrors.setSubmitted();
@@ -281,28 +316,36 @@ export class RegisterCreditCard {
       }
       this.formErrors.setUnsubmitted(); // Restaura o estado dos erros
     }
-  
+
     // Configurar o comportamento do botão Voltar
     if (formStep === this.formSteps.STEP_HOLDER_INFO) {
-      this.setupBackButton(() => this.goToFormStep(this.formSteps.STEP_CARD_INFO));
+      this.setupBackButton(() =>
+        this.goToFormStep(this.formSteps.STEP_CARD_INFO)
+      );
     } else {
       this.setupBackButton(() => window.history.back());
     }
-  
-    // Encontrar o índice do slide e navegar para ele
-    const selectedIndex = this.slides.findIndex(slide => slide.id === formStep);
+
+    const selectedIndex = this.slides.findIndex(
+      (slide: any) => slide.id === formStep
+    );
+
     if (selectedIndex !== -1) {
       this.formStep = formStep;
-      this.slider.allowSlideNext = true;
-      this.slider.allowSlidePrev = true;
-  
+      this.allowNext = true;
+      this.allowPrev = true;
+
       // Navegação sem `then`, pois o retorno é booleano
-      const slideChanged = this.slider.slideTo(selectedIndex);
-  
+      // const slideChanged = this.slider.slideTo(selectedIndex);
+      const slideChanged =
+        this.sliderEl.nativeElement.swiper.slideTo(selectedIndex);
+      console.log(slideChanged);
+      console.log(this.sliderEl.nativeElement.swiper);
+
       if (slideChanged) {
         // Resetar o estado após a navegação bem-sucedida
-        this.slider.allowSlideNext = false;
-        this.slider.allowSlidePrev = false;
+        this.allowNext = false;
+        this.allowPrev = false;
       } else {
         console.error('Erro ao tentar navegar para o slide.');
       }
@@ -312,32 +355,33 @@ export class RegisterCreditCard {
   }
 
   skipCardRegister() {
-    this.trans.get([
-      'QUESTION_SKIP_REGISTER_CARD',
-      'EXPLANATION_SKIP_REGISTER_CARD',
-      'BTN_SKIP',
-      'BTN_REGISTER'
-    ]).subscribe(
-      (res: any) => {
-        this.alertHelper.confirm(
-          res.QUESTION_SKIP_REGISTER_CARD,
-          res.EXPLANATION_SKIP_REGISTER_CARD,
-          res.BTN_SKIP,
-          res.BTN_REGISTER
-        ).then((confirmed) => {
-          console.log(confirmed);
-          if (confirmed) {
-            this.finish();
-          }
-        });
-
-      }
-    );
+    this.trans
+      .get([
+        'QUESTION_SKIP_REGISTER_CARD',
+        'EXPLANATION_SKIP_REGISTER_CARD',
+        'BTN_SKIP',
+        'BTN_REGISTER',
+      ])
+      .subscribe((res: any) => {
+        this.alertHelper
+          .confirm(
+            res.QUESTION_SKIP_REGISTER_CARD,
+            res.EXPLANATION_SKIP_REGISTER_CARD,
+            res.BTN_SKIP,
+            res.BTN_REGISTER
+          )
+          .then((confirmed) => {
+            console.log(confirmed);
+            if (confirmed) {
+              this.finish();
+            }
+          });
+      });
   }
 
   finish() {
     if (this.isFirstAccess) {
-      this.authService.getUser().then(user => {
+      this.authService.getUser().then((user) => {
         this.loadingHelper.hide();
         this.events.emitEvent('userLogIn', user);
       });
@@ -346,7 +390,7 @@ export class RegisterCreditCard {
       if (this.redirectAfter === 'pop') {
         window.history.back(); // Voltar para a página anterior
       } else {
-        const navigationPath = this.redirectAfter || '/HomePage';
+        const navigationPath = this.redirectAfter || '/HomeList';
         this.router.navigate([navigationPath]).then(() => {
           if (this.redirectAfter) {
             this.router.navigate([this.redirectAfter]);
@@ -358,10 +402,10 @@ export class RegisterCreditCard {
 
   onInvalidCard() {
     this.loadingHelper.hide();
-    this.alertHelper
-      .show(
-        'Erro',
-        'O cartão foi recusado pelo emissor ou possui dados inválidos.');
+    this.alertHelper.show(
+      'Erro',
+      'O cartão foi recusado pelo emissor ou possui dados inválidos.'
+    );
   }
 
   onValidCard(data) {
@@ -382,16 +426,20 @@ export class RegisterCreditCard {
     // VALIDATION ERRORS
 
     if (error instanceof Response) {
-
       let serverResponse = new ResponseError(error);
       if (serverResponse.status === 400) {
-        const errorMsg = serverResponse.getErrorMessage() || 'Não foi possível validar seu cartão na adquirente. Verifique os dados.';
+        const errorMsg =
+          serverResponse.getErrorMessage() ||
+          'Não foi possível validar seu cartão na adquirente. Verifique os dados.';
         this.alertHelper.show(errorMsg);
       } else {
         // UNEXPECTED ERRORS
         if (this.isFirstAccess) {
           this.alertHelper
-            .confirm('Erro', 'Ocorreu um erro ao cadastrar o seu cartão, deseja tentar novamente mais tarde?')
+            .confirm(
+              'Erro',
+              'Ocorreu um erro ao cadastrar o seu cartão, deseja tentar novamente mais tarde?'
+            )
             .then((confirmed) => {
               if (confirmed) {
                 this.finish();
@@ -408,7 +456,10 @@ export class RegisterCreditCard {
             })
             .catch((e) => {
               console.error(e);
-              this.alertHelper.show('Cartão recusado', 'Não foi possível validar seu cartão na adquirente. Verifique os dados.');
+              this.alertHelper.show(
+                'Cartão recusado',
+                'Não foi possível validar seu cartão na adquirente. Verifique os dados.'
+              );
             });
         }
       }
@@ -418,5 +469,4 @@ export class RegisterCreditCard {
       }
     }
   }
-
 }

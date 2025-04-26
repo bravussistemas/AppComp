@@ -10,17 +10,17 @@ const routes: Routes = [
     component: RegisterCreditCard,
   },
   {
-    path: 'HomePage',
+    path: 'HomeList',
     component: HomePage,
   },
   {
     path: 'CheckoutComplete',
     component: CheckoutComplete,
   },
-  ];
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RegisterCreditCardRoutingModule { }
+export class RegisterCreditCardRoutingModule {}

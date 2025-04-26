@@ -1185,6 +1185,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
   }
 
   goToChooseDefaultCard() {
+    (document.activeElement as HTMLElement)?.blur();
     if (this.useCredit) {
       return;
     }

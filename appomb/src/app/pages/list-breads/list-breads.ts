@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { IonContent, ModalController } from '@ionic/angular';
 import { Product } from '../../shared/models/product.model';
 import { Store } from '../../shared/models/store.model';
@@ -9,7 +15,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { AlertHelper } from '../../utils/alert-helper';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth-service';
-import { AdminStoreService, ChangeOrderDTO } from '../../providers/admin-store.service';
+import {
+  AdminStoreService,
+  ChangeOrderDTO,
+} from '../../providers/admin-store.service';
 import { ToastHelper } from '../../utils/toast-helper';
 import * as Raven from 'raven-js';
 import { IUserSettings } from '../../shared/interfaces';
@@ -19,8 +28,8 @@ import { EditProductActivesPage } from '../edit-product-actives/edit-product-act
 
 export let parseProductsToReorder = (items: Product[]): ChangeOrderDTO[] => {
   return items.map((item) => {
-    return {id: item.id, item_order: items.indexOf(item)}
-  })
+    return { id: item.id, item_order: items.indexOf(item) };
+  });
 };
 const MSG_ID = '0934127u4895';
 
@@ -39,34 +48,39 @@ export class ListBreadsPage implements OnInit, OnDestroy {
   reorder = false;
   @ViewChild(IonContent) content: IonContent;
 
-  constructor(public router: Router,
-              private modalCtrl: ModalController,
-              private settingsService: SettingsService,
-              public productService: ProductService,
-              private adminStoreService: AdminStoreService,
-              private trans: TranslateService,
-              private events: EventService,
-              private alertHelper: AlertHelper,
-              public loadingHelper: LoadingHelper,
-              private toastHelper: ToastHelper,
-              private authService: AuthService,
-              private renderer: Renderer2,
-              private storage: Storage,
-              public route: ActivatedRoute) {
-  }
+  constructor(
+    public router: Router,
+    private modalCtrl: ModalController,
+    private settingsService: SettingsService,
+    public productService: ProductService,
+    private adminStoreService: AdminStoreService,
+    private trans: TranslateService,
+    private events: EventService,
+    private alertHelper: AlertHelper,
+    public loadingHelper: LoadingHelper,
+    private toastHelper: ToastHelper,
+    private authService: AuthService,
+    private renderer: Renderer2,
+    private storage: Storage,
+    public route: ActivatedRoute
+  ) {}
 
   eventProductsListEdited = () => {
     this.getProducts();
   };
 
   init() {
-    this.events.onEvent('productsListEdited').subscribe(this.eventProductsListEdited);
+    this.events
+      .onEvent('productsListEdited')
+      .subscribe(this.eventProductsListEdited);
     this.getProducts();
   }
 
   getProducts() {
     this.loadingHelper.setLoading('products', true);
-    this.productService.listBreads().toPromise()
+    this.productService
+      .listBreads()
+      .toPromise()
       .then((res) => {
         this.products = res;
         this.loadingHelper.setLoading('products', false);
@@ -93,7 +107,7 @@ export class ListBreadsPage implements OnInit, OnDestroy {
     this.renderer.addClass(contentElement, 'content-with-fixed-toolbar-top');
     this.enableSearch = true;
   }
-  
+
   async stopSearch() {
     const contentElement = await this.content.getScrollElement();
     this.renderer.removeClass(contentElement, 'content-with-fixed-toolbar-top');
@@ -102,7 +116,9 @@ export class ListBreadsPage implements OnInit, OnDestroy {
   }
 
   goToDetail(product: Product) {
-    this.router.navigate(['/DetailProduct'], { queryParams: { product: product } });
+    this.router.navigate(['/DetailProduct'], {
+      queryParams: { product: product },
+    });
   }
 
   startReorder() {
@@ -112,19 +128,26 @@ export class ListBreadsPage implements OnInit, OnDestroy {
 
   saveReorder() {
     this.loadingHelper.show();
-    this.adminStoreService.changeProductsOrder(parseProductsToReorder(this.products))
-      .subscribe(() => {
-        this.loadingHelper.hide();
-        this.toastHelper.show({message: 'Ordem alterada com sucesso', cssClass: 'toast-success'});
-        this.reorder = false;
-      }, () => {
-        this.loadingHelper.hide();
-        this.trans.get(['ERROR', 'ERROR_REQUEST']).subscribe((res: any) => {
-          this.alertHelper.show(res.ERROR, res.ERROR_REQUEST);
-        });
-      });
+    this.adminStoreService
+      .changeProductsOrder(parseProductsToReorder(this.products))
+      .subscribe(
+        () => {
+          this.loadingHelper.hide();
+          this.toastHelper.show({
+            message: 'Ordem alterada com sucesso',
+            cssClass: 'toast-success',
+          });
+          this.reorder = false;
+        },
+        () => {
+          this.loadingHelper.hide();
+          this.trans.get(['ERROR', 'ERROR_REQUEST']).subscribe((res: any) => {
+            this.alertHelper.show(res.ERROR, res.ERROR_REQUEST);
+          });
+        }
+      );
   }
-  
+
   reorderItems(event: any) {
     // Atualize a ordem do array com os índices fornecidos pelo evento
     const fromIndex = event.detail.from;
@@ -141,23 +164,22 @@ export class ListBreadsPage implements OnInit, OnDestroy {
 
   cancelReorder() {
     this.trans.get(['CANCEL', 'CANCEL_REORDER']).subscribe((val) => {
-      this.alertHelper.confirm(
-        val.CANCEL,
-        val.CANCEL_REORDER,
-      ).then((isConfirmed) => {
-        if (isConfirmed) {
-          this.reorder = false;
-        }
-      });
+      this.alertHelper
+        .confirm(val.CANCEL, val.CANCEL_REORDER)
+        .then((isConfirmed) => {
+          if (isConfirmed) {
+            this.reorder = false;
+          }
+        });
     });
   }
-  
+
   async openEditProductsModal() {
     try {
       const modal = await this.modalCtrl.create({
         component: EditProductActivesPage,
-      });  
-      await modal.present(); 
+      });
+      await modal.present();
     } catch (error) {
       Raven.captureException(error);
     }
@@ -166,11 +188,13 @@ export class ListBreadsPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadingHelper.setLoading('list', true);
 
-    this.settingsService.getSettings()
+    this.settingsService
+      .getSettings()
       .then((result: IUserSettings) => {
         this.store = result.store;
         this.init();
-      }).catch(this.handlerError.bind(this));
+      })
+      .catch(this.handlerError.bind(this));
 
     this.storage.get(MSG_ID).then((resp) => {
       this.canShowMsg = resp === null;

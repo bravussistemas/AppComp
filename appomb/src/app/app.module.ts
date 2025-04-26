@@ -104,6 +104,9 @@ import { AddAddressPageModule } from './pages/add-address/add-address.module';
 import { SearchStatePageModule } from './pages/search-state/search-state.module';
 import { SearchAddressPageModule } from './pages/search-address/search-address.module';
 import { SearchCityPageModule } from './pages/search-city/search-city.module';
+import { ListBreadsPageModule } from './pages/list-breads/list-breads.module';
+import { DetailProductModule } from './pages/detail-product/detail-product.module';
+import { EditProductActivesModule } from './pages/edit-product-actives/edit-product-actives.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -162,6 +165,9 @@ registerLocaleData(localePt);
     RegisterCreditCardModule,
     RegisterDocumentNoteModule,
     RequestStatusPageModule,
+    ListBreadsPageModule,
+    DetailProductModule,
+    EditProductActivesModule,
     AddAddressPageModule,
     SearchStatePageModule,
     SearchAddressPageModule,

@@ -110,7 +110,7 @@
         <div class="purchase-details-item"
           *ngIf="!inSellerMode(user, store) && testDecimalField(freeDeliveryPrice) && isForDelivery">
           <div class="detail featured-info">
-            <strong>FRETE GRÁTIS</strong> A PARTIR DE <strong>{{freeDeliveryPrice | currency:"BRL":true}}</strong>
+            <strong>FRETE GRÁTIS</strong> A PARTIR DE <strong>{{freeDeliveryPrice | currency:"BRL":"symbol"}}</strong>
           </div>
         </div>
 
@@ -228,12 +228,12 @@
             <h1>
               <span style="opacity: 0.6; font-weight: normal;">Saldo:</span>
               <span [ngClass]="{'stroke': useCredit}">
-                {{userCreditBalance | currency:"BRL":true }}
+                {{userCreditBalance | currency:"BRL":"symbol" }}
               </span>
               <ng-container *ngIf="useCredit">
                 <br>
                 <span style="opacity: 0.6; font-weight: normal;">Novo saldo:</span>
-                {{userCreditBalanceDisplay | currency:"BRL":true }}
+                {{userCreditBalanceDisplay | currency:"BRL":"symbol" }}
               </ng-container>
             </h1>
             <p *ngIf="!useCredit">Clique para ativar seu crédito</p>
