@@ -1,7 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonContent, ModalController, Platform , IonHeader} from '@ionic/angular';
+import {
+  IonContent,
+  ModalController,
+  Platform,
+  IonHeader,
+} from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DeliveryHourSimple, UserAddressProvider } from '../../providers/user-address/user-address';
+import {
+  DeliveryHourSimple,
+  UserAddressProvider,
+} from '../../providers/user-address/user-address';
 import { AuthService } from '../../providers/auth-service';
 import { DeliveryState } from '../../providers/delivery-state/delivery-state';
 import { Utils } from '../../utils/utils';
@@ -42,10 +50,23 @@ export class ChooseDeliveryHourPage implements OnInit {
   ngOnInit(): void {
     // Pegando parâmetros da rota
     const params = this.route.snapshot.queryParams;
-    this.items = params['items'] || [];
+
+    try {
+      // Tenta converter a string JSON em array de objetos
+      this.items = JSON.parse(params['items']) || [];
+    } catch (e) {
+      console.error('Erro ao fazer parse de items:', e);
+      this.items = [];
+    }
+
+    console.log('Items:', this.items);
+
     this.goToAfter = params['goToAfter'];
+
     this.possibleDeliveryHour = params['possibleDeliveryHour'];
+
     this.redirectType = params['redirectType'];
+
     this.onCancel = params['onCancel'];
     this.onSelect = params['onSelect'];
 
@@ -85,7 +106,9 @@ export class ChooseDeliveryHourPage implements OnInit {
     } else if (deliveryHour.is_full) {
       errorMessage = 'Horário atingiu a capacidade de entregas.';
     } else if (deliveryHour.is_before_next_batch) {
-      const values = Utils.extractHourPartsFromJsonHour(this.possibleDeliveryHour.start_hour);
+      const values = Utils.extractHourPartsFromJsonHour(
+        this.possibleDeliveryHour.start_hour
+      );
       if (values) {
         const dtString = `${values.hour}:${values.minute}`;
         errorMessage = `Um dos produtos escolhidos só estará disponível a partir de ${dtString}.`;
@@ -113,9 +136,13 @@ export class ChooseDeliveryHourPage implements OnInit {
 
   async afterSelect(): Promise<void> {
     if (this.goToAfter) {
+      
       await this.redirectToAfterPage();
     } else {
-      this.router.navigate(['../'], { relativeTo: this.route });
+      console.log(this.goToAfter);
+      //MUDAMOS PARA CHECKOUTCOMPLETE
+      // this.router.navigate(['CheckoutComplete'], { relativeTo: this.route });
+      this.router.navigate(['CheckoutComplete']);
     }
   }
 

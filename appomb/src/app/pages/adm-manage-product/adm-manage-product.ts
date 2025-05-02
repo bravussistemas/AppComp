@@ -1,6 +1,18 @@
-import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import {EventService} from '../../providers/event.service';
-import { IonContent, ModalController, NavController, IonFab } from '@ionic/angular';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import { EventService } from '../../providers/event.service';
+import {
+  IonContent,
+  ModalController,
+  NavController,
+  IonFab,
+} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { LoadingHelper } from '../../utils/loading-helper';
 import { DateService } from '../../providers/date-service';
@@ -19,13 +31,16 @@ import { AlertHelper } from '../../utils/alert-helper';
 import { NoteTypeEnum } from '../../providers/operating-days-note.service';
 import { AdmListProductsResellersInventoryComponent } from '../../components/adm-list-products-resellers-inventory/adm-list-products-resellers-inventory';
 import { User } from '../../shared/models/user.model';
-import { DeliveryEmployeeFilter, EditDispatchFilterPage } from '../edit-dispatch-filter/edit-dispatch-filter';
+import {
+  DeliveryEmployeeFilter,
+  EditDispatchFilterPage,
+} from '../edit-dispatch-filter/edit-dispatch-filter';
 import { DispatchOrderAdminList } from '../../shared/models/dispatch-order.model';
-import { Utils } from "../../utils/utils";
-import { StoreBalance } from "../admin-balance-store/admin-balance-store";
-import { AdminStoreService } from "../../providers/admin-store.service";
+import { Utils } from '../../utils/utils';
+import { StoreBalance } from '../admin-balance-store/admin-balance-store';
+import { AdminStoreService } from '../../providers/admin-store.service';
 import { EditInventoryDayItemsPage } from '../edit-inventory-day-items/edit-inventory-day-items';
-import {Swiper} from 'swiper';
+import { Swiper } from 'swiper';
 import { Subscription } from 'rxjs';
 
 declare let $: any;
@@ -35,13 +50,16 @@ declare let $: any;
   templateUrl: './adm-manage-product.html',
   styleUrls: ['./adm-manage-product.scss'],
 })
-
 export class AdmManageProductPage implements OnInit, OnDestroy {
   @ViewChild('mySlider') slider: Swiper;
-  @ViewChild('rootContent', { static: false }) rootContent: IonContent;
+  @ViewChild('rootContent', { static: false, read: ElementRef })
+  rootContent!: ElementRef;
+
   @ViewChild('fab') fab: IonFab;
-  @ViewChild(AdmListProductsInventoryComponent) listProducts: AdmListProductsInventoryComponent;
-  @ViewChild(AdmListProductsResellersInventoryComponent) listResellersProducts: AdmListProductsResellersInventoryComponent;
+  @ViewChild(AdmListProductsInventoryComponent)
+  listProducts: AdmListProductsInventoryComponent;
+  @ViewChild(AdmListProductsResellersInventoryComponent)
+  listResellersProducts: AdmListProductsResellersInventoryComponent;
   private subscriptions: Subscription[] = [];
 
   SLIDE_BREADS = 'breads';
@@ -68,7 +86,7 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
     },
     {
       id: this.SLIDE_DISPATCH,
-    }
+    },
   ];
 
   set reorder(value: boolean) {
@@ -83,25 +101,27 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
       }
     }
   }
-  
+
   get reorder(): boolean {
     return this._reorder;
   }
 
-  constructor(public router: Router,
-              private cartManagerTable: CartManagerTable,
-              private renderer: Renderer2,
-              public loadingHelper: LoadingHelper,
-              private salesService: SalesService,
-              private date: DateService,
-              private modalCtrl: ModalController,
-              private alertHelper: AlertHelper,
-              public adminStoreService: AdminStoreService,
-              private trans: TranslateService,
-              private authService: AuthService,
-              public events: EventService,
-              private settingsService: SettingsService,) {
-    this.trans.get('TODAY').subscribe((val) => this.todayTxt = val);
+  constructor(
+    public router: Router,
+    private cartManagerTable: CartManagerTable,
+    private renderer: Renderer2,
+    public loadingHelper: LoadingHelper,
+    private salesService: SalesService,
+    private date: DateService,
+    private modalCtrl: ModalController,
+    private alertHelper: AlertHelper,
+    public adminStoreService: AdminStoreService,
+    private trans: TranslateService,
+    private authService: AuthService,
+    public events: EventService,
+    private settingsService: SettingsService
+  ) {
+    this.trans.get('TODAY').subscribe((val) => (this.todayTxt = val));
   }
 
   get isDeliveryStore() {
@@ -124,21 +144,20 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Inicialização da tabela do gerenciador de carrinho
     this.cartManagerTable.init().then(() => {
-      this.settingsService.getSettings()
-        .then((result: IUserSettings) => {
-          this.init(result.store);
-        });
+      this.settingsService.getSettings().then((result: IUserSettings) => {
+        this.init(result.store);
+      });
     });
 
     // Assinaturas de eventos
     this.subscriptions.push(
-      this.events.onEvent('storeChanged').subscribe(data => {
+      this.events.onEvent('storeChanged').subscribe((data) => {
         this.eventStoreChanged(data);
       })
     );
 
     this.subscriptions.push(
-      this.events.onEvent('inventoryEdited').subscribe(data => {
+      this.events.onEvent('inventoryEdited').subscribe((data) => {
         this.eventInventoryEdited();
       })
     );
@@ -146,23 +165,22 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // Cancelar todas as assinaturas registradas
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   init(store: Store) {
     this.authService.getUser().then((user) => {
       this.user = user;
       if (!Utils.canAdminStore(user, store)) {
-        return this.router.navigateByUrl('HomePage');
+        return this.router.navigateByUrl('HomeList');
       }
       this.setupStyles();
       if (store) {
         this.setStore(store);
       } else {
-        this.settingsService.getSettings()
-          .then((result: IUserSettings) => {
-            this.setStore(result.store);
-          });
+        this.settingsService.getSettings().then((result: IUserSettings) => {
+          this.setStore(result.store);
+        });
       }
     });
   }
@@ -183,7 +201,7 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   }
 
   onSlideChanged(slider) {
-    const currentSlide = this.slides[slider.getActiveIndex()];
+    const currentSlide = this.slides[slider.target.swiper.activeIndex];
     if (currentSlide) {
       this.section = currentSlide.id;
       return;
@@ -199,12 +217,34 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   }
 
   updateSliderProportions() {
-    const $el = $('page-adm-manage-product.ion-page .fixed-content');
-    const slideH = $el.height();
-    $('page-adm-manage-product .swiper-slide').height(slideH - 56 * 3);
-    $('page-adm-manage-product .swiper-slide, .slide-zoom').css({'min-height': `${slideH - 56 * 3}px`});
-    // $el.height( $('.swiper-slide-active').height() - $('reservation-bar').height());
-    return slideH;
+    if (!this.rootContent) return;
+
+    const rootEl = this.rootContent.nativeElement as HTMLElement;
+
+    // Encontra o swiper-container e os slides
+    const swiperContainer = rootEl.querySelector('swiper-container');
+    if (!swiperContainer) return;
+
+    const slides = swiperContainer.querySelectorAll('swiper-slide');
+
+    // Altura disponível no conteúdo
+    const contentHeight = rootEl.offsetHeight;
+
+    // Altura estimada de 3 elementos fixos de 56px (header, footer, barra inferior, etc.)
+    const reservedHeight = 56 * 3;
+
+    const availableHeight = contentHeight - reservedHeight;
+
+    slides.forEach((slide: Element) => {
+      const slideEl = slide as HTMLElement;
+      slideEl.style.height = `${availableHeight}px`;
+
+      // Se tiver algum elemento com .slide-zoom dentro do slide
+      const zoomEl = slideEl.querySelector('.slide-zoom') as HTMLElement;
+      if (zoomEl) {
+        zoomEl.style.minHeight = `${availableHeight}px`;
+      }
+    });
   }
 
   setDay(day: moment.Moment) {
@@ -212,42 +252,49 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
       return;
     }
     this.day = day;
-    this.dataDispatchOrders = {day: this.day, store: this.store};
+    this.dataDispatchOrders = { day: this.day, store: this.store };
   }
 
   updateBalanceDay(day: moment.Moment) {
     const today = moment();
     let diff = day.diff(today, 'days');
-    if(today.isBefore(day)){
-      diff += 1
+    if (today.isBefore(day)) {
+      diff += 1;
     }
     this.loadingHelper.setLoading('updateBalanceDay', true);
-    this.adminStoreService.balanceGeneral({
-      store_id: this.store.id,
-      page: diff,
-      period_type: 'day'
-    }).subscribe((e: any) => {
-      this.storeBalance = e;
-      this.loadingHelper.setLoading('updateBalanceDay', false);
-    }, (e) => {
-        this.loadingHelper.setLoading('updateBalanceDay', false);
-        console.error(e);
-      });
+    this.adminStoreService
+      .balanceGeneral({
+        store_id: this.store.id,
+        page: diff,
+        period_type: 'day',
+      })
+      .subscribe(
+        (e: any) => {
+          this.storeBalance = e;
+          this.loadingHelper.setLoading('updateBalanceDay', false);
+        },
+        (e) => {
+          this.loadingHelper.setLoading('updateBalanceDay', false);
+          console.error(e);
+        }
+      );
   }
 
   updateDeliveryEmployeesFilter(items: DispatchOrderAdminList[]) {
     const idListIn = [];
     const result = [];
-    items.filter(item => item.del_emp_id).forEach((item) => {
-      if (idListIn.indexOf(item.del_emp_id) !== -1) {
-        return;
-      }
-      idListIn.push(item.del_emp_id);
-      result.push({
-        name: item.del_emp,
-        id: item.del_emp_id,
+    items
+      .filter((item) => item.del_emp_id)
+      .forEach((item) => {
+        if (idListIn.indexOf(item.del_emp_id) !== -1) {
+          return;
+        }
+        idListIn.push(item.del_emp_id);
+        result.push({
+          name: item.del_emp,
+          id: item.del_emp_id,
+        });
       });
-    });
     this.deliveryEmployeesFilter = result;
   }
 
@@ -265,13 +312,21 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   }
 
   setupStyles() {
-    this.renderer.addClass(this.rootContent, 'content-with-bottom-bar');
-    this.renderer.addClass(this.rootContent, 'content-with-fixed-toolbar-top');
-    this.renderer.addClass(this.rootContent, 'two-rows-bottom');
+    this.renderer.addClass(
+      this.rootContent.nativeElement,
+      'content-with-bottom-bar'
+    );
+    this.renderer.addClass(
+      this.rootContent.nativeElement,
+      'content-with-fixed-toolbar-top'
+    );
+    this.renderer.addClass(this.rootContent.nativeElement, 'two-rows-bottom');
   }
 
   titleDateFilter(dt: moment.Moment) {
-    if (moment(this.date.today(), 'DD-MM-YYYY').isSame(moment(dt, 'DD-MM-YYYY'))) {
+    if (
+      moment(this.date.today(), 'DD-MM-YYYY').isSame(moment(dt, 'DD-MM-YYYY'))
+    ) {
       return this.todayTxt || '';
     }
     return dt.format('dddd');
@@ -281,38 +336,40 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
     return this.router.navigate(['/add-operating-day-note'], {
       queryParams: {
         day: this.day,
-        noteType: NoteTypeEnum.NORMAL
-      }
+        noteType: NoteTypeEnum.NORMAL,
+      },
     });
-  } 
+  }
 
   async openEditInventoryModal() {
     this.fab.close();
-    const resellerMode = this.slides[this.slider.activeIndex].id === this.SLIDE_RESALE;
-    
-    try {   
+    const resellerMode =
+      this.slides[this.slider.activeIndex].id === this.SLIDE_RESALE;
+
+    try {
       const modal = await this.modalCtrl.create({
         component: EditInventoryDayItemsPage, // Substitua 'DayNotePopUpPage' pelo componente real
         componentProps: {
-          day: this.day, resellerMode: resellerMode
-        }
+          day: this.day,
+          resellerMode: resellerMode,
+        },
       });
       modal.present();
-    } catch(e) {
+    } catch (e) {
       Raven.captureException(e);
     }
   }
 
   async openEditFilterModal() {
-    try {   
+    try {
       const modal = await this.modalCtrl.create({
         component: EditDispatchFilterPage, // Substitua 'DayNotePopUpPage' pelo componente real
         componentProps: {
-          deliveryEmployeesFilter: this.deliveryEmployeesFilter
-        }
+          deliveryEmployeesFilter: this.deliveryEmployeesFilter,
+        },
       });
       modal.present();
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   }
@@ -328,7 +385,7 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
         date: this.day.toISOString(), // Data inicial
         locale: 'pt-BR', // Localização para formato de data
       });
-  
+
       if (result.value) {
         this.setDay(moment(new Date(result.value))); // Atualiza o dia selecionado
       }
@@ -339,7 +396,9 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
 
   startReorder() {
     this.reorder = true;
-    this.fab.close();
+    if (this.fab) {
+      this.fab.close();
+    }
   }
 
   saveReorder() {
@@ -356,19 +415,17 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
 
   cancelReorder() {
     this.trans.get(['CANCEL', 'CANCEL_REORDER']).subscribe((val) => {
-      this.alertHelper.confirm(
-        val.CANCEL,
-        val.CANCEL_REORDER,
-      ).then((isConfirmed) => {
-        if (isConfirmed) {
-          this.reorder = false;
-        }
-      });
+      this.alertHelper
+        .confirm(val.CANCEL, val.CANCEL_REORDER)
+        .then((isConfirmed) => {
+          if (isConfirmed) {
+            this.reorder = false;
+          }
+        });
     });
   }
 
   startReorderProductsResellers() {
     this.startReorder();
   }
-
 }

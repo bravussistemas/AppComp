@@ -87,7 +87,7 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
       return {
         icon: 'barcode',
         iconClass: '',
-        handler: (event) => {
+        handler: (event:any) => {
           this.router.navigate(['/AdmManageProductPage']);
         },
       };

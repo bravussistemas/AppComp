@@ -4,7 +4,7 @@ import { AdmManageProductPage } from './adm-manage-product'; // Certifique-se de
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'AdmManageProductPage',
     component: AdmManageProductPage
   }
 ];

@@ -17,16 +17,13 @@
         Qual o melhor horário para <br> entregar o seu pedido?
       </div>
     </div>
+
     <ion-list>
-      <ion-item
-        *ngFor="let item of items"
-        [ngClass]="{
+      <ion-item *ngFor="let item of items" [ngClass]="{
           'disabled': item.is_full || item.is_past || item.is_before_next_batch,
           'invalid': (item.is_full || item.is_before_next_batch) && !item.is_past
-        }"
-        (click)="select(item)"
-        [disabled]="item.is_full || item.is_past || item.is_before_next_batch"
-        button>
+        }" (click)="select(item)" [disabled]="item.is_full || item.is_past || item.is_before_next_batch" button>
+        
         <ion-label>
           <span class="hour-label">
             {{ item.start_hour | deliveryHour }} - {{ item.end_hour | deliveryHour }}
@@ -35,6 +32,7 @@
             CHEIO
           </ion-badge>
         </ion-label>
+      
       </ion-item>
     </ion-list>
   </div>

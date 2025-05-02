@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NoteTypeEnum } from '../../providers/operating-days-note.service';
 import { User } from '../../shared/models/user.model';
@@ -13,8 +13,8 @@ import { LoadingHelper } from '../../utils/loading-helper';
   styleUrl: './store-options-menu-popover.scss',
 })
 export class StoreOptionsMenuPopoverComponent implements OnInit {
-  store: Store;
-  user: User;
+  @Input() store!: Store;
+  @Input() user!: User;
 
   enabledSaleNotification = false;
   enabledLastDeliveryNotification = false;
@@ -28,16 +28,16 @@ export class StoreOptionsMenuPopoverComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.store = this.route.snapshot.params['store'];
-    this.user = this.route.snapshot.params['user'];
-
     this.loadingState = true;
 
     try {
-      const resp = await this.storeSellerService.getSeller(this.store).toPromise();
+      const resp = await this.storeSellerService
+        .getSeller(this.store)
+        .toPromise();
       if (resp) {
         this.enabledSaleNotification = resp.send_new_sale_push_notification;
-        this.enabledLastDeliveryNotification = resp.send_delivery_finish_notification;
+        this.enabledLastDeliveryNotification =
+          resp.send_delivery_finish_notification;
       }
     } catch (error) {
       console.error('Failed to fetch seller details:', error);
@@ -63,9 +63,11 @@ export class StoreOptionsMenuPopoverComponent implements OnInit {
   async enableSaleNotification(enable: boolean) {
     this.loadingState = true;
     try {
-      await this.storeSellerService.update(this.store, {
-        send_new_sale_push_notification: enable,
-      }).toPromise();
+      await this.storeSellerService
+        .update(this.store, {
+          send_new_sale_push_notification: enable,
+        })
+        .toPromise();
       this.enabledSaleNotification = enable;
     } catch (error) {
       console.error('Failed to update sale notification:', error);
@@ -77,9 +79,11 @@ export class StoreOptionsMenuPopoverComponent implements OnInit {
   async enableDeliveryFinishNotification(enable: boolean) {
     this.loadingState = true;
     try {
-      await this.storeSellerService.update(this.store, {
-        send_delivery_finish_notification: enable,
-      }).toPromise();
+      await this.storeSellerService
+        .update(this.store, {
+          send_delivery_finish_notification: enable,
+        })
+        .toPromise();
       this.enabledLastDeliveryNotification = enable;
     } catch (error) {
       console.error('Failed to update delivery notification:', error);

@@ -27,7 +27,7 @@
         </span>
       </ion-col>
       <ion-col col-3 class="total-price line-break">
-        <span class="feature" [ngClass]="{'disabled-text': amount == 0}">
+        <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
           <span class="small-text normal-text">R$</span>
           {{ total }}
         </span>
@@ -35,7 +35,7 @@
     </ng-container>
     <ng-container *ngIf="!enableAdminView">
       <ion-col col-5 class="total-price line-break">
-        <span class="feature" [ngClass]="{'disabled-text': amount == 0}">
+        <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
           <span class="small-text normal-text">R$</span>
           {{ total }}
         </span>

@@ -10,13 +10,15 @@
   </ion-item>
 
   <!-- Botão para Ativar/Desativar Push de Nova Venda (Visível apenas para vendedores da loja) -->
-  <ion-item *ngIf="isStoreSeller()" [disabled]="loading" button (click)="enableSaleNotification(!enabledSaleNotification)">
+  <ion-item *ngIf="isStoreSeller()" [disabled]="loading" button
+    (click)="enableSaleNotification(!enabledSaleNotification)">
     [{{ loading ? 'Carregando...' : (enabledSaleNotification ? 'DESATIVAR' : 'ATIVAR') }}] push nova venda
     <ion-spinner slot="end" *ngIf="loading"></ion-spinner>
   </ion-item>
 
   <!-- Botão para Ativar/Desativar Push de Última Entrega (Visível apenas para vendedores da loja) -->
-  <ion-item *ngIf="isStoreSeller()" [disabled]="loading" button (click)="enableDeliveryFinishNotification(!enabledLastDeliveryNotification)">
+  <ion-item *ngIf="isStoreSeller()" [disabled]="loading" button
+    (click)="enableDeliveryFinishNotification(!enabledLastDeliveryNotification)">
     [{{ loading ? 'Carregando...' : (enabledLastDeliveryNotification ? 'DESATIVAR' : 'ATIVAR') }}] push última entrega
     <ion-spinner slot="end" *ngIf="loading"></ion-spinner>
   </ion-item>

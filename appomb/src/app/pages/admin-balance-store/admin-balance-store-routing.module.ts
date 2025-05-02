@@ -4,7 +4,7 @@ import { AdminBalanceStorePage } from './admin-balance-store';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'AdminBalanceStorePage',
     component: AdminBalanceStorePage, // Adicione o componente principal da página aqui
   },
 ];

@@ -4,7 +4,7 @@ import { AddOperatingDayNotePage } from './add-operating-day-note';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'AddOperatingDayNotePage',
     component: AddOperatingDayNotePage
   }
 ];

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdmDetailUserCreditsPage } from './adm-detail-user-credits';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../../shared/shared.module';
 import { AdmDetailUserCreditsRoutingModule } from './adm-detail-user-credits-routing.module';
@@ -11,16 +12,14 @@ import { CommonModule } from '@angular/common';
 // Configuração das rotas
 
 @NgModule({
-  declarations: [
-    AdmDetailUserCreditsPage,
-  ],
+  declarations: [AdmDetailUserCreditsPage],
   imports: [
     TranslateModule.forChild(),
     SharedModule,
     IonicModule,
     FormsModule,
     CommonModule,
-    AdmDetailUserCreditsRoutingModule
+    AdmDetailUserCreditsRoutingModule,
   ],
 })
 export class AdmDetailUserCreditsPageModule {}

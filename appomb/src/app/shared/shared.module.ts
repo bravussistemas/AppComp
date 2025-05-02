@@ -37,19 +37,14 @@ import { HeroBannerComponent } from '../components/hero-banner/hero-banner.compo
 import { ShowTimeout } from './show-timeout';
 import { SheetModalComponent } from '../components/sheet-modal/sheet-modal';
 import { MyRequestsListComponent } from '../components/my-requests-list/my-requests-list';
-import { MoneyPipe } from "../pipes/money/money";
+import { MoneyPipe } from '../pipes/money/money';
 import { DocumentPipe } from '../pipes/document/document';
 import { CommonModule } from '@angular/common';
 import { MomentModule } from 'ngx-moment'; // Importar o MomentModule
 import { DistrictFilterPipe } from '../pipes/district-filter/district-filter';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    TranslateModule.forChild(),
-  ],
+  imports: [IonicModule, CommonModule, FormsModule, TranslateModule.forChild()],
   declarations: [
     PageMessageBox,
     LongPress,
@@ -89,7 +84,7 @@ import { DistrictFilterPipe } from '../pipes/district-filter/district-filter';
     SheetModalComponent,
     DistrictFilterPipe,
   ],
-  exports: [ 
+  exports: [
     MyRequestsListComponent,
     SheetModalComponent,
     PageMessageBox,
@@ -128,7 +123,6 @@ import { DistrictFilterPipe } from '../pipes/district-filter/district-filter';
     StoreListComponent,
     HeroBannerComponent,
     DistrictFilterPipe,
-  ]
+  ],
 })
-export class SharedModule {
-}
+export class SharedModule {}

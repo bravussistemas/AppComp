@@ -17,42 +17,59 @@ declare let $: any;
   templateUrl: './adm-detail-user-credits.html',
   styleUrls: ['./adm-detail-user-credits.scss'],
 })
-
 export class AdmDetailUserCreditsPage implements OnInit {
   segment = 'add';
-  userId = parseInt(this.route.snapshot.paramMap.get('userId'));
+  userId: number;
   data: any = {};
   store: Store;
   @ViewChild('inputCredit', { static: false }) inputCredit: IonInput;
 
-  constructor(private settingsService: SettingsService,
-              public loadingHelper: LoadingHelper,
-              public userCreditService: UserCreditService,
-              public adminStoreService: AdminStoreService,
-              public toastHelper: ToastHelper,
-              public route: ActivatedRoute,
-              public router: Router) {
-  }
+  constructor(
+    private settingsService: SettingsService,
+    public loadingHelper: LoadingHelper,
+    public userCreditService: UserCreditService,
+    public adminStoreService: AdminStoreService,
+    public toastHelper: ToastHelper,
+    public route: ActivatedRoute,
+    public router: Router
+  ) {}
 
-  ionViewDidLoad() {
+  ionViewDidLoad() {}
 
+  ngOnInit() {
+    const queryUserId = this.route.snapshot.queryParamMap.get('userId');
+    if (queryUserId) {
+      this.userId = parseInt(queryUserId, 10);
+    } else {
+      this.toastHelper.show({
+        message: 'ID do usuário não foi informado na URL.',
+        cssClass: 'toast-error',
+      });
+      return;
+    }
+    this.loadDetail();
   }
 
   addCredit() {
     this.loadingHelper.show();
-    this.userCreditService.addCredit({
-      userId: this.userId,
-      amount: this.inputCredit.value,
-      storeId: this.store.id,
-    }).subscribe(() => {
-      this.loadingHelper.hide();
-      this.loadDetail();
-    }, (e) => {
-      this.handlerError(e);
-      this.loadingHelper.hide();
-    })
+    this.userCreditService
+      .addCredit({
+        userId: this.userId,
+        amount: this.inputCredit.value,
+        storeId: this.store.id,
+      })
+      .subscribe(
+        () => {
+          this.loadingHelper.hide();
+          this.loadDetail();
+        },
+        (e) => {
+          this.handlerError(e);
+          this.loadingHelper.hide();
+        }
+      );
   }
-  
+
   canSendAddCredit() {
     if (!this.inputCredit || !this.inputCredit.value) {
       return false;
@@ -65,31 +82,37 @@ export class AdmDetailUserCreditsPage implements OnInit {
     }
   }
 
-  changeValue(event) {
-    if (event.value === 'R$ ') {
-      this.inputCredit.value = '';
-    }
+  changeValue(event: any) {
+    let value = event.target.value;
+
+    value = value.replace(/\D/g, '');
+
+    this.inputCredit.value = value;
   }
 
   deleteCredit(credit) {
     credit._deleting = true;
-    this.userCreditService.remove({
-      userId: this.userId,
-      creditId: credit.id,
-    }).subscribe(() => {
-      this.data.user.credit_missing -= credit.missing_use;
-      credit._hidden = true;
-    }, (e) => {
-      console.error(e);
-      credit._deleting = false;
-      this.handlerError(e);
-    })
+    this.userCreditService
+      .remove({
+        userId: this.userId,
+        creditId: credit.id,
+      })
+      .subscribe(
+        () => {
+          this.data.user.credit_missing -= credit.missing_use;
+          credit._hidden = true;
+        },
+        (e) => {
+          console.error(e);
+          credit._deleting = false;
+          this.handlerError(e);
+        }
+      );
   }
 
   setFocus() {
     setTimeout(() => {
       if (this.segment === 'add') {
-        $('#inputCredit input').mask('000');
         this.inputCredit.setFocus();
       }
     }, 400);
@@ -101,31 +124,32 @@ export class AdmDetailUserCreditsPage implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.loadDetail();
-  }
-
   loadDetail() {
     this.loadingHelper.setLoading('detailCredit', true);
-    this.settingsService.getSettings()
-      .then((result: IUserSettings) => {
-        this.store = result.store;
+    this.settingsService.getSettings().then((result: IUserSettings) => {
+      this.store = result.store;
 
-        this.userCreditService.detailUserCredits(this.userId).subscribe((resp) => {
+      this.userCreditService.detailUserCredits(this.userId).subscribe(
+        (resp) => {
           this.loadingHelper.setLoading('detailCredit', false);
           this.data = resp;
           if (this.segment === 'add') {
             this.setFocus();
           }
-        }, (e) => {
+        },
+        (e) => {
           this.handlerError(e);
-        })
-      }, this.handlerError.bind(this));
+        }
+      );
+    }, this.handlerError.bind(this));
   }
 
   handlerError(error) {
     console.error(error);
     this.loadingHelper.setLoading('detailCredit', false);
-    this.toastHelper.show({message: 'Ocorreu um erro sua requisição, verifique sua conexão.', cssClass: 'toast-error'});
+    this.toastHelper.show({
+      message: 'Ocorreu um erro sua requisição, verifique sua conexão.',
+      cssClass: 'toast-error',
+    });
   }
 }

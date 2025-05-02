@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'product-details',
   templateUrl: './product-details.html',
-  styleUrl: './product-details.scss'
+  styleUrl: './product-details.scss',
 })
 export class ProductDetails implements OnDestroy {
   @Input() alwaysShowNextBatch = false;
@@ -28,14 +28,15 @@ export class ProductDetails implements OnDestroy {
   @Input('enableDetail') enableDetail = true;
   timeoutId: number;
 
-  constructor(public navCtrl: NavController, 
-              change: ChangeDetectorRef,
-              public router: Router) {
+  constructor(
+    public navCtrl: NavController,
+    change: ChangeDetectorRef,
+    public router: Router
+  ) {
     Utils.everyMinute(() => {
       try {
         change.detectChanges();
-      }catch (e) {
-      }
+      } catch (e) {}
     }).then((id) => {
       this.timeoutId = id;
     });
@@ -49,7 +50,10 @@ export class ProductDetails implements OnDestroy {
 
   goToDetail() {
     if (this.enableDetail) {
-      this.router.navigate(['/DetailProduct', {product: this.product}]);
+      this.router.navigate([
+        '/DetailProduct',
+        { product: JSON.stringify(this.product) },
+      ]);
     }
   }
 
@@ -58,8 +62,10 @@ export class ProductDetails implements OnDestroy {
     let now = new Date();
     if (now.getHours() > parseInt(values.hour, 10)) {
       return true;
-    }
-    else if (now.getHours() === parseInt(values.hour, 10) && now.getMinutes() > parseInt(values.minute, 10)) {
+    } else if (
+      now.getHours() === parseInt(values.hour, 10) &&
+      now.getMinutes() > parseInt(values.minute, 10)
+    ) {
       return true;
     }
     return false;
@@ -74,5 +80,4 @@ export class ProductDetails implements OnDestroy {
     }
     return !this.productInStore();
   }
-
 }

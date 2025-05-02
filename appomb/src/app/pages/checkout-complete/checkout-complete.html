@@ -10,10 +10,14 @@
   <ng-container *ngIf="!(isForDelivery && inSellerMode(user, store))">
     <page-message-box *ngIf="hasError()" [text]="'REQUEST_SERVER_ERROR' | translate"></page-message-box>
     <ion-spinner [showTimeout]="800" *ngIf="isLoading" class="page-spinner"></ion-spinner>
-    <div *ngIf="!isLoading && isEmptyList()">
+    <!-- REMOVENDO O "!isLoading" DO NGIF  -->
+    <div *ngIf="isEmptyList()">
       <page-message-box [text]="'EMPTY_CHECKOUT_LIST' | translate"></page-message-box>
     </div>
-    <div class="checkout-wrapper" *ngIf="!isLoading && !isEmptyList() && !isPixPayment()">
+
+    <!-- REMOVER O "!isPixPayment()" DO NGIF POR ENQUANTO QUE NÃO ARRUMA O PIX -->
+    <!-- REMOVENDO O "!isLoading" DO NGIF  -->
+    <div class="checkout-wrapper" *ngIf="!isEmptyList() && !isPixPayment()">
 
       <!--   INÍCIO: LISTA DE ITENS NO CARRINHO   -->
       <div class="list-thumb-round">
@@ -149,7 +153,7 @@
             Cupom: taxa de entrega ({{couponRegister?.coupon?.amount_discount_delivery_price_display}})
           </div>
           <div class="purchase-details-item__line-value success">
-            -{{deliveryPriceCouponDiscount | currency:"BRL":true}}
+            -{{deliveryPriceCouponDiscount | currency:"BRL":"symbol"}}
           </div>
         </div>
         <div class="purchase-details-item --purchase-total">

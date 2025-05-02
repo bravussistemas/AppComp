@@ -1,15 +1,12 @@
 <ion-header>
-  <app-header
-    [title]="store?.name"
-    [subTitle]="store?.address?.get_simple_address"
-    [buttonIcon]="'chatboxes'"
+  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address" [buttonIcon]="'chatboxes'"
     (headerBtnClick)="headerBtnClick()">
   </app-header>
 </ion-header>
 
-<ion-content>
+<ion-content #rootContent>
   <!-- Botões Flutuantes -->
-  <ion-fab vertical="bottom" horizontal="end" *ngIf="reorder">
+  <ion-fab vertical="bottom" horizontal="end" *ngIf="reorder" #fab>
     <ion-fab-button color="green-button" (click)="saveReorder()">
       <ion-icon name="checkmark"></ion-icon>
     </ion-fab-button>
@@ -21,21 +18,12 @@
   </ion-fab>
 
   <!-- Swiper -->
-  <swiper-container
-    [slides-per-view]="1"
-    [loop]="true"
-    [pagination]="true"
-    [navigation]="true"
-    (swiperslidechange)="onSlideChanged($event)">
-    
+  <swiper-container [slides-per-view]="1" [loop]="true" [pagination]="true" [navigation]="true" (swiperslidechange)="onSlideChanged($event)" #slider>
+
     <!-- Slide 1 -->
     <swiper-slide>
       <div class="slide-content-ctrl" *ngIf="section === SLIDE_BREADS">
-        <adm-list-products-inventory
-          [day]="day"
-          [store]="store"
-          [canReorder]="reorder"
-          (itemsWasSet)="itemsWasSet()">
+        <adm-list-products-inventory [day]="day" [store]="store" [canReorder]="reorder" (itemsWasSet)="itemsWasSet()">
         </adm-list-products-inventory>
       </div>
     </swiper-slide>
@@ -43,12 +31,8 @@
     <!-- Slide 2 -->
     <swiper-slide>
       <div class="slide-content-ctrl" *ngIf="section === SLIDE_RESALE">
-        <adm-list-products-resellers-inventory
-          [day]="day"
-          [store]="store"
-          [canReorder]="reorder"
-          (itemsWasSet)="itemsWasSet()"
-          (startReorder)="startReorderProductsResellers()">
+        <adm-list-products-resellers-inventory [day]="day" [store]="store" [canReorder]="reorder"
+          (itemsWasSet)="itemsWasSet()" (startReorder)="startReorderProductsResellers()">
         </adm-list-products-resellers-inventory>
       </div>
     </swiper-slide>
@@ -56,9 +40,7 @@
     <!-- Slide 3 -->
     <swiper-slide>
       <div class="slide-content-ctrl" *ngIf="section === SLIDE_DISPATCH">
-        <adm-list-dispatch-orders
-          [data]="dataDispatchOrders"
-          [user]="user"
+        <adm-list-dispatch-orders [data]="dataDispatchOrders" [user]="user"
           (listUpdated)="dispatchOrdersUpdated($event)">
         </adm-list-dispatch-orders>
       </div>
@@ -71,22 +53,22 @@
       <ul class="balance-store-list" *ngIf="storeBalance && !loadingHelper.isLoading('updateBalanceDay')">
         <li>
           <span><strong class="label-balance">Dinheiro</strong></span><br>
-          <span>{{ storeBalance.gross_value.money | currency:'BRL':true | money }}</span>
+          <span>{{ storeBalance.gross_value.money | currency:'BRL':'symbol' | money }}</span>
         </li>
         <li class="symbol">+</li>
         <li>
           <span><strong class="label-balance">Pré-pago</strong></span><br>
-          <span>{{ storeBalance.gross_value.client_credit | currency:'BRL':true | money }}</span>
+          <span>{{ storeBalance.gross_value.client_credit | currency:'BRL':'symbol' | money }}</span>
         </li>
         <li class="symbol">+</li>
         <li>
           <span><strong class="label-balance">Cartão</strong></span><br>
-          <span>{{ storeBalance.gross_value.card | currency:'BRL':true | money }}</span>
+          <span>{{ storeBalance.gross_value.card | currency:'BRL':'symbol' | money }}</span>
         </li>
         <li class="symbol">=</li>
         <li>
           <span><strong class="label-balance">Total</strong></span><br>
-          <span>{{ storeBalance.gross_value.total | currency:'BRL':true | money }}</span>
+          <span>{{ storeBalance.gross_value.total | currency:'BRL':'symbol' | money }}</span>
         </li>
       </ul>
 

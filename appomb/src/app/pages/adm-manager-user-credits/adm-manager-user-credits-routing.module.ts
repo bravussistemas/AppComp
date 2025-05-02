@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdmManagerUserCreditsPageModule } from './adm-manager-user-credits.module';
+
+import { AdmManagerUserCreditsPage } from './adm-manager-user-credits';
+import { AdmDetailUserCreditsPage } from '../adm-detail-user-credits/adm-detail-user-credits';
 
 const routes: Routes = [
   {
-    path: '',
-    component: AdmManagerUserCreditsPageModule, // Adicione o componente principal da página aqui
+    path: 'AdmManagerUserCreditsPage',
+    component: AdmManagerUserCreditsPage, // Adicione o componente principal da página aqui
   },
   {
     path: 'adm-detail-user-credits',
-    component: AdmManagerUserCreditsPageModule, // O componente que deve ser carregado
+    component: AdmDetailUserCreditsPage, // O componente que deve ser carregado
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AdmManagerUserCreditsRoutingModule {}

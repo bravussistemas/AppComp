@@ -10,9 +10,7 @@ import { ToastHelper } from '../../utils/toast-helper';
   templateUrl: './adm-manager-user-credits.html',
   styleUrls: ['./adm-manager-user-credits.scss'],
 })
-
 export class AdmManagerUserCreditsPage implements OnInit {
-
   searchTextToAdd: string;
   page = 1;
   limit = 7;
@@ -20,13 +18,14 @@ export class AdmManagerUserCreditsPage implements OnInit {
   canLoadMore = true;
   @ViewChild('searchBar') searchBar: IonSearchbar;
 
-  constructor(public navCtrl: NavController,
-              public loadingHelper: LoadingHelper,
-              public toastHelper: ToastHelper,
-              public userCreditService: UserCreditService,
-              private route: ActivatedRoute,
-              private router: Router) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public loadingHelper: LoadingHelper,
+    public toastHelper: ToastHelper,
+    public userCreditService: UserCreditService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ionViewDidLoad() {
     setTimeout(() => {
@@ -57,30 +56,38 @@ export class AdmManagerUserCreditsPage implements OnInit {
       return;
     }
     this.loadingHelper.setLoading(loaderName, true);
-    this.userCreditService.list(this.page, this.limit, this.searchTextToAdd)
-      .subscribe((resp) => {
-        this.loadingHelper.setLoading(loaderName, false);
-        const data = resp;
-        const users = data.users;
-        const pages = data.pages;
-        this.canLoadMore = this.page < pages;
-        if (this.page === 1) {
-          this.usersList = users;
-        } else {
-          this.usersList = this.usersList.concat(users);
+    this.userCreditService
+      .list(this.page, this.limit, this.searchTextToAdd)
+      .subscribe(
+        (resp) => {
+          this.loadingHelper.setLoading(loaderName, false);
+          const data = resp;
+          const users = data.users;
+          const pages = data.pages;
+          this.canLoadMore = this.page < pages;
+          if (this.page === 1) {
+            this.usersList = users;
+          } else {
+            this.usersList = this.usersList.concat(users);
+          }
+        },
+        (error) => {
+          console.error(error);
+          this.loadingHelper.setLoading(loaderName, false);
+          this.toastHelper.show({
+            message: 'Ocorreu um erro, verifique sua conexão.',
+            cssClass: 'toast-error',
+          });
         }
-      }, (error) => {
-        console.error(error);
-        this.loadingHelper.setLoading(loaderName, false);
-        this.toastHelper.show({message: 'Ocorreu um erro, verifique sua conexão.', cssClass: 'toast-error'});
-      })
+      );
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   detail(userId: number) {
-    this.router.navigate(['/adm-detail-user-credits'], { queryParams: { userId: userId } });
+    console.log(userId);
+    this.router.navigate(['/adm-detail-user-credits'], {
+      queryParams: { userId: userId },
+    });
   }
-
 }

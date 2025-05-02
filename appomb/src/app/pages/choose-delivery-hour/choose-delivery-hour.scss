@@ -1,44 +1,42 @@
-page-choose-delivery-hour {
-  ion-label {
-    //text-align: center;
+ion-label {
+  //text-align: center;
+}
+
+.choose-delivery-content {
+  button.disabled {
+    opacity: 0.9;
+
+    .hour-label {
+      opacity: 0.4;
+    }
+
+    background: #f3f3f3;
+    //&.invalid {
+    //  background: #ffd7d7;
+    //}
   }
 
-  .choose-delivery-content {
-    button.disabled {
-      opacity: 0.9;
+  .item-block {
+    min-height: 42px;
+  }
 
-      .hour-label {
-        opacity: 0.4;
-      }
+  .item-inner {
+    height: 42px;
+    font-size: 1.8rem;
+    text-align: center;
+  }
 
-      background: #f3f3f3;
-      //&.invalid {
-      //  background: #ffd7d7;
-      //}
-    }
+  .text-center {
+    text-align: center;
+  }
 
-    .item-block {
-      min-height: 42px;
-    }
+  ion-label {
+    position: relative;
+  }
 
-    .item-inner {
-      height: 42px;
-      font-size: 1.8rem;
-      text-align: center;
-    }
-
-    .text-center {
-      text-align: center;
-    }
-
-    ion-label {
-      position: relative;
-    }
-
-    ion-badge {
-      position: absolute;
-      right: 55px;
-      top: 1px;
-    }
+  ion-badge {
+    position: absolute;
+    right: 55px;
+    top: 1px;
   }
 }

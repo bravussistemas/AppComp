@@ -15,12 +15,9 @@ export class DetailProduct {
     this.product = JSON.parse(
       route.snapshot.paramMap.get('product')
     ) as Product;
-    //O PRODUTO ESTA VINDO NULL NO PARAMETRO POR ISSO NAO EXIBE O CONTEUDO
-    //VERIFICAR O POR QUE NAO ESTA VINDO
-    console.log(this.product);
 
     if (!this.product) {
-      this.router.navigate(['/HomePage']);
+      this.router.navigate(['/HomeList']);
     } else {
       if (this.product.image && this.product.image.original) {
         this.images.push(this.product.image.original);

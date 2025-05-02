@@ -107,6 +107,10 @@ import { SearchCityPageModule } from './pages/search-city/search-city.module';
 import { ListBreadsPageModule } from './pages/list-breads/list-breads.module';
 import { DetailProductModule } from './pages/detail-product/detail-product.module';
 import { EditProductActivesModule } from './pages/edit-product-actives/edit-product-actives.module';
+import { AdmManageProductPageModule } from './pages/adm-manage-product/adm-manage-product.module';
+import { AdmManagerUserCreditsPageModule } from './pages/adm-manager-user-credits/adm-manager-user-credits.module';
+import { AdmDetailUserCreditsPageModule } from './pages/adm-detail-user-credits/adm-detail-user-credits.module';
+import { AddOperatingDayNotePageModule } from './pages/add-operating-day-note/add-operating-day-note.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -158,10 +162,13 @@ registerLocaleData(localePt);
     SignInModule,
     ForgotPasswordModule,
     CardErrorPopUpModule,
+    AdmManageProductPageModule,
+    // AdmDetailUserCreditsPageModule,
     ChooseDeliveryHourPageModule,
     ChooseDeliveryAddressPageModule,
     RegisterMobilePhoneModule,
     ListCreditCardPageModule,
+    AdmManagerUserCreditsPageModule,
     RegisterCreditCardModule,
     RegisterDocumentNoteModule,
     RequestStatusPageModule,
@@ -180,6 +187,7 @@ registerLocaleData(localePt);
     ChooseDeliveryEmployeePageModule,
     ChooseDeliveryAddressPageModule,
     AdminBalanceStorePageModule,
+    AddOperatingDayNotePageModule,
     // Removido: CacheInterceptor,
     // Removido: HttpClient do array de imports
     TranslateModule.forRoot({

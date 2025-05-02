@@ -65,6 +65,7 @@ export class RegisterCreditCard implements AfterViewInit, OnInit {
 
   @ViewChild('inputCvv') inputCvv: IonInput;
   @ViewChild('inputExpiration') inputExpiration: IonInput;
+  @ViewChild('inputCardHolderId') inputCardHolderId: IonInput;
 
   dataForm: {
     cardHolderName: string;
@@ -143,10 +144,6 @@ export class RegisterCreditCard implements AfterViewInit, OnInit {
     this.allowPrev = this.sliderEl.nativeElement.swiper.allowSlidePrev;
     this.allowNext = false;
     this.allowPrev = false;
-
-    // // Aplicar máscaras usando jQuery
-    // $('#inputExpiration').find('input').mask('00/00');
-    // $('#inputCardHolderId').find('input').mask('000.000.000-00');
   }
 
   ionViewWillEnter() {
@@ -352,6 +349,39 @@ export class RegisterCreditCard implements AfterViewInit, OnInit {
     } else {
       console.error(`Slide não encontrado para a etapa: ${formStep}`);
     }
+  }
+
+  changeValueHolder(event: any) {
+    let value = event.target.value;
+
+    value = value.replace(/\D/g, '');
+
+    value = value.slice(0, 11);
+
+    if (value.length > 9) {
+      value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else if (value.length > 6) {
+      value = value.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+    } else if (value.length > 3) {
+      value = value.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+    }
+
+    this.inputCardHolderId.value = value;
+    console.log(this.inputCardHolderId.value);
+  }
+
+  changeValueExpiration(event: any) {
+    let value = event.target.value;
+
+    value = value.replace(/\D/g, '');
+
+    if (value.length > 2) {
+      value = value.slice(0, 4);
+      value = value.replace(/(\d{2})(\d{2})/, '$1/$2');
+    }
+
+    this.inputExpiration.value = value;
+    console.log(this.inputExpiration.value);
   }
 
   skipCardRegister() {

@@ -1,5 +1,6 @@
 import {
   Component,
+  OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -116,6 +117,7 @@ declare let cordova: any;
 /* eslint-disable @angular-eslint/component-class-suffix */
 export class CheckoutComplete implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
+  productsPrice: number = 0;
 
   get productsPriceWithCouponDiscountPrice(): number {
     return this.productsPrice - this.couponDiscountPrice;
@@ -195,7 +197,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
 
   data: DayInventory = {};
   days: string[] = [];
-  productsPrice: number = 0;
+
   couponRegister: CouponUserRegister;
   couponErrors: CouponInvalidError[];
 
@@ -446,6 +448,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
   }
 
   get canApplyCoupon() {
+    // console.log('oito condição');
     return (
       this.couponRegister &&
       this.couponRegister.coupon &&
@@ -507,7 +510,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
               this.cartManagerTable
                 .clearDay(moment(day).toDate())
                 .then(() => {
-                  this.loadCheckoutList(true);
+                  // this.loadCheckoutList(true);
                   this.loadingHelper.hide();
                 })
                 .catch((e) => {
@@ -526,7 +529,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
 
   eventCartChangedCheckout = (data) => {
     if (data.auto) {
-      this.loadCheckoutList();
+      // this.loadCheckoutList();
     }
   };
 
@@ -597,6 +600,8 @@ export class CheckoutComplete implements OnInit, OnDestroy {
     });
   }
 
+  
+
   ngOnInit() {
     this.trackHelper.trackByName(TrackHelper.EVENTS.OPEN_CHECKOUT_PAGE);
     this.auth.getUser().then((user) => {
@@ -626,6 +631,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
       }
 
       this.productsPrice = 0;
+      console.log('zerei o subtotal');
 
       this.cartManagerTable.init().then(() => {
         this.settingsService
@@ -660,10 +666,12 @@ export class CheckoutComplete implements OnInit, OnDestroy {
         this.cartManagerTable
           .getFuture()
           .then((result) => {
+            console.log('result Load, ', result);
             if (result.length > 0) {
               let ids = [];
               for (let i = 0; i < result.length; i++) {
                 if (result[i]) {
+                  console.log(result);
                   ids.push(result[i].inventory_day_id);
                 }
               }
@@ -671,9 +679,11 @@ export class CheckoutComplete implements OnInit, OnDestroy {
                 .getByIds(ids, this.store.id)
                 .toPromise()
                 .then((resp) => {
+                  console.log('limpa os dias e reseta');
                   this.reset();
                   const data = resp.data;
                   for (let day in data) {
+                    console.log(day.length);
                     if (data.hasOwnProperty(day)) {
                       this.days.push(day);
                     }
@@ -692,6 +702,8 @@ export class CheckoutComplete implements OnInit, OnDestroy {
               if (afterClearDay) {
                 this.router.navigate(['/home']);
               } else {
+                console.log('vim pelo reset');
+
                 this.reset();
                 this.loadingHelper.setLoading('checkoutList', false);
               }
@@ -745,7 +757,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
   }
 
   loadCouponsEvent = () => {
-    this.loadCheckoutList();
+    // this.loadCheckoutList();
   };
 
   documentNoteUpdatedEvent = (value) => {
@@ -1275,7 +1287,7 @@ export class CheckoutComplete implements OnInit, OnDestroy {
     }
     this.router.navigate(['/ChooseDeliveryHourPage'], {
       queryParams: {
-        items: this.deliveryAddressInfo.delivery_hours,
+        items: JSON.stringify(this.deliveryAddressInfo.delivery_hours),
         possibleDeliveryHour: this.possibleDeliveryHour,
       },
     });

@@ -37,7 +37,7 @@
           <p>{{ user.email }}</p>
         </ion-label>
         <div class="ion-text-end">
-          <strong>{{ user.credit_missing | currency: "BRL": true }}</strong>
+          <strong>{{ user.credit_missing | currency: 'BRL':'symbol' }}</strong>
         </div>
       </ion-item>
     </ion-list>
