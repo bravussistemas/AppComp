@@ -1,9 +1,5 @@
-<ion-searchbar
-  *ngIf="items?.length"
-  [(ngModel)]="searchText"
-  [showCancelButton]="true"
-  [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-  [animated]="true">
+<ion-searchbar *ngIf="items?.length" [(ngModel)]="searchText" [showCancelButton]="true"
+  [placeholder]="'SEARCH_PLACEHOLDER' | translate" [animated]="true">
 </ion-searchbar>
 
 <ion-progress-bar type="indeterminate" *ngIf="loadingHelper.isLoading('productsInventory')"></ion-progress-bar>
@@ -21,26 +17,17 @@
             <ion-row>
               <ion-col size="12" class="clear-spacing">
                 <ion-progress-bar type="indeterminate" *ngIf="item.loading"></ion-progress-bar>
-                <button (click)="toggleProductDay(item)"
-                        *ngIf="!item.loading && !canReorder"
-                        ion-button
-                        item-start
-                        color="primary"
-                        fill="clear">
+                <button (click)="toggleProductDay(item)" *ngIf="!item.loading && !canReorder" ion-button item-start
+                  color="primary" fill="clear">
                   <ion-icon [name]="item.is_visible ? 'eye' : 'eye-off'"></ion-icon>
                 </button>
               </ion-col>
             </ion-row>
           </ion-col>
           <ion-col size="10">
-            <product-details [product]="item.product"
-                            [alwaysShowNextBatch]="true"
-                            [enableDetail]="!canReorder"
-                            [nextBatch]="item.next_batch"></product-details>
-            <adm-product-amount-control
-              *ngIf="!canReorder"
-              [enableDetail]="!canReorder"
-              [day]="day"
+            <product-details [product]="item.product" [alwaysShowNextBatch]="true" [enableDetail]="!canReorder"
+              [nextBatch]="item.next_batch"></product-details>
+            <adm-product-amount-control *ngIf="!canReorder" [enableDetail]="!canReorder" [day]="day"
               [item]="item"></adm-product-amount-control>
           </ion-col>
         </ion-row>

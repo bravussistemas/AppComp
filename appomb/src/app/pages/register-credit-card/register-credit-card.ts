@@ -139,6 +139,7 @@ export class RegisterCreditCard implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     // Desabilitar controle de teclado
     // this.slider.keyboard.disable();
+    console.log(this.sliderEl);
 
     this.allowNext = this.sliderEl.nativeElement.swiper.allowSlideNext;
     this.allowPrev = this.sliderEl.nativeElement.swiper.allowSlidePrev;
@@ -368,20 +369,6 @@ export class RegisterCreditCard implements AfterViewInit, OnInit {
 
     this.inputCardHolderId.value = value;
     console.log(this.inputCardHolderId.value);
-  }
-
-  changeValueExpiration(event: any) {
-    let value = event.target.value;
-
-    value = value.replace(/\D/g, '');
-
-    if (value.length > 2) {
-      value = value.slice(0, 4);
-      value = value.replace(/(\d{2})(\d{2})/, '$1/$2');
-    }
-
-    this.inputExpiration.value = value;
-    console.log(this.inputExpiration.value);
   }
 
   skipCardRegister() {

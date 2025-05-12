@@ -78,7 +78,7 @@ const orderStoresByType = (stores: Store[]): StoreByType => {
 @Component({
   selector: 'app-page-choose-store',
   templateUrl: 'choose-store.html',
-  styleUrls: ['choose-store.scss']
+  styleUrls: ['choose-store.scss'],
 })
 /* eslint-disable @angular-eslint/component-class-suffix */
 export class ChooseStore implements OnInit, OnDestroy {
@@ -222,8 +222,6 @@ export class ChooseStore implements OnInit, OnDestroy {
     this.settingsService
       .chooseStore(store)
       .then(() => {
-        
-
         return this.redirectSelectStore(store, autoSelect);
       })
       .catch((e) => {
@@ -234,7 +232,6 @@ export class ChooseStore implements OnInit, OnDestroy {
   }
 
   getRedirectFunc(store: Store, autoSelect = false): Promise<any> {
-    console.log(this.user);
     if (!this.user) {
       return this.router.navigate(['/HomeList']);
     }

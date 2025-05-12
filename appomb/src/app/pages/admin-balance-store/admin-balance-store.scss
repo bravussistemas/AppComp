@@ -1,98 +1,96 @@
-@import '../../../theme/variables.scss';
+@import "../../../theme/variables.scss";
 
-page-admin-balance-store {
-  .scroll-content {
-    padding-top: $reservation-bar-height * 1.1;
-  }
+.scroll-content {
+  padding-top: $reservation-bar-height * 1.1;
+}
 
-  ion-content {
-    &.with-select {
-      .scroll-content {
-        padding-top: $reservation-bar-height * 2.3;
-      }
+ion-content {
+  &.with-select {
+    .scroll-content {
+      padding-top: $reservation-bar-height * 2.3;
     }
   }
+}
 
-  #bottom-btn-content {
-    background-color: map-get($colors, dark);
-    bottom: 0;
-    left: 0;
+#bottom-btn-content {
+  background-color: map-get($colors, dark);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 100;
+  //min-height: $reservation-bar-height;
+  * {
+    color: map-get($colors, light);
+    font-size: 1.4rem;
+  }
+
+  .reservation-wrapper-inner {
+    font-size: 1.3rem;
     width: 100%;
-    text-align: center;
-    z-index: 100;
-    //min-height: $reservation-bar-height;
-    * {
-      color: map-get($colors, light);
-      font-size: 1.4rem;
-    }
+    height: $reservation-bar-height !important;
+    padding: 0;
+    margin: 0;
 
-    .reservation-wrapper-inner {
-      font-size: 1.3rem;
-      width: 100%;
-      height: $reservation-bar-height !important;
-      padding: 0;
-      margin: 0;
-
-      &.borded {
-        border-bottom: 1px solid #4c4c4c;
-        height: auto !important;
-        padding: 5px 10px;
-      }
-    }
-
-    .feature {
-      font-size: 2.2rem;
-      font-weight: bold;
-    }
-
-    .row {
-      height: 100% !important;
-    }
-
-    ion-col {
-      height: 100% !important;
-      padding: 0 !important;
-      line-height: $reservation-bar-height;
-    }
-
-    ion-grid {
-      padding: 0;
-
-      &.grid {
-        padding: 0;
-      }
-    }
-
-    .negative-value {
-      font-weight: bold;
-      color: #e81b1b;
+    &.borded {
+      border-bottom: 1px solid #4c4c4c;
+      height: auto !important;
+      padding: 5px 10px;
     }
   }
 
-  .balance-store-list {
-    margin: 0;
-    margin-top: 4px;
+  .feature {
+    font-size: 2.2rem;
+    font-weight: bold;
+  }
+
+  .row {
+    height: 100% !important;
+  }
+
+  ion-col {
+    height: 100% !important;
+    padding: 0 !important;
+    line-height: $reservation-bar-height;
+  }
+
+  ion-grid {
     padding: 0;
 
-    li {
-      display: inline-block;
+    &.grid {
+      padding: 0;
     }
   }
 
-  .segment-button {
-    height: 5rem !important;
-    line-height: 4.7rem !important;
+  .negative-value {
+    font-weight: bold;
+    color: #e81b1b;
   }
+}
 
-  ion-footer {
-    height: 56px;
+.balance-store-list {
+  margin: 0;
+  margin-top: 4px;
+  padding: 0;
 
-    #bottom-btn-content {
-      height: 100%;
+  li {
+    display: inline-block;
+  }
+}
 
-      //.row {
-      //  height: 1090px !important;
-      //}
-    }
+.segment-button {
+  height: 5rem !important;
+  line-height: 4.7rem !important;
+}
+
+ion-footer {
+  height: 56px;
+
+  #bottom-btn-content {
+    height: 100%;
+
+    //.row {
+    //  height: 1090px !important;
+    //}
   }
 }

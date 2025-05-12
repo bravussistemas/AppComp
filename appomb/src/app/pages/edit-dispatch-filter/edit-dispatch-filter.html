@@ -1,4 +1,4 @@
-<!-- <ion-header>
+<ion-header>
    <ion-toolbar>
     <ion-title>Alterar filtro</ion-title>
     <ion-buttons slot="end">
@@ -10,13 +10,13 @@
 </ion-header>
 
 <ion-content *ngIf="data">
-  <\!-- FAB Button -\->
+  <!-- <\!-- FAB Button -\-> -->
    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-button (click)="save()" color="success">
       <ion-icon name="checkmark"></ion-icon>
     </ion-button>
   </ion-fab>
-<\!-- Entrega Section -\->
+<!-- <\!-- Entrega Section -\-> -->
  <h5 class="ion-padding">Entrega</h5>
   <ion-card>
     <ion-grid>
@@ -34,8 +34,8 @@
       </ion-row>
     </ion-grid>
   </ion-card>
-
-  <!-\- Entregadores Section -\->
+<!-- 
+  <!-\- Entregadores Section -\-> -->
   <h5 class="ion-padding">Entregadores</h5>
   <ion-card *ngIf="deliveryEmployeesFilter && deliveryEmployeesFilter.length">
     <ion-grid>
@@ -50,4 +50,3 @@
     </ion-grid>
   </ion-card> 
 </ion-content>
- -->

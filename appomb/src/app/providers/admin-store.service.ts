@@ -18,7 +18,7 @@ export interface ChangeOrderDTO {
 export enum PaymentMethods {
   CARD = 1,
   MONEY = 2,
-  CARD_IN_STORE = 4
+  CARD_IN_STORE = 4,
 }
 
 export interface ICreateSaleData {
@@ -43,7 +43,10 @@ export class AdminStoreService extends CachedServiceBase {
     super('AdminStoreService', cache);
   }
 
-  toggleDispatchClosed(id: number, isClosed: boolean): Observable<{ status: boolean }> {
+  toggleDispatchClosed(
+    id: number,
+    isClosed: boolean
+  ): Observable<{ status: boolean }> {
     return this.authUserHttp.post<{ status: boolean }>(
       this.getUrl(this.appConfig.API_TOGGLE_DISPATCH_CLOSED_V2),
       { id, is_closed: isClosed }
@@ -71,7 +74,10 @@ export class AdminStoreService extends CachedServiceBase {
     );
   }
 
-  changeResellersOrder(data: { day: Moment; data: ChangeOrderDTO[] }): Observable<{ status: boolean }> {
+  changeResellersOrder(data: {
+    day: Moment;
+    data: ChangeOrderDTO[];
+  }): Observable<{ status: boolean }> {
     return this.authUserHttp.post<{ status: boolean }>(
       this.getUrl(this.appConfig.API_CHANGE_RESELLERS_ORDER),
       data
@@ -94,7 +100,12 @@ export class AdminStoreService extends CachedServiceBase {
       );
   }
 
-  balanceGeneral(data: { store_id: number; page: number; period_type: 'week' | 'month' | 'day'; delivery_employee_id?: number }) {
+  balanceGeneral(data: {
+    store_id: number;
+    page: number;
+    period_type: 'week' | 'month' | 'day';
+    delivery_employee_id?: number;
+  }) {
     const params = new HttpParams({ fromObject: { ...data } });
 
     return this.authUserHttp
@@ -106,22 +117,39 @@ export class AdminStoreService extends CachedServiceBase {
   }
 
   listDeliveryEmployee() {
-    const request = this.authUserHttp.get(this.getUrl(this.appConfig.API_LIST_DELIVERY_EMPLOYEE));
+    const request = this.authUserHttp.get(
+      this.getUrl(this.appConfig.API_LIST_DELIVERY_EMPLOYEE)
+    );
     return this.cacheRequest('listDeliveryEmployee', request, 60 * 60 * 8).pipe(
       map((resp: any) => <DeliveryEmployeeSimple[]>resp),
       catchError((e) => this.handleHttpError(e))
     );
   }
 
-  setDispatchDeliveryEmployee(data: { employee_id: number; dispatch_id: number }) {
-    return this.authUserHttp.post(this.getUrl(this.appConfig.API_SET_DISPATCH_DELIVERY_EMPLOYEE), data);
+  setDispatchDeliveryEmployee(data: {
+    employee_id: number;
+    dispatch_id: number;
+  }) {
+    return this.authUserHttp.post(
+      this.getUrl(this.appConfig.API_SET_DISPATCH_DELIVERY_EMPLOYEE),
+      data
+    );
   }
 
-  balanceGeneralV2(data: { store: number; page: number; period_type: 'week' | 'month' | 'day'; delivery_employee?: number }) {
+  balanceGeneralV2(data: {
+    store: number;
+    page: number;
+    period_type: 'week' | 'month' | 'day';
+    delivery_employee?: number;
+  }) {
     const params = new HttpParams({ fromObject: { ...data } });
+    console.log(params);
 
     return this.authUserHttp
-      .get<any>(this.getUrl(this.appConfig.API_STORE_GENERAL_BALANCE_CONTENT),  params)
+      .get<any>(
+        this.getUrl(this.appConfig.API_STORE_GENERAL_BALANCE_CONTENT),
+        params
+      )
       .pipe(
         map((resp: any) => <any>resp),
         catchError((e) => this.handleHttpError(e))
@@ -129,10 +157,12 @@ export class AdminStoreService extends CachedServiceBase {
   }
 
   listDeliveryEmployees() {
-    return this.authUserHttp.get(this.getUrl(this.appConfig.API_LIST_DELIVERY_EMPLOYEES)).pipe(
-      map((resp: any) => <any>resp),
-      catchError((e) => this.handleHttpError(e))
-    );
+    return this.authUserHttp
+      .get(this.getUrl(this.appConfig.API_LIST_DELIVERY_EMPLOYEES))
+      .pipe(
+        map((resp: any) => <any>resp),
+        catchError((e) => this.handleHttpError(e))
+      );
   }
 
   getUrl(endpoint: string): string {

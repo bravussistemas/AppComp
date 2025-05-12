@@ -24,31 +24,30 @@ export class ResellerAmountComponent implements OnDestroy, OnInit {
   constructor(private events: EventService) {}
 
   update = () => {
-    // Ionic Events requires arrow functions to make right unsubscribe
-    if (!Utils.isNullOrUndefined(this.updating)) {
+    if (this.updating) {
       clearTimeout(this.updating);
     }
+
     this.updating = setTimeout(() => {
-      let items = $(document).find('.reseller-data-content');
-      if (!items) {
-        return;
-      }
+      const items = document.querySelectorAll('.reseller-data-content');
+      if (!items.length) return;
+
       let finalTotal = 0;
-      items.each((_, item) => {
-        let a = $(item);
-        let resellerId = a.attr('data-resellerId');
+
+      items.forEach((item: Element) => {
+        const resellerId = item.getAttribute('data-resellerId');
+        const total = item.getAttribute('data-itemTotal');
+
         if (
           resellerId &&
           this._resellerId &&
-          resellerId.toString() === this._resellerId.toString()
+          resellerId.toString() === this._resellerId.toString() &&
+          total
         ) {
-          let total = a.attr('data-itemTotal');
-          if (!total) {
-            return;
-          }
           finalTotal += parseInt(total, 10);
         }
       });
+
       this.total = finalTotal;
     }, 300);
   };

@@ -9,9 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [
-    AdminBalanceStorePage,
-  ],
+  declarations: [AdminBalanceStorePage],
   imports: [
     AdminBalanceStoreRoutingModule, // Importa o Routing Module separado
     TranslateModule.forChild(),
@@ -22,5 +20,4 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
   ],
 })
-export class AdminBalanceStorePageModule {
-}
+export class AdminBalanceStorePageModule {}

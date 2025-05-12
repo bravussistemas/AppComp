@@ -27,7 +27,9 @@ export class FirebaseDbService {
    * @returns An Observable of ProductInventoryDay array.
    */
   getDay(day: Moment, storeId: number): Observable<ProductInventoryDay[]> {
-    const path = `/${this.appConfig.FIREBASE_DB_INVENTORY_DAY}/${storeId}/${day.format('YYYYMMDD')}/`;
+    const path = `/${
+      this.appConfig.FIREBASE_DB_INVENTORY_DAY
+    }/${storeId}/${day.format('YYYYMMDD')}/`;
 
     return this.db.list<ProductInventoryDay>(path).valueChanges();
   }
@@ -86,6 +88,7 @@ export class FirebaseDbService {
     const path = `/${this.appConfig.FIREBASE_DB_DISPATCH_ORDERS}/${day.format(
       'YYYYMMDD'
     )}/`;
+
     return this.db
       .list<DispatchOrderAdminList>(path, (ref) =>
         ref.orderByChild('store_id').equalTo(storeId)

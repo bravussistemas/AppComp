@@ -16,13 +16,14 @@ import { Router } from '@angular/router';
 })
 export class ItemCartAmount implements OnInit {
   _item: ProductInventoryDay;
-  @Input('enableAdminView') enableAdminView = false;
+
+  @Input() enableAdminView = false;
 
   get item(): ProductInventoryDay {
     return this._item;
   }
 
-  @Input('item')
+  @Input()
   set item(val: ProductInventoryDay) {
     this._item = val;
     this.resellerId = Utils.safeAttr(this._item, 'reseller.id');

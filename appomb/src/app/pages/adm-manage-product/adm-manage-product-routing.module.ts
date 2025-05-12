@@ -5,12 +5,13 @@ import { AdmManageProductPage } from './adm-manage-product'; // Certifique-se de
 const routes: Routes = [
   {
     path: 'AdmManageProductPage',
-    component: AdmManageProductPage
-  }
+    component: AdmManageProductPage,
+  },
+ 
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AdmManageProductPageRoutingModule {}

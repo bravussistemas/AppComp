@@ -1,5 +1,10 @@
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { IonContent, IonSearchbar, ModalController, SearchbarInputEventDetail } from '@ionic/angular';
+import {
+  IonContent,
+  IonSearchbar,
+  ModalController,
+  SearchbarInputEventDetail,
+} from '@ionic/angular';
 import { ProductForEdit } from '../../shared/models/product.model';
 import { ProductService } from '../../providers/product.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -68,7 +73,10 @@ export class EditInventoryDayItemsPage implements OnInit {
   }
 
   init() {
-    const data = this.resellerMode !== undefined ? { without_reseller: !this.resellerMode } : {};
+    const data =
+      this.resellerMode !== undefined
+        ? { without_reseller: !this.resellerMode }
+        : {};
     const getProducts = this.productService
       .listForEdit(data)
       .toPromise()
@@ -79,6 +87,7 @@ export class EditInventoryDayItemsPage implements OnInit {
       is_active: true,
       store_id: this.store.id,
     };
+
     const getInventory = this.productInventoryService
       .getDay(moment(this.day), params)
       .toPromise()
@@ -102,7 +111,9 @@ export class EditInventoryDayItemsPage implements OnInit {
       const productItem = new ProductItem();
       productItem.product = item;
       productItem.next_batch =
-        DateUtils.datetimeToHour(activatedItems[item.id.toString()] || item.next_batch_default) || '';
+        DateUtils.datetimeToHour(
+          activatedItems[item.id.toString()] || item.next_batch_default
+        ) || '';
       productItem.active = !!activatedItems[item.id.toString()];
       return productItem;
     });
@@ -154,6 +165,5 @@ export class EditInventoryDayItemsPage implements OnInit {
     });
   }
 
-  onInput(e) {
-  }
+  onInput(e) {}
 }

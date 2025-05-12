@@ -1,8 +1,5 @@
 <ion-header>
-  <app-header
-    [title]="store?.name"
-    [subTitle]="store?.address?.get_simple_address"
-    [buttonIcon]="'refresh'"
+  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address" [buttonIcon]="'refresh'"
     (headerBtnClick)="headerBtnClick()">
   </app-header>
 </ion-header>
@@ -20,7 +17,7 @@
       </div>
 
       <!-- Seleção de Entregadores -->
-      <ng-container *ngIf="!loadingHelper.isLoading('updateBalanceDay')">
+      <ng-container>
         <div class="toolbar-line" id="bottom-btn-content" *ngIf="canChooseEmployee()">
           <div class="reservation-wrapper-inner borded" style="padding-top: 15px;">
             <div *ngIf="loadingHelper.isLoading('loadDeliveryEmployees')">
@@ -40,10 +37,7 @@
   </ion-toolbar>
 
   <!-- Spinner de Carregamento -->
-  <ion-spinner
-    *ngIf="loadingHelper.isLoading('updateBalanceDay')"
-    class="page-spinner"
-    style="margin-top: 0;">
+  <ion-spinner *ngIf="loadingHelper.isLoading('updateBalanceDay')" class="page-spinner" style="margin-top: 0;">
   </ion-spinner>
 
   <!-- Histórico e Saldo -->
@@ -51,9 +45,11 @@
     <div [innerHTML]="storeBalanceContentHtml"></div>
 
     <h4 class="ion-text-center ion-margin-top ion-margin-bottom">Histórico de pré-pago</h4>
+
     <div *ngIf="!clientCreditHistory?.length" class="ion-text-center ion-padding">
       Nenhum registro no período.
     </div>
+
     <ion-list *ngIf="clientCreditHistory?.length">
       <ion-item *ngFor="let item of clientCreditHistory">
         <ion-label>
@@ -78,19 +74,23 @@
   <ion-toolbar>
     <ion-grid id="bottom-btn-content" class="hide-open-keyboard">
       <ion-row>
+
         <ion-col size="3">
           <ion-button expand="block" fill="clear" (click)="prevDay()">
-            <ion-icon name="arrow-dropleft"></ion-icon>
+            <ion-icon name="caret-back-outline"></ion-icon>
           </ion-button>
         </ion-col>
+
         <ion-col size="6" class="ion-text-center">
-          <ion-label [innerHTML]="getDateLabel()"></ion-label>
+          <span [innerHTML]="getDateLabel()"></span>
         </ion-col>
+
         <ion-col size="3">
           <ion-button expand="block" fill="clear" (click)="nextDay()">
-            <ion-icon name="arrow-dropright"></ion-icon>
+            <ion-icon name="caret-forward-outline"></ion-icon>
           </ion-button>
         </ion-col>
+
       </ion-row>
     </ion-grid>
   </ion-toolbar>

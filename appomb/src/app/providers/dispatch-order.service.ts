@@ -4,7 +4,10 @@ import { AuthUserHttp } from './auth-user-http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
-import { DispatchOrder, DispatchOrderRequests } from '../shared/models/dispatch-order.model';
+import {
+  DispatchOrder,
+  DispatchOrderRequests,
+} from '../shared/models/dispatch-order.model';
 import { Sales } from '../shared/models/sales.model';
 import { Address } from '../shared/models/address.model';
 
@@ -21,14 +24,19 @@ export interface ReportProblemDTO {
 
 @Injectable()
 export class DispatchOrderService {
-  constructor(private authUserHttp: AuthUserHttp, private appConfig: AppConfig) {}
+  constructor(
+    private authUserHttp: AuthUserHttp,
+    private appConfig: AppConfig
+  ) {}
 
   get(id: number): Observable<DispatchOrder> {
-    return this.authUserHttp.get<DispatchOrder>(`${this.getUrl(id)}/`);
+    return this.authUserHttp.get<DispatchOrder>(`${this.getUrl(id.toString())}/`);
   }
 
   listSales(id: number): Observable<Sales[]> {
-    return this.authUserHttp.get<Sales[]>(`${this.appConfig.SERVER_API}${this.appConfig.API_DISPATCH_ORDERS_SALES}${id}`);
+    return this.authUserHttp.get<Sales[]>(
+      `${this.appConfig.SERVER_API}${this.appConfig.API_DISPATCH_ORDERS_SALES}${id}`
+    );
   }
 
   listUserSales({ only_opened = false } = {}): Observable<{
@@ -37,22 +45,33 @@ export class DispatchOrderService {
     has_any_open_today: boolean;
   }> {
     const params = new HttpParams().set('only_opened', String(only_opened));
-    return this.authUserHttp.get(this.getUrl(this.appConfig.API_USER_DISPATCH_ORDERS), params);
+
+    return this.authUserHttp.get(
+      this.getUrl(this.appConfig.API_USER_DISPATCH_ORDERS),
+      params
+    );
   }
 
   getDispatchSale(id: number): Observable<Sales> {
     const params = new HttpParams().set('d_id', id.toString());
-    return this.authUserHttp.get<Sales>(`${this.appConfig.SERVER_API}${this.appConfig.API_GET_DISPATCH_SALE}`, params);
+    return this.authUserHttp.get<Sales>(
+      `${this.appConfig.SERVER_API}${this.appConfig.API_GET_DISPATCH_SALE}`,
+      params
+    );
   }
 
-  cancelSale(data: CancelSaleDTO): Observable<{ success: boolean; is_admin_sale: boolean }> {
+  cancelSale(
+    data: CancelSaleDTO
+  ): Observable<{ success: boolean; is_admin_sale: boolean }> {
     return this.authUserHttp.post<{ success: boolean; is_admin_sale: boolean }>(
       `${this.appConfig.SERVER_API}${this.appConfig.API_CANCEL_SALE}`,
       data
     );
   }
 
-  notifyDeliveryEmployeeIsComing(dispatchId: number): Observable<{ success: boolean; address: Address }> {
+  notifyDeliveryEmployeeIsComing(
+    dispatchId: number
+  ): Observable<{ success: boolean; address: Address }> {
     const params = new HttpParams().set('dispatch_id', dispatchId.toString());
     return this.authUserHttp.get<{ success: boolean; address: Address }>(
       `${this.appConfig.SERVER_API}${this.appConfig.API_NOTIFY_USER_DELIVERY_INCOMING}`,
@@ -60,12 +79,19 @@ export class DispatchOrderService {
     );
   }
 
-  setDispatchRating({ id, rating }: { id: number; rating: number }): Observable<{ success: boolean }> {
+  setDispatchRating({
+    id,
+    rating,
+  }: {
+    id: number;
+    rating: number;
+  }): Observable<{ success: boolean }> {
     const params = new HttpParams()
       .set('dispatch_id', id.toString())
       .set('rating', rating.toString());
-    return this.authUserHttp.get<{ success: boolean }>(`${this.appConfig.SERVER_API}${this.appConfig.API_SET_DISPATCH_RATING}`, 
-      params,
+    return this.authUserHttp.get<{ success: boolean }>(
+      `${this.appConfig.SERVER_API}${this.appConfig.API_SET_DISPATCH_RATING}`,
+      params
     );
   }
 
@@ -77,6 +103,9 @@ export class DispatchOrderService {
   }
 
   private getUrl(endpoint: any): string {
-    return `${this.appConfig.SERVER_API}${this.appConfig.API_DISPATCH_ORDERS}${endpoint}`;
+    const cleanedEndpoint = endpoint.startsWith('api/')
+      ? endpoint.slice(4)
+      : endpoint;
+    return `${this.appConfig.SERVER_API}${this.appConfig.API_DISPATCH_ORDERS}${cleanedEndpoint}`;
   }
 }

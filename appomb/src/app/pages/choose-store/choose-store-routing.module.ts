@@ -13,24 +13,33 @@ const routes: Routes = [
   },
   {
     path: 'HomeList',
-    loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+    component: HomePage,
+    // loadChildren: () =>
+    //   import('../home/home.module').then((m) => m.HomePageModule),
   },
   {
     path: 'AdmManageProductPage',
-    loadChildren: () => import('../adm-manage-product/adm-manage-product.module').then( m => m.AdmManageProductPageModule)
+    component: AdmManageProductPage,
+    // loadChildren: () => import('../adm-manage-product/adm-manage-product.module').then( m => m.AdmManageProductPageModule)
   },
   {
     path: 'ListDispatchDeliveryPage',
-    loadChildren: () => import('../list-dispatch-delivery/list-dispatch-delivery.module').then( m => m.ListDispatchDeliveryPageModule),
+    loadChildren: () =>
+      import('../list-dispatch-delivery/list-dispatch-delivery.module').then(
+        (m) => m.ListDispatchDeliveryPageModule
+      ),
   },
   {
     path: 'ChooseDeliveryAddressPage',
-    loadChildren: () => import('../choose-delivery-address/choose-delivery-address.module').then( m => m.ChooseDeliveryAddressPageModule),
+    loadChildren: () =>
+      import('../choose-delivery-address/choose-delivery-address.module').then(
+        (m) => m.ChooseDeliveryAddressPageModule
+      ),
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ChooseStoreRoutingModule { }
+export class ChooseStoreRoutingModule {}

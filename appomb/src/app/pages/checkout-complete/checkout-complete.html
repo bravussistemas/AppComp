@@ -11,13 +11,13 @@
     <page-message-box *ngIf="hasError()" [text]="'REQUEST_SERVER_ERROR' | translate"></page-message-box>
     <ion-spinner [showTimeout]="800" *ngIf="isLoading" class="page-spinner"></ion-spinner>
     <!-- REMOVENDO O "!isLoading" DO NGIF  -->
-    <div *ngIf="isEmptyList()">
+    <div *ngIf="isEmptyList() && !isLoading">
       <page-message-box [text]="'EMPTY_CHECKOUT_LIST' | translate"></page-message-box>
     </div>
 
     <!-- REMOVER O "!isPixPayment()" DO NGIF POR ENQUANTO QUE NÃO ARRUMA O PIX -->
     <!-- REMOVENDO O "!isLoading" DO NGIF  -->
-    <div class="checkout-wrapper" *ngIf="!isEmptyList() && !isPixPayment()">
+    <div class="checkout-wrapper" *ngIf="!isEmptyList() && !isPixPayment() && !isLoading">
 
       <!--   INÍCIO: LISTA DE ITENS NO CARRINHO   -->
       <div class="list-thumb-round">
@@ -248,19 +248,23 @@
         <!--   FINAL: USER PRÉ-PAGO   -->
 
 
-        <ion-list radio-group [(ngModel)]="tipopagamento" *ngIf="!useCredit && storewithpix">
+        <ion-radio-group [(ngModel)]="tipopagamento" *ngIf="!useCredit && storewithpix">
           <ion-list-header>
             Pagamento
           </ion-list-header>
+
           <ion-item>
             <ion-label>Cartão de crédito</ion-label>
-            <ion-radio checked="true" value="cartao"></ion-radio>
+            <ion-radio value="cartao"></ion-radio>
           </ion-item>
+
           <ion-item>
             <ion-label>PIX</ion-label>
             <ion-radio value="pix"></ion-radio>
           </ion-item>
-        </ion-list>
+        </ion-radio-group>
+
+
         <!--   INÍCIO: ESCOLHER FORMA PAGAMENTO   -->
         <button ion-item tappable no-lines *ngIf="!useCredit && tipopagamento ==='cartao'" id="cartaobotao"
           (click)="goToChooseDefaultCard()" [ngClass]="{'line-disabled': useCredit}" class="coupon-item">

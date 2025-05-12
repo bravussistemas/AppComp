@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { ChooseStore } from './pages/choose-store/choose-store';
+import { AdmDetailDispatchOrderPage } from './pages/adm-detail-dispatch-order/adm-detail-dispatch-order';
 
 const routes: Routes = [
   {
@@ -26,6 +27,14 @@ const routes: Routes = [
       import('./pages/choose-store/choose-store.module').then(
         (m) => m.ChooseStoreModule
       ),
+  },
+
+  {
+    path: 'AdmDetailDispatchOrderPage',
+    loadChildren: () =>
+      import(
+        './pages/adm-detail-dispatch-order/adm-detail-dispatch-order.module'
+      ).then((m) => m.AdmDetailDispatchOrderPageModule),
   },
 ];
 

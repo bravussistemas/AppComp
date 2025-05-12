@@ -4,13 +4,13 @@ import { AdmDetailDispatchOrderPage } from './adm-detail-dispatch-order';
 
 const routes: Routes = [
   {
-    path: '',
-    component: AdmDetailDispatchOrderPage
-  }
+    path: ':id',
+    component: AdmDetailDispatchOrderPage,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AdmDetailDispatchOrderRoutingModule {}

@@ -1,5 +1,5 @@
 <ion-header>
-  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address" [buttonIcon]="'chatboxes'"
+  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address" [buttonIcon]="'chatbox'"
     (headerBtnClick)="headerBtnClick()">
   </app-header>
 </ion-header>
@@ -11,14 +11,64 @@
       <ion-icon name="checkmark"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
   <ion-fab vertical="bottom" horizontal="start" *ngIf="reorder">
     <ion-fab-button color="red-button-dark" (click)="cancelReorder()">
       <ion-icon name="close"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
+  <ion-fab slot="fixed" vertical="bottom" horizontal="start"
+    *ngIf="section === SLIDE_DISPATCH && !reorder && isDeliveryStore" #fab>
+    <ion-fab-button color="light-button" (click)="openEditFilterModal()">
+      <ion-icon name="funnel"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" *ngIf="section === SLIDE_DISPATCH && !reorder" #fab>
+    <ion-fab-button color="light-button" (click)="openEditInventoryModal()">
+      <ion-icon name="clipboard"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end"
+    *ngIf="[SLIDE_BREADS, SLIDE_RESALE].indexOf(section) !== -1 && !reorder" #fab>
+    <ion-fab-button color="light-button">
+      <ion-icon name="caret-up-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="openEditInventoryModal()">
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="startReorder()">
+        <ion-icon name="git-compare"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+
+  <!-- buttons ion segments -->
+  <ion-toolbar ion-fixed>
+    <div class="toolbar-lines-content">
+      <ion-segment [(ngModel)]="section" (ionChange)="onSegmentChanged($event)">
+        <ion-segment-button [disabled]="reorder" [value]="SLIDE_BREADS">
+          {{ 'PRODUCTS' | translate }}
+        </ion-segment-button>
+        <ion-segment-button [disabled]="reorder" [value]="SLIDE_RESALE">
+          {{ 'RESALE' | translate }}
+        </ion-segment-button>
+        <ion-segment-button [disabled]="reorder" [value]="SLIDE_DISPATCH">
+          {{ 'DISPATCH' | translate }}
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+  </ion-toolbar>
+
+  <page-message-box *ngIf="hasError()" [text]="'REQUEST_SERVER_ERROR' | translate"></page-message-box>
+
   <!-- Swiper -->
-  <swiper-container [slides-per-view]="1" [loop]="true" [pagination]="true" [navigation]="true" (swiperslidechange)="onSlideChanged($event)" #slider>
+  <swiper-container #mySlider (swiperslidechange)="onSlideChanged($event)">
+
 
     <!-- Slide 1 -->
     <swiper-slide>
@@ -80,17 +130,20 @@
         <ion-row>
           <ion-col size="3">
             <ion-button color="dark" (click)="prevDay()" fill="clear">
-              <ion-icon class="arrow-navigation-left" name="arrow-dropleft"></ion-icon>
+              <ion-icon name="caret-back-outline"></ion-icon>
             </ion-button>
           </ion-col>
+
           <ion-col size="6" class="arrow-navigation-title">
             <ion-button color="dark" (click)="openDatePicker()" fill="clear">
-              <strong>{{ titleDateFilter(day) }}</strong>, {{ day.toDate() | amDateFormat:'L' }}
+              <strong>{{ titleDateFilter(day) }},</strong>
+              <span style="padding-inline-start: 5px;"> {{ day.toDate() | date: 'shortDate' }}</span>
             </ion-button>
           </ion-col>
+
           <ion-col size="3">
             <ion-button color="dark" (click)="nextDay()" fill="clear">
-              <ion-icon class="arrow-navigation-right" name="arrow-dropright"></ion-icon>
+              <ion-icon name="caret-forward-outline"></ion-icon>
             </ion-button>
           </ion-col>
         </ion-row>

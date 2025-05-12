@@ -5,6 +5,7 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import { EventService } from '../../providers/event.service';
 import {
@@ -40,8 +41,9 @@ import { Utils } from '../../utils/utils';
 import { StoreBalance } from '../admin-balance-store/admin-balance-store';
 import { AdminStoreService } from '../../providers/admin-store.service';
 import { EditInventoryDayItemsPage } from '../edit-inventory-day-items/edit-inventory-day-items';
-import { Swiper } from 'swiper';
+
 import { Subscription } from 'rxjs';
+import { register } from 'swiper/element/bundle';
 
 declare let $: any;
 
@@ -51,23 +53,27 @@ declare let $: any;
   styleUrls: ['./adm-manage-product.scss'],
 })
 export class AdmManageProductPage implements OnInit, OnDestroy {
-  @ViewChild('mySlider') slider: Swiper;
+  @ViewChild('mySlider', { static: false }) sliderEl!: ElementRef;
+
   @ViewChild('rootContent', { static: false, read: ElementRef })
   rootContent!: ElementRef;
 
   @ViewChild('fab') fab: IonFab;
+
   @ViewChild(AdmListProductsInventoryComponent)
   listProducts: AdmListProductsInventoryComponent;
+
   @ViewChild(AdmListProductsResellersInventoryComponent)
   listResellersProducts: AdmListProductsResellersInventoryComponent;
+
   private subscriptions: Subscription[] = [];
 
+  SLIDE_DISPATCH = 'dispatch';
   SLIDE_BREADS = 'breads';
   SLIDE_RESALE = 'resale';
-  SLIDE_DISPATCH = 'dispatch';
+  section = this.SLIDE_DISPATCH;
   page = 0;
 
-  section: string = this.SLIDE_DISPATCH;
   day: moment.Moment = this.date.today();
   store: Store;
   todayTxt: string;
@@ -91,13 +97,13 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
 
   set reorder(value: boolean) {
     this._reorder = value;
-    if (this.slider) {
+    if (this.sliderEl) {
       if (value) {
-        this.slider.allowSlideNext = false; // Bloqueia o swipe para frente
-        this.slider.allowSlidePrev = false; // Bloqueia o swipe para trás
+        this.sliderEl.nativeElement.swiper.allowSlideNext = false; // Bloqueia o swipe para frente
+        this.sliderEl.nativeElement.swiper.allowSlidePrev = false; // Bloqueia o swipe para trás
       } else {
-        this.slider.allowSlideNext = true; // Permite o swipe para frente
-        this.slider.allowSlidePrev = true; // Permite o swipe para trás
+        this.sliderEl.nativeElement.swiper.allowSlideNext = true; // Permite o swipe para frente
+        this.sliderEl.nativeElement.swiper.allowSlidePrev = true; // Permite o swipe para trás
       }
     }
   }
@@ -138,7 +144,7 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   };
 
   eventInventoryEdited = () => {
-    this.slider.slideTo(0);
+    this.sliderEl.nativeElement.swiper.slideTo(0);
   };
 
   ngOnInit(): void {
@@ -194,14 +200,18 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
     if (this.reorder) {
       return;
     }
+    // register();
     let selectedIndex = this.slides.findIndex((slide) => {
-      return slide.id === segmentButton.value;
+      register();
+      return slide.id === segmentButton.detail.value;
     });
-    this.slider.slideTo(selectedIndex);
+
+    this.sliderEl.nativeElement.swiper.slideTo(selectedIndex);
   }
 
   onSlideChanged(slider) {
     const currentSlide = this.slides[slider.target.swiper.activeIndex];
+
     if (currentSlide) {
       this.section = currentSlide.id;
       return;
@@ -219,7 +229,7 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   updateSliderProportions() {
     if (!this.rootContent) return;
 
-    const rootEl = this.rootContent.nativeElement as HTMLElement;
+    const rootEl = this.rootContent.nativeElement;
 
     // Encontra o swiper-container e os slides
     const swiperContainer = rootEl.querySelector('swiper-container');
@@ -235,16 +245,16 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
 
     const availableHeight = contentHeight - reservedHeight;
 
-    slides.forEach((slide: Element) => {
-      const slideEl = slide as HTMLElement;
-      slideEl.style.height = `${availableHeight}px`;
+    // slides.forEach((slide: Element) => {
+    //   const slideEl = slide as HTMLElement;
+    //   slideEl.style.height = `${availableHeight}px`;
 
-      // Se tiver algum elemento com .slide-zoom dentro do slide
-      const zoomEl = slideEl.querySelector('.slide-zoom') as HTMLElement;
-      if (zoomEl) {
-        zoomEl.style.minHeight = `${availableHeight}px`;
-      }
-    });
+    //   // Se tiver algum elemento com .slide-zoom dentro do slide
+    //   const zoomEl = slideEl.querySelector('.slide-zoom') as HTMLElement;
+    //   if (zoomEl) {
+    //     zoomEl.style.minHeight = `${availableHeight}px`;
+    //   }
+    // });
   }
 
   setDay(day: moment.Moment) {
@@ -333,18 +343,20 @@ export class AdmManageProductPage implements OnInit, OnDestroy {
   }
 
   headerBtnClick() {
-    return this.router.navigate(['/add-operating-day-note'], {
+    return this.router.navigate(['/AddOperatingDayNotePage'], {
       queryParams: {
-        day: this.day,
+        day: this.day.toISOString(),
         noteType: NoteTypeEnum.NORMAL,
       },
     });
   }
 
   async openEditInventoryModal() {
+    register();
     this.fab.close();
     const resellerMode =
-      this.slides[this.slider.activeIndex].id === this.SLIDE_RESALE;
+      this.slides[this.sliderEl.nativeElement.swiper.activeIndex].id ===
+      this.SLIDE_RESALE;
 
     try {
       const modal = await this.modalCtrl.create({

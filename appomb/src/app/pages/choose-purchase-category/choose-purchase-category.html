@@ -1,6 +1,5 @@
-<app-header [buttonIcon]="getHeaderAction()?.icon" 
-[iconClass]="getHeaderAction()?.iconClass" 
-(headerBtnClick)="getHeaderAction()?.handler($event)"></app-header>
+<app-header [buttonIcon]="getHeaderAction()?.icon" [iconClass]="getHeaderAction()?.iconClass"
+  (headerBtnClick)="getHeaderAction()?.handler($event)"></app-header>
 
 <ion-content>
   <ng-container *ngIf="loading; else mainContent">
@@ -24,9 +23,10 @@
     <ion-list>
       <!-- Lojas -->
       <ng-container *ngIf="storesState?.has_normal_stores || hasErrorLoadStoreState">
-        <ion-item id="btn-stores" [disabled]="disableBtns" class="store-item gray-item-new" (click)="chooseStores()">
-          <i class="main-menu-fa-icon svg-icon-flat" >
-            <img slot="start" class="main-menu-fa-icon svg-icon-flat" src="assets/svg/icons/shop.svg"/>
+        <ion-item id="btn-stores" [disabled]="disableBtns" class="store-item gray-item-new"
+          (click)="chooseStores(storeType.NORMAL, deliveryType.MAIN)">
+          <i class="main-menu-fa-icon svg-icon-flat">
+            <img slot="start" class="main-menu-fa-icon svg-icon-flat" src="assets/svg/icons/shop.svg" />
           </i>
           <ion-label>
             <h1>Lojas</h1>
@@ -56,7 +56,7 @@
         <ion-item [disabled]="disableBtns" class="store-item gray-item-new"
           (click)="chooseStores(storeType.DELIVERY, deliveryType.PIZZA)">
           <i class="main-menu-fa-icon svg-icon-flat">
-            <img slot="start" src="assets/svg/icons/pizza.svg"/>
+            <img slot="start" src="assets/svg/icons/pizza.svg" />
           </i>
           <ion-label>
             <h1>Entrega de pizzas</h1>
@@ -75,7 +75,7 @@
       <ion-list>
         <ion-item [disabled]="disableBtns" class="store-item gray-item-new" (click)="chooseLastRequest()">
           <i class="main-menu-fa-icon svg-icon-flat">
-            <img slot="start" src="assets/svg/icons/previous.svg"/>
+            <img slot="start" src="assets/svg/icons/previous.svg" />
           </i>
           <ion-label>
             <h1>{{ lastRequestSettings.title }}</h1>

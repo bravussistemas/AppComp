@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Moment } from 'moment';
 import { LoadingHelper } from '../../utils/loading-helper';
 import { Store, StoreTypeEnum } from '../../shared/models/store.model';
@@ -7,16 +15,19 @@ import { FirebaseDbService } from '../../providers/firebase-db-service';
 import {
   DispatchOrderAdminList,
   DispatchOrderByDeliveryArea,
-  DispatchOrderByHour
+  DispatchOrderByHour,
 } from '../../shared/models/dispatch-order.model';
 import { Utils } from '../../utils/utils';
-import { DispatchFilterData, DispatchFilterService } from '../../providers/dispatch-filter.service';
+import {
+  DispatchFilterData,
+  DispatchFilterService,
+} from '../../providers/dispatch-filter.service';
 import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'adm-list-dispatch-orders',
   templateUrl: './adm-list-dispatch-orders.html',
-  styleUrl: './adm-list-dispatch-orders.scss'
+  styleUrl: './adm-list-dispatch-orders.scss',
 })
 export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
   @Input('user') user: User;
@@ -28,11 +39,13 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.dispatchFilterSub = this.dispatchFilterService.changed$.subscribe((data) => {
-      // console.log('changed!', data);
-      this.dispatchFilter = data;
-      this.ref.detectChanges();
-    })
+    this.dispatchFilterSub = this.dispatchFilterService.changed$.subscribe(
+      (data) => {
+        // console.log('changed!', data);
+        this.dispatchFilter = data;
+        this.ref.detectChanges();
+      }
+    );
   }
 
   private day: Moment;
@@ -58,16 +71,27 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
     return this._data;
   }
 
-  @Input() mapList: (items: DispatchOrderAdminList[]) => DispatchOrderAdminList[];
-  @Output() listUpdated: EventEmitter<DispatchOrderAdminList[]> = new EventEmitter<DispatchOrderAdminList[]>();
+  @Input() mapList: (
+    items: DispatchOrderAdminList[]
+  ) => DispatchOrderAdminList[];
+  @Output() listUpdated: EventEmitter<DispatchOrderAdminList[]> =
+    new EventEmitter<DispatchOrderAdminList[]>();
 
   @Input()
   set data(value: { store: Store; day: Moment }) {
     this._data = value;
-    if (Utils.isNullOrUndefined(value) || Utils.isObjectEmpty(value) || Utils.isNullOrUndefined(value.day) || Utils.isNullOrUndefined(value.store)) {
+    if (
+      Utils.isNullOrUndefined(value) ||
+      Utils.isObjectEmpty(value) ||
+      Utils.isNullOrUndefined(value.day) ||
+      Utils.isNullOrUndefined(value.store)
+    ) {
       return;
     }
-    if (value.day.isSame(this.day, 'date') && (this.store && this.store.id) === value.store.id) {
+    if (
+      value.day.isSame(this.day, 'date') &&
+      (this.store && this.store.id) === value.store.id
+    ) {
       return;
     }
     this.day = value.day;
@@ -75,13 +99,14 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
     this.update();
   }
 
-  private _data: { store: Store, day: Moment };
+  private _data: { store: Store; day: Moment };
 
-  constructor(public loadingHelper: LoadingHelper,
-              private ref: ChangeDetectorRef,
-              public dispatchFilterService: DispatchFilterService,
-              private firebaseService: FirebaseDbService,) {
-  }
+  constructor(
+    public loadingHelper: LoadingHelper,
+    private ref: ChangeDetectorRef,
+    public dispatchFilterService: DispatchFilterService,
+    private firebaseService: FirebaseDbService
+  ) {}
 
   listItemUpdated() {
     this.updateItemsList(this.items);
@@ -92,19 +117,24 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
     this.loadingHelper.setLoading('dispatchOrders', true);
     this.allSubs.unsubscribe();
     this.allSubs = new Subscription();
-    this.dispatchFilterService.get().then(data => {
+    this.dispatchFilterService.get().then((data) => {
       this.dispatchFilter = data;
-      this.allSubs.add(this.firebaseService.listDispatchOrders(this.day, this.store.id).subscribe(
-        (resp) => {
-          resp = this.mapList ? this.mapList(resp) : resp;
-          this.items = resp;
-          this.updateItemsList(resp);
-          this.listUpdated.emit(resp);
-          this.serverReturned = true;
-          this.loadingHelper.setLoading('dispatchOrders', false);
-        },
-        () => this.handlerError()
-      ));
+
+      this.allSubs.add(
+        this.firebaseService
+          .listDispatchOrders(this.day, this.store.id)
+          .subscribe(
+            (resp) => {
+              resp = this.mapList ? this.mapList(resp) : resp;
+              this.items = resp;
+              this.updateItemsList(resp);
+              this.listUpdated.emit(resp);
+              this.serverReturned = true;
+              this.loadingHelper.setLoading('dispatchOrders', false);
+            },
+            () => this.handlerError()
+          )
+      );
     });
   }
 
@@ -117,38 +147,40 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
       return value.is_clo === false && !value.has_plm;
     });
 
-    this.itemsStoreNormal = itemsOpened.filter(i => !i.is_del);
+    this.itemsStoreNormal = itemsOpened.filter((i) => !i.is_del);
 
     const result: { [key: number]: DispatchOrderByHour } = {};
 
     function makeLabel(value) {
       if (!value) return '';
-      return `${value.split(':')[0]}H`
+      return `${value.split(':')[0]}H`;
     }
 
     function makeStartHour(value): number {
       if (!value) return 0;
-      return parseInt(value.split(':')[0] || 0) || 0
+      return parseInt(value.split(':')[0] || 0) || 0;
     }
 
-    itemsOpened.filter(i => i.is_del).forEach((item) => {
-      if (!result.hasOwnProperty(item.d_hour_id)) {
-        result[item.d_hour_id] = {
-          id: item.d_hour_id,
-          label: `${makeLabel(item.d_hour_s)} - ${makeLabel(item.d_hour_e)}`,
-          startHour: makeStartHour(item.d_hour_s),
-          items: [item],
-          itemsByDeliveryArea: [],
-          count: 1,
-          countWithDeliveryMan: item.del_emp ? 1 : 0,
-          opened: this.itemsOpened.indexOf(item.d_hour_id) !== -1
+    itemsOpened
+      .filter((i) => i.is_del)
+      .forEach((item) => {
+        if (!result.hasOwnProperty(item.d_hour_id)) {
+          result[item.d_hour_id] = {
+            id: item.d_hour_id,
+            label: `${makeLabel(item.d_hour_s)} - ${makeLabel(item.d_hour_e)}`,
+            startHour: makeStartHour(item.d_hour_s),
+            items: [item],
+            itemsByDeliveryArea: [],
+            count: 1,
+            countWithDeliveryMan: item.del_emp ? 1 : 0,
+            opened: this.itemsOpened.indexOf(item.d_hour_id) !== -1,
+          };
+        } else {
+          result[item.d_hour_id].items.push(item);
+          result[item.d_hour_id].count += 1;
+          result[item.d_hour_id].countWithDeliveryMan += item.del_emp ? 1 : 0;
         }
-      } else {
-        result[item.d_hour_id].items.push(item);
-        result[item.d_hour_id].count += 1;
-        result[item.d_hour_id].countWithDeliveryMan += item.del_emp ? 1 : 0;
-      }
-    });
+      });
     let resultArray: DispatchOrderByHour[] = [];
     for (const item in result) {
       resultArray.push(result[item]);
@@ -162,7 +194,8 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
     });
     // console.log(this.itemsOpenedByDelivery);
     resultArray.forEach((item) => {
-      let resultByDeliveryArea: { [key: number]: DispatchOrderByDeliveryArea } = {};
+      let resultByDeliveryArea: { [key: number]: DispatchOrderByDeliveryArea } =
+        {};
       item.items.forEach((sale) => {
         if (!resultByDeliveryArea.hasOwnProperty(sale.d_area_id)) {
           resultByDeliveryArea[sale.d_area_id] = {
@@ -172,12 +205,13 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
             items: [sale],
             count: 1,
             countWithDeliveryMan: sale.del_emp ? 1 : 0,
-            opened: this.itemsOpenedByDelivery.indexOf(sale.d_area_id) !== -1
-          }
+            opened: this.itemsOpenedByDelivery.indexOf(sale.d_area_id) !== -1,
+          };
         } else {
           resultByDeliveryArea[sale.d_area_id].items.push(sale);
           resultByDeliveryArea[sale.d_area_id].count += 1;
-          resultByDeliveryArea[sale.d_area_id].countWithDeliveryMan += sale.del_emp ? 1 : 0;
+          resultByDeliveryArea[sale.d_area_id].countWithDeliveryMan +=
+            sale.del_emp ? 1 : 0;
         }
       });
       // console.log('resultByDeliveryArea', resultByDeliveryArea);
@@ -201,15 +235,13 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
     this.itemsClosed = items.filter((value: DispatchOrderAdminList) => {
       return value.is_clo === true && !value.has_plm;
     });
-
-  };
+  }
 
   isEmptyList() {
     return this.serverReturned && !this.items.length;
   }
 
-  handlerError() {
-  }
+  handlerError() {}
 
   openGroup(group) {
     group.opened = !group.opened;
@@ -225,7 +257,10 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
     if (group.opened) {
       this.itemsOpenedByDelivery.push(group.id);
     } else {
-      this.itemsOpenedByDelivery.splice(this.itemsOpenedByDelivery.indexOf(group.id), 1);
+      this.itemsOpenedByDelivery.splice(
+        this.itemsOpenedByDelivery.indexOf(group.id),
+        1
+      );
     }
     // console.log(this.itemsOpenedByDelivery);
   }
@@ -233,6 +268,4 @@ export class AdmListDispatchOrdersComponent implements OnDestroy, OnInit {
   get isAdminOrSeller() {
     return Utils.isAdminOrStoreSeller(this.user, this.store);
   }
-
-
 }

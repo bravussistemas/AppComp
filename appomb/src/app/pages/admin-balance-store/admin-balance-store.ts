@@ -147,12 +147,11 @@ export class AdminBalanceStorePage implements OnInit {
       delivery_employee: [''],
     });
     this.form.get('delivery_employee').valueChanges.subscribe((v) => {
-      console.log('Está aqui, ', v);
-      
       this.employeIdFilter = v;
       this.loadBalance();
     });
-    // this.loadBalance();
+
+    this.loadBalance();
   }
 
   canChooseEmployee() {

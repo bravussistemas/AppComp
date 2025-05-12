@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { DispatchFilterData, DispatchFilterService } from '../../providers/dispatch-filter.service';
+import {
+  DispatchFilterData,
+  DispatchFilterService,
+} from '../../providers/dispatch-filter.service';
 import { DeliveryEmployeeSimple } from '../../shared/models/store.model';
 import { ActivatedRoute, Route } from '@angular/router';
 
@@ -21,8 +24,10 @@ export class EditDispatchFilterPage implements OnInit {
     private modalCtrl: ModalController,
     private dispatchFilterService: DispatchFilterService,
     private route: ActivatedRoute
-  ) {    
-    this.deliveryEmployeesFilter = JSON.parse(this.route.snapshot.paramMap.get('deliveryEmployeesFilter'));
+  ) {
+    this.deliveryEmployeesFilter = JSON.parse(
+      this.route.snapshot.paramMap.get('deliveryEmployeesFilter')
+    );
   }
 
   ngOnInit() {

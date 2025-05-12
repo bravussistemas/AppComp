@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, IonInput } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '../../utils/form-errors';
@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './coupons-register.html',
   styleUrl: './coupons-register.scss',
 })
-export class CouponsRegisterPage {
+export class CouponsRegisterPage implements OnInit {
   form: FormGroup;
   formErrors: FormErrors;
   dataForm: { coupon: string };
@@ -49,7 +49,7 @@ export class CouponsRegisterPage {
     this.buildForm();
   }
 
-  ionViewDidLoad() {
+  ngOnInit() {
     setTimeout(() => {
       this.input.setFocus();
     }, 500);
@@ -58,12 +58,22 @@ export class CouponsRegisterPage {
     });
   }
 
+  // ionViewDidLoad() {
+  //   setTimeout(() => {
+  //     this.input.setFocus();
+  //   }, 500);
+  //   this.settingsService.getSettings().then((result: IUserSettings) => {
+  //     this.store = result.store;
+  //   });
+  // }
+
   onSubmit(valid) {
     this.formErrors.setSubmitted();
     if (!valid) {
       return;
     }
     this.loadingHelper.show('Validando cupom, aguarde...');
+
     this.couponsService
       .register({
         coupon: this.form.get('coupon').value.toString().toUpperCase(),

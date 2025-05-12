@@ -1,18 +1,13 @@
-<ion-item
-  [ngClass]="{
+<ion-item [ngClass]="{
     'dispatch-closed': item?.is_clo && !item?.has_plm,
     'adm-sale': item?.is_ads
-  }"
-  *ngFor="let item of items | dispatchOrderFilter: { name: searchTerm, dispatchFilter: dispatchFilter }"
->
+  }" *ngFor="let item of items | dispatchOrderFilter: { name: searchTerm, dispatchFilter: dispatchFilter }">
   <ion-grid>
-    <ion-row
-      [ngClass]="{
+    <ion-row [ngClass]="{
         'line-canceled': item?.is_rev,
         'line-recurring': item?.is_rod && !item?.is_ads,
         'line-problem': item?.has_plm
-      }"
-    >
+      }">
       <ion-col size="10" (click)="goToDetail(item.id)">
         <ion-grid>
           <ion-row>
@@ -23,7 +18,8 @@
           <ion-row>
             <ion-col size="3" *ngIf="!item?.is_ads">
               <ion-avatar *ngIf="item?.c_photo">
-                <img [src]="item?.c_photo"  [style.display]="imageError ? 'none' : 'block'" (error)="imageError = true" />
+                <img [src]="item?.c_photo" [style.display]="imageError ? 'none' : 'block'"
+                  (error)="imageError = true" />
               </ion-avatar>
             </ion-col>
             <ion-col size="5" class="centered-text-v name-color">
@@ -60,9 +56,8 @@
             <ion-col size="12" style="font-size: 1.3rem; word-wrap: break-word; white-space: initial;">
               <strong>Endereço:</strong> {{ item.del_f_addr || item.del_addr }}<br /><br />
               <span *ngIf="item.is_del_rec"><i><strong>* Entregar na portaria</strong></i><br /></span>
-              <span *ngIf="item.is_d_free"
-                ><i>* Frete grátis <span *ngIf="item.is_d_free_r">({{ item.is_d_free_r }})</span></i><br
-              /></span>
+              <span *ngIf="item.is_d_free"><i>* Frete grátis <span *ngIf="item.is_d_free_r">({{ item.is_d_free_r
+                    }})</span></i><br /></span>
             </ion-col>
           </ion-row>
           <ion-row *ngIf="item?.is_del && item?.d_sch_dt">
@@ -76,31 +71,19 @@
       <ion-col size="2" class="dispatch-buttons" *ngIf="!item?.is_ads">
         <ul>
           <li class="fix-height-ios" style="border-bottom: 1px solid #ccc;">
-            <button
-              *ngIf="item?.is_del && !item?.is_clo && canChangeDeliveryEmployee"
-              class="btn-toggle-is-closed fix-height-ios"
-              (click)="openChooseDeliveryEmployee(item)"
-            >
+            <button *ngIf="item?.is_del && !item?.is_clo && canChangeDeliveryEmployee"
+              class="btn-toggle-is-closed fix-height-ios" (click)="openChooseDeliveryEmployee(item)">
               <ion-icon name="bicycle-outline"></ion-icon>
             </button>
-            <button
-              *ngIf="!item?.is_cli_not && item?.is_del && !item?.is_clo && !canChangeDeliveryEmployee"
-              class="btn-toggle-is-closed fix-height-ios"
-              (click)="notifyDeliveryComming(item)"
-            >
+            <button *ngIf="!item?.is_cli_not && item?.is_del && !item?.is_clo && !canChangeDeliveryEmployee"
+              class="btn-toggle-is-closed fix-height-ios" (click)="notifyDeliveryComming(item)">
               <ion-icon name="megaphone-outline"></ion-icon>
             </button>
           </li>
           <li *ngIf="!item?.is_rev" style="background-color: #dedede;" class="fix-height-ios">
             <ion-spinner *ngIf="isLoading(item)"></ion-spinner>
-            <button
-              *ngIf="!isLoading(item)"
-              class="btn-toggle-is-closed fix-height-ios"
-              (click)="toggleIsClosed(item)"
-            >
-              <ion-icon
-                [name]="item?.has_plm ? 'checkmark' : item.is_clo ? 'undo' : 'checkmark-outline'"
-              ></ion-icon>
+            <button *ngIf="!isLoading(item)" class="btn-toggle-is-closed fix-height-ios" (click)="toggleIsClosed(item)">
+              <ion-icon [name]="item?.has_plm ? 'checkmark' : item.is_clo ? 'undo' : 'checkmark-outline'"></ion-icon>
               <span class="solved-item" *ngIf="item?.has_plm">resolvido</span>
             </button>
           </li>

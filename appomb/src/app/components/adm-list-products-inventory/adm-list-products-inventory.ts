@@ -8,9 +8,14 @@ import { Subscription } from 'rxjs';
 import { FirebaseDbService } from '../../providers/firebase-db-service';
 import { ProductInventoryDay } from '../../shared/models/product-inventory-day.model';
 import { ProductInventory } from '../../providers/product-inventory';
-import { AdminStoreService, ChangeOrderDTO } from '../../providers/admin-store.service';
+import {
+  AdminStoreService,
+  ChangeOrderDTO,
+} from '../../providers/admin-store.service';
 
-export let parseProductInventoryToReorder = (items: ProductInventoryDay[]): ChangeOrderDTO[] => {
+export let parseProductInventoryToReorder = (
+  items: ProductInventoryDay[]
+): ChangeOrderDTO[] => {
   return items.map((item, index) => ({ id: item.id, item_order: index }));
 };
 
@@ -76,7 +81,7 @@ export class AdmListProductsInventoryComponent {
     private adminStoreService: AdminStoreService,
     private productInventory: ProductInventory
   ) {}
-  
+
   hasError() {
     return this.error;
   }
@@ -93,20 +98,22 @@ export class AdmListProductsInventoryComponent {
 
   getInventoryDay() {
     this.unsubscribe();
-    this.firebaseSub = this.firebaseService.getDay(this.day, this.store.id).subscribe(
-      (resp) => {
-        if (!this._canReorder) {
-          this.items = parseItemsWithoutReseller(resp);
-          this.itemsWasSet.emit();
+    this.firebaseSub = this.firebaseService
+      .getDay(this.day, this.store.id)
+      .subscribe(
+        (resp) => {
+          if (!this._canReorder) {
+            this.items = parseItemsWithoutReseller(resp);
+            this.itemsWasSet.emit();
+          }
+          this.serverReturned = true;
+          this.loadingHelper.setLoading('productsInventory', false);
+        },
+        () => {
+          this.error = true;
+          this.loadingHelper.setLoading('productsInventory', false);
         }
-        this.serverReturned = true;
-        this.loadingHelper.setLoading('productsInventory', false);
-      },
-      () => {
-        this.error = true;
-        this.loadingHelper.setLoading('productsInventory', false);
-      }
-    );
+      );
   }
 
   toggleProductDay(item: ProductInventoryDay) {
@@ -141,16 +148,18 @@ export class AdmListProductsInventoryComponent {
 
   saveReorder() {
     this.loadingHelper.show();
-    this.adminStoreService.changeOrder(parseProductInventoryToReorder(this.items)).subscribe(
-      () => {
-        this.loadingHelper.hide();
-      },
-      () => {
-        this.loadingHelper.hide();
-        this.trans.get(['ERROR', 'ERROR_REQUEST']).subscribe((res: any) => {
-          this.alertHelper.show(res.ERROR, res.ERROR_REQUEST);
-        });
-      }
-    );
+    this.adminStoreService
+      .changeOrder(parseProductInventoryToReorder(this.items))
+      .subscribe(
+        () => {
+          this.loadingHelper.hide();
+        },
+        () => {
+          this.loadingHelper.hide();
+          this.trans.get(['ERROR', 'ERROR_REQUEST']).subscribe((res: any) => {
+            this.alertHelper.show(res.ERROR, res.ERROR_REQUEST);
+          });
+        }
+      );
   }
 }

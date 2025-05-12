@@ -1,26 +1,17 @@
-<ion-searchbar
-  *ngIf="items?.length"
-  [(ngModel)]="searchText"
-  [showCancelButton]="true"
-  [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-  [animated]="true">
+<ion-searchbar *ngIf="items?.length" [(ngModel)]="searchText" [showCancelButton]="true"
+  [placeholder]="'SEARCH_PLACEHOLDER' | translate" [animated]="true">
 </ion-searchbar>
 
 <ion-spinner *ngIf="loadingHelper.isLoading('dispatchOrders')" class="page-spinner"></ion-spinner>
 
 <div *ngIf="isEmptyList() && !loadingHelper.isLoading('dispatchOrders')">
-  <page-message-box
-    [text]="'EMPTY_DISPATCH_ORDER' | translate"></page-message-box>
+  <page-message-box [text]="'EMPTY_DISPATCH_ORDER' | translate"></page-message-box>
 </div>
 
 <ion-list class="dispatch-list" *ngIf="serverReturned && !isEmptyList() && !loadingHelper.isLoading('dispatchOrders')">
 
-  <adm-dispatch-list-item [items]="itemsWithProblem"
-                          [searchTerm]="searchText"
-                          [user]="user"
-                          [store]="store"
-                          [dispatchFilter]="dispatchFilter"
-                          (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
+  <adm-dispatch-list-item [items]="itemsWithProblem" [searchTerm]="searchText" [user]="user" [store]="store"
+    [dispatchFilter]="dispatchFilter" (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
 
   <ng-container *ngIf="itemsByDeliveryHour?.length">
     <div *ngFor="let item of itemsByDeliveryHour" class="items-group" [ngClass]="{'opened': item.opened}">
@@ -30,15 +21,12 @@
 
       <div *ngFor="let itemI of item.itemsByDeliveryArea" class="items-group" [ngClass]="{'opened': itemI.opened}">
         <ion-item-divider (click)="openGroupDelivery(itemI)">
-          {{itemI.label}} <span>(<span *ngIf="isAdminOrSeller">{{itemI.countWithDeliveryMan}}/</span>{{itemI.count}})</span>
+          {{itemI.label}} <span>(<span
+              *ngIf="isAdminOrSeller">{{itemI.countWithDeliveryMan}}/</span>{{itemI.count}})</span>
         </ion-item-divider>
 
-        <adm-dispatch-list-item [items]="itemI.items"
-                                [searchTerm]="searchText"
-                                [user]="user"
-                                [store]="store"
-                                [dispatchFilter]="dispatchFilter"
-                                (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
+        <adm-dispatch-list-item [items]="itemI.items" [searchTerm]="searchText" [user]="user" [store]="store"
+          [dispatchFilter]="dispatchFilter" (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
       </div>
       <hr>
 
@@ -46,21 +34,13 @@
     <hr>
   </ng-container>
 
-  <adm-dispatch-list-item [items]="itemsStoreNormal"
-                          [searchTerm]="searchText"
-                          [user]="user"
-                          [store]="store"
-                          [dispatchFilter]="dispatchFilter"
-                          (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
+  <adm-dispatch-list-item [items]="itemsStoreNormal" [searchTerm]="searchText" [user]="user" [store]="store"
+    [dispatchFilter]="dispatchFilter" (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
 
 
   <ion-item-divider color="light-divider">
     {{ 'ORDERS_DELIVER' | translate }}
   </ion-item-divider>
-  <adm-dispatch-list-item [items]="itemsClosed"
-                          [searchTerm]="searchText"
-                          [user]="user"
-                          [store]="store"
-                          [dispatchFilter]="dispatchFilter"
-                          (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
+  <adm-dispatch-list-item [items]="itemsClosed" [searchTerm]="searchText" [user]="user" [store]="store"
+    [dispatchFilter]="dispatchFilter" (listItemUpdated)="listItemUpdated()"></adm-dispatch-list-item>
 </ion-list>

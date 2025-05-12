@@ -593,14 +593,13 @@ export class CheckoutComplete implements OnInit, OnDestroy {
   }
 
   loadPixInfo(store: Store) {
+    console.log(store);
     this.loadingHelper.setLoading('pixinfo', true);
     this.pix.verifypix(store.id).subscribe((resp) => {
       this.storewithpix = resp.result;
       console.log(this.storewithpix);
     });
   }
-
-  
 
   ngOnInit() {
     this.trackHelper.trackByName(TrackHelper.EVENTS.OPEN_CHECKOUT_PAGE);
@@ -631,7 +630,6 @@ export class CheckoutComplete implements OnInit, OnDestroy {
       }
 
       this.productsPrice = 0;
-      console.log('zerei o subtotal');
 
       this.cartManagerTable.init().then(() => {
         this.settingsService
@@ -679,7 +677,6 @@ export class CheckoutComplete implements OnInit, OnDestroy {
                 .getByIds(ids, this.store.id)
                 .toPromise()
                 .then((resp) => {
-                  console.log('limpa os dias e reseta');
                   this.reset();
                   const data = resp.data;
                   for (let day in data) {
@@ -702,8 +699,6 @@ export class CheckoutComplete implements OnInit, OnDestroy {
               if (afterClearDay) {
                 this.router.navigate(['/home']);
               } else {
-                console.log('vim pelo reset');
-
                 this.reset();
                 this.loadingHelper.setLoading('checkoutList', false);
               }

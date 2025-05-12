@@ -1,19 +1,21 @@
 <ion-header>
-  <app-header
-    [title]="store?.name"
-    [subTitle]="store?.address?.get_simple_address"></app-header>
+  <app-header [title]="store?.name" [subTitle]="store?.address?.get_simple_address"></app-header>
 
   <ion-toolbar *ngIf="user?.is_staff" class="ion-padding">
     <ion-segment [(ngModel)]="noteType" (ionChange)="onSegmentChanged($event)">
+
       <ion-segment-button [value]="noteTypeEnum.NORMAL">
         Simples
       </ion-segment-button>
+
       <ion-segment-button [value]="noteTypeEnum.WARNING">
         Pop-up
       </ion-segment-button>
+
       <ion-segment-button [value]="noteTypeEnum.SUBTITLE">
         Subtítulo
       </ion-segment-button>
+
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -44,6 +46,7 @@
       <ng-container *ngIf="!hasNote()">
         <p class="ion-text-center">Nenhuma mensagem ativa</p>
       </ng-container>
+
       <ng-container *ngIf="hasNote()">
         <ion-item>
           <ion-label>
@@ -61,6 +64,7 @@
           </ion-buttons>
         </ion-item>
       </ng-container>
+
     </ion-list>
 
     <ion-item-divider>Outras mensagens</ion-item-divider>
@@ -97,14 +101,15 @@
 
         <ion-item>
           <ion-label color="primary" position="stacked">Dia</ion-label>
-          <ion-input (click)="openDatePicker()" type="text" formControlName="day" readonly
-                     [value]="day | amDateFormat:'DD/MM/YYYY'"></ion-input>
+          <ion-input (click)="openDatePicker()" type="text" readonly
+            [value]="form.get('day').value | amDateFormat:'DD/MM/YYYY'"></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label color="primary" position="stacked">Repetir</ion-label>
-          <ion-select [(ngModel)]="selectedRepeatPeriod" formControlName="repeat_period">
-            <ion-select-option *ngFor="let period of periods" [value]="period.value">{{ period.label }}</ion-select-option>
+          <ion-select formControlName="repeat_period">
+            <ion-select-option *ngFor="let period of periods" [value]="period.value">{{ period.label
+              }}</ion-select-option>
           </ion-select>
         </ion-item>
         <ul class="list-input-errors" *ngIf="formErrors.submitted && formErrors.getErrors().repeat_period?.length">
@@ -121,12 +126,13 @@
         <div *ngIf="noteType === noteTypeEnum.WARNING">
           <ion-item>
             <ion-label color="primary" position="stacked">Tipo do pop-up</ion-label>
-            <ion-select [(ngModel)]="selectedPopupType" formControlName="popup_type">
-              <ion-select-option *ngFor="let poptype of popupTypes" [value]="poptype.value">{{ poptype.label }}</ion-select-option>
+            <ion-select formControlName="popup_type">
+              <ion-select-option *ngFor="let poptype of popupTypes" [value]="poptype.value">{{ poptype.label
+                }}</ion-select-option>
             </ion-select>
           </ion-item>
 
-          <ng-container *ngIf="selectedPopupType == 1">
+          <ng-container *ngIf="form.get('popup_type').value === 1">
             <ion-item>
               <ion-label color="primary" position="stacked">Número da versão (ex: 1.12.2)</ion-label>
               <ion-input formControlName="app_version_to_update" type="text"></ion-input>

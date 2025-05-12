@@ -5,7 +5,7 @@ import { OperatingDaysNote } from './operating-day-note.model';
 export enum StoreTypeEnum {
   NORMAL = 0,
   POINT_OF_SALES = 1,
-  DELIVERY = 2
+  DELIVERY = 2,
 }
 
 export enum DeliveryTypeEnum {

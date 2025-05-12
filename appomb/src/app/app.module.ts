@@ -110,7 +110,11 @@ import { EditProductActivesModule } from './pages/edit-product-actives/edit-prod
 import { AdmManageProductPageModule } from './pages/adm-manage-product/adm-manage-product.module';
 import { AdmManagerUserCreditsPageModule } from './pages/adm-manager-user-credits/adm-manager-user-credits.module';
 import { AdmDetailUserCreditsPageModule } from './pages/adm-detail-user-credits/adm-detail-user-credits.module';
+
 import { AddOperatingDayNotePageModule } from './pages/add-operating-day-note/add-operating-day-note.module';
+
+import { AdmDetailDispatchOrderPageModule } from './pages/adm-detail-dispatch-order/adm-detail-dispatch-order.module';
+import { EditDispatchFilterPageModule } from './pages/edit-dispatch-filter/edit-dispatch-filter.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -163,7 +167,11 @@ registerLocaleData(localePt);
     ForgotPasswordModule,
     CardErrorPopUpModule,
     AdmManageProductPageModule,
-    // AdmDetailUserCreditsPageModule,
+    
+    EditDispatchFilterPageModule,
+
+
+
     ChooseDeliveryHourPageModule,
     ChooseDeliveryAddressPageModule,
     RegisterMobilePhoneModule,
