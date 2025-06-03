@@ -47,8 +47,7 @@
                 </ion-item>
 
                 <ng-container *ngFor="let p of pages">
-                    <ion-item *ngIf="!p.onlyLogged || userIsLoggedIn" button 
-                    (click)="openPage(p)">
+                    <ion-item *ngIf="!p.onlyLogged || userIsLoggedIn" button (click)="openPage(p)">
                         <ion-icon slot="start" [name]="p.icon" color="primary"></ion-icon>
                         <ion-label [innerHTML]="p.title | translate"></ion-label>
                     </ion-item>
@@ -110,7 +109,10 @@
                 </ion-item>
 
                 <ion-item>
-                    {{ appName }} <span class="app-version">{{ version }}</span>
+                    {{ appName }}
+                    <span class="app-version">
+                        {{ versaoApp }}
+                    </span>
                 </ion-item>
             </ion-list>
         </ion-footer>

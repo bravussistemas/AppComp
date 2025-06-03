@@ -59,7 +59,7 @@ declare let cordova: any;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.html',
-  styleUrls: ['app.component.scss'],
+  styleUrls: ['app.scss'],
   standalone: false,
 })
 export class AppComponent implements OnDestroy, OnInit {
@@ -512,11 +512,11 @@ export class AppComponent implements OnDestroy, OnInit {
   async obterVersaoApp() {
     const info = await App.getInfo();
     this.versaoApp = info.version;
-    console.log('Versão do App:', this.versaoApp);
+    console.log('Essa é Versão do App:', this.versaoApp);
   }
 
   saveAppVersion() {
-    if (this.platform.is('cordova')) {
+    if (Capacitor.getPlatform() !== 'web') {
       this.obterVersaoApp().then((version) => {
         this.auth.updateAppVersion(version).subscribe(
           () => console.debug(`App version saved!`),
@@ -532,7 +532,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   setVersionApp() {
-    if (this.platform.is('cordova')) {
+    if (Capacitor.getPlatform() !== 'web') {
       App.getInfo().then((version) => {
         this.version = version.build;
       });

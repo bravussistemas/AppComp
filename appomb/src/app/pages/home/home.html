@@ -61,10 +61,15 @@
             <div *ngIf="!dayMessage && !hasError() && !notHasDays() && notHasPrimaryItems()">
               <page-message-box [text]="'EMPTY_PRODUCT_LIST_DAY' | translate"></page-message-box>
             </div>
+
+
             <ion-list *ngIf="!dayMessage && !loadingHelper.isLoading('products')">
+
               <ng-container *ngFor="let item of items">
                 <ion-item [ngClass]="{ 'product-disable': !item.is_visible }">
+
                   <product-img item-start [product]="item.product"></product-img>
+
                   <ion-grid class="menu-product-item">
                     <product-details [enableAdminView]="enableAdminView" [simpleView]="!item.amount"
                       [product]="item.product" [nextBatch]="item.next_batch">
@@ -83,11 +88,14 @@
                         <span *ngIf="!item.next_batch">--:--</span>
                       </button>
                     </product-details>
+
                     <item-cart-amount [enableAdminView]="enableAdminView" [item]="item"></item-cart-amount>
                   </ion-grid>
                 </ion-item>
               </ng-container>
             </ion-list>
+
+
           </div>
         </div>
       </swiper-slide>
@@ -96,7 +104,6 @@
       <swiper-slide>
         <div *ngIf="section === 'others' || othersAlreadyOpen" [hidden]="section !== 'others'">
           <!-- Conteúdo do Slide 2 -->
-
           <div class="slide-content-ctrl">
             <ion-spinner [showTimeout]="800"
               *ngIf="(loadingHelper.isLoading('products') || !canRenderOthers) && !dayMessage"
@@ -107,8 +114,11 @@
             <div *ngIf="!dayMessage && !hasError() && !notHasDays() && notHasSecondaryItems()">
               <page-message-box [text]="'EMPTY_PRODUCT_LIST_DAY' | translate"></page-message-box>
             </div>
+
             <ion-list *ngIf="!dayMessage && !loadingHelper.isLoading('othersProducts') && canRenderOthers">
+
               <ng-container *ngFor="let resellerId of sellersIds">
+
                 <ion-item-divider class="light-divider reseller-divider"
                   (click)="openReseller($event, resellerId, itemsPerReseller[resellerId][0].reseller?.name)"
                   [ngClass]="{'opened': resellerOpen === resellerId}" *ngIf="itemsPerReseller[resellerId]">
@@ -122,6 +132,7 @@
                     R$ <reseller-amount [resellerId]="resellerId" class="feature"></reseller-amount>
                   </span>
                 </ion-item-divider>
+
                 <div [ngClass]="{'hidden': resellerOpen !== resellerId}">
                   <ng-container *ngFor="let item of itemsPerReseller[resellerId]">
                     <ion-item [hidden]="!(item.is_visible && item.is_active)">
@@ -134,6 +145,7 @@
                     </ion-item>
                   </ng-container>
                 </div>
+
               </ng-container>
             </ion-list>
           </div>

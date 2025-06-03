@@ -83,7 +83,7 @@ export class AdminBalanceStorePage implements OnInit {
   storeBalance: StoreBalance;
   page = 0;
   form: FormGroup;
-  employeIdFilter: number;
+  employeIdFilter: number = 0;
   storeBalanceContent: string = '';
   clientCreditHistory: UserCreditHistory[] = [];
   deliveryEmployees: any[] = [];
@@ -185,7 +185,7 @@ export class AdminBalanceStorePage implements OnInit {
           .balanceGeneralV2({
             store: this.store.id,
             page: this.page,
-            delivery_employee: this.employeIdFilter,
+            // delivery_employee: this.employeIdFilter,
             period_type: this.getPeriodType(),
           })
           .subscribe(

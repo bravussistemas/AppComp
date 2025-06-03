@@ -478,13 +478,18 @@ export class HomePage implements OnInit, OnDestroy {
         this.isAdminOrStoreSeller(this.user, this.store)
       );
       mainItems = parseItemsWithoutReseller(items);
+
       secondaryItems = filterItemsWithReseller(items);
+
       const { itemsPerReseller, sellersIds } =
         Utils.parseProductsPerReseller(secondaryItems);
       this.itemsPerReseller = itemsPerReseller;
+
       this.sellersIds = sellersIds;
     }
     this.items = mainItems;
+    console.log(mainItems);
+    console.log(secondaryItems);
     this.itemsSecondary = secondaryItems;
     this.serverReturned = true;
     setTimeout(() => {

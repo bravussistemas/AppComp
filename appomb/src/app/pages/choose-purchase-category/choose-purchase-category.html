@@ -23,8 +23,9 @@
     <ion-list>
       <!-- Lojas -->
       <ng-container *ngIf="storesState?.has_normal_stores || hasErrorLoadStoreState">
+
         <ion-item id="btn-stores" [disabled]="disableBtns" class="store-item gray-item-new"
-          (click)="chooseStores(storeType.NORMAL, deliveryType.MAIN)">
+          (click)="chooseStores()">
           <i class="main-menu-fa-icon svg-icon-flat">
             <img slot="start" class="main-menu-fa-icon svg-icon-flat" src="assets/svg/icons/shop.svg" />
           </i>

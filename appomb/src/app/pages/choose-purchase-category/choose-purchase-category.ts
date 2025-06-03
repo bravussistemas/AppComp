@@ -87,7 +87,7 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
       return {
         icon: 'barcode',
         iconClass: '',
-        handler: (event:any) => {
+        handler: (event: any) => {
           this.router.navigate(['/AdmManageProductPage']);
         },
       };
@@ -232,6 +232,7 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
     }, 500);
     this.storeService.getStoresCities(storeType, deliveryType).subscribe(
       async (resp) => {
+        console.log(resp);
         clearTimeout(timout);
         this.loadingHelper.hide();
         this.disableBtns = false;

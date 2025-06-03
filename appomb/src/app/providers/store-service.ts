@@ -96,6 +96,7 @@ export class StoreService extends CachedServiceBase {
         delivery_type: deliveryType,
       },
     });
+
     return this.cacheRequest(key, request, 60 * 60).pipe(
       map((res: any) => {
         return <StoreCitiesResponse>res;

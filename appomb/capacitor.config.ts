@@ -4,7 +4,9 @@ const config: CapacitorConfig = {
   appId: 'br.com.ohmybread', // ID do aplicativo
   appName: 'Oh My Bread!', // Nome do aplicativo
   webDir: 'www', // Diretório onde o build é gerado
-  bundledWebRuntime: false, // Runtime do Capacitor no WebView
+ 
+
+  // bundledWebRuntime: false, // Runtime do Capacitor no WebView
 
   // Configurações específicas de servidor
   // server: {

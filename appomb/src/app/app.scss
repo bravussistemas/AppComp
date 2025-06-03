@@ -13,8 +13,7 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 @import "../theme/fonts.scss";
-@import 'src/theme/variables.scss';
-
+@import "src/theme/variables.scss";
 
 .svg-icon {
   width: 50px !important;
@@ -80,11 +79,13 @@ page-list-credit-card {
 }
 
 .svg-flat-diners {
-  background: url("../assets/svg/sprite.css.svg") 16.666666666666668% 12.34520617898634% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 16.666666666666668%
+    12.34520617898634% no-repeat;
 }
 
 .svg-flat-elo {
-  background: url("../assets/svg/sprite.css.svg") 16.666666666666668% 24.69041235797268% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 16.666666666666668%
+    24.69041235797268% no-repeat;
 }
 
 .svg-flat-mastercard {
@@ -92,7 +93,8 @@ page-list-credit-card {
 }
 
 .svg-flat-visa {
-  background: url("../assets/svg/sprite.css.svg") 50% 37.31009830205541% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 50% 37.31009830205541%
+    no-repeat;
 }
 
 .svg-single-diners {
@@ -100,34 +102,42 @@ page-list-credit-card {
 }
 
 .svg-single-elo {
-  background: url("../assets/svg/sprite.css.svg") 89% 12.619685944082727% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 89% 12.619685944082727%
+    no-repeat;
 }
 
 .svg-single-hipercard {
-  background: url("../assets/svg/sprite.css.svg") 89% 25.033604301350575% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 89% 25.033604301350575%
+    no-repeat;
 }
 
 .svg-single-mastercard {
-  background: url("../assets/svg/sprite.css.svg") 89% 62.27499042512447% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 89% 62.27499042512447%
+    no-repeat;
 }
 
 .svg-single-visa {
-  background: url("../assets/svg/sprite.css.svg") 89% 99.5850887271799% no-repeat;
+  background: url("../assets/svg/sprite.css.svg") 89% 99.5850887271799%
+    no-repeat;
 }
 
 @mixin placeholder-color($color) {
-  ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
     color: $color;
   }
-  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: $color;
-    opacity: 1;
-  }
-  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
     color: $color;
     opacity: 1;
   }
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: $color;
+    opacity: 1;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
     color: $color;
   }
 }
@@ -136,7 +146,12 @@ $dark-base: #414141;
 $dark-contrast: #ffffff;
 
 * {
-  font-family: 'Ubuntu', sans-serif;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.app-version {
+  color: #999999;
+  margin-left: 5px;
 }
 
 body {
@@ -255,7 +270,7 @@ body {
     }
 
     ion-item {
-      background-color: #F6F4F6;
+      background-color: #f6f4f6;
 
       &:last-child {
         margin-bottom: 56px;
@@ -283,7 +298,6 @@ body {
 
         * {
           text-align: left;
-
         }
       }
 
@@ -299,7 +313,7 @@ body {
       }
 
       &.light-divider {
-        background-color: #E6E6E6;
+        background-color: #e6e6e6;
         height: 35px;
 
         .input-wrapper {
@@ -310,7 +324,7 @@ body {
       }
 
       &.reseller-divider {
-        background-color: #E6E6E6;
+        background-color: #e6e6e6;
         min-height: 43px;
         height: initial;
         padding-top: 6px;
@@ -347,7 +361,8 @@ body {
             &:after {
               position: absolute;
               content: " ";
-              background: url("../assets/img/reseller_title_bg.png") no-repeat right;
+              background: url("../assets/img/reseller_title_bg.png") no-repeat
+                right;
               height: 100%;
               width: 40px;
               right: 0;
@@ -536,7 +551,8 @@ body {
     }
   }
 
-  .line-break, .break-line {
+  .line-break,
+  .break-line {
     overflow: inherit;
     text-overflow: inherit;
     white-space: normal;
@@ -577,7 +593,8 @@ body {
   .arrow-navigation-control {
     padding: 0;
 
-    ion-col, ion-row {
+    ion-col,
+    ion-row {
       height: 100%;
     }
 
@@ -661,7 +678,8 @@ body {
   }
 
   .item-input-disabled {
-    ion-label, .text-input {
+    ion-label,
+    .text-input {
       opacity: 0.4;
     }
   }
@@ -731,7 +749,12 @@ body {
     }
   }
 
-  page-login, page-sign-in, page-sign-up, page-register-credit-card, page-forgot-password, page-register-mobile-phone {
+  page-login,
+  page-sign-in,
+  page-sign-up,
+  page-register-credit-card,
+  page-forgot-password,
+  page-register-mobile-phone {
     padding: 0;
 
     .input-wrapper {
@@ -766,7 +789,8 @@ body {
       z-index: 1;
     }
 
-    .toolbar-background, .item-block {
+    .toolbar-background,
+    .item-block {
       background-color: $body-background-color !important;
     }
 
@@ -774,14 +798,17 @@ body {
       background-image: none;
     }
 
-    .scroll-content, ion-item {
+    .scroll-content,
+    ion-item {
       padding: 0 !important;
     }
 
     ion-input {
       font-size: 1.8rem;
 
-      input, select, textarea {
+      input,
+      select,
+      textarea {
         @include placeholder-color(#9e9e9e);
       }
     }
@@ -799,11 +826,11 @@ body {
     ion-icon {
       font-size: 1.8em;
 
-      &[name="logo-facebook" ] {
+      &[name="logo-facebook"] {
         color: #024383 !important;
       }
 
-      &[name="logo-googleplus" ] {
+      &[name="logo-googleplus"] {
         color: #dc4e42 !important;
       }
     }
@@ -836,7 +863,8 @@ body {
       }
     }
 
-    .sign-in-buttons, .icon-form {
+    .sign-in-buttons,
+    .icon-form {
       ion-icon {
         color: map-get($colors, primary);
       }
@@ -929,7 +957,6 @@ body {
     .icon-message {
       padding-right: $j-units-1-2;
       order: 1;
-
     }
 
     .block-message {
@@ -937,11 +964,12 @@ body {
     }
   }
 
-  ion-app [no-margin], ion-app [no-margin] .scroll-content {
+  ion-app [no-margin],
+  ion-app [no-margin] .scroll-content {
     margin: 0 !important;
   }
 
-  ion-icon[name='card'] {
+  ion-icon[name="card"] {
     position: relative;
     height: 100%;
 
@@ -952,7 +980,7 @@ body {
     }
 
     &.cvv-indicator:after {
-      content: ' ';
+      content: " ";
       background: transparent;
       width: 6px;
       height: 2px;
@@ -1082,7 +1110,9 @@ body {
     }
   }
 
-  .bar-button-default-ios, .bar-button-default.bar-button-ios-default, .bar-button-clear-ios-default {
+  .bar-button-default-ios,
+  .bar-button-default.bar-button-ios-default,
+  .bar-button-clear-ios-default {
     color: #424242;
   }
 
@@ -1155,11 +1185,6 @@ body {
     .list {
       margin: 0 !important;
     }
-
-    .app-version {
-      color: #999999;
-      margin-left: 5px;
-    }
   }
 
   .fix-scroll-bug {
@@ -1187,12 +1212,10 @@ body {
 
   .text-green {
     color: #43a32f !important;
-
   }
 
   .text-red {
     color: #a32d2f !important;
-
   }
 
   .label-md[stacked] {
@@ -1281,7 +1304,6 @@ body {
   }
 
   .content-with-fixed-toolbar-top {
-
     .scroll-content {
       padding-top: var(--ion-toolbar-min-height, 56px) !important;
     }
@@ -1438,10 +1460,10 @@ body {
 
   @keyframes placeHolderShimmer {
     0% {
-      background-position: -468px 0
+      background-position: -468px 0;
     }
     100% {
-      background-position: 468px 0
+      background-position: 468px 0;
     }
   }
 
@@ -1533,7 +1555,9 @@ body {
     .content-with-fixed-toolbar-top {
       &.one-half {
         .scroll-content {
-          padding-top: calc(var(--ion-toolbar-min-height, 56px) * 1.5) !important;
+          padding-top: calc(
+            var(--ion-toolbar-min-height, 56px) * 1.5
+          ) !important;
         }
 
         ion-toolbar {
@@ -1547,7 +1571,9 @@ body {
 
       &.two-half-rows {
         .scroll-content {
-          padding-top: calc(var(--ion-toolbar-min-height, 56px) * 1.9) !important;
+          padding-top: calc(
+            var(--ion-toolbar-min-height, 56px) * 1.9
+          ) !important;
         }
 
         ion-toolbar {
@@ -1619,7 +1645,7 @@ body {
   }
 
   .gray-item-new {
-    background: #F5F5F5;
+    background: #f5f5f5;
     border-radius: 0.2rem;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
     border-bottom: 1px solid #d8d8d8;
@@ -1660,11 +1686,10 @@ body {
     }
 
     p {
-      color: #7F7F7F;
+      color: #7f7f7f;
       white-space: initial;
     }
   }
-
 }
 
 ion-app {
@@ -1703,7 +1728,7 @@ ion-app {
     }
 
     .toolbar-background {
-      background: #ffffff
+      background: #ffffff;
     }
 
     * {
@@ -1716,7 +1741,6 @@ ion-app {
     height: 3.6rem !important;
     font-size: 1.4rem !important;
   }
-
 
   .reset-item-btn-size {
     padding: 0 2.6rem !important;
@@ -1736,16 +1760,16 @@ ion-app {
 
   .svg-icon-flat {
     img {
-      width: 31px !important;;
+      width: 31px !important;
     }
   }
 
   .main-menu-fa-icon {
     text-align: center !important;
-    display: flex!important;
-    align-items: center!important;
-    justify-content: center!important;
-    min-width: 24px!important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 24px !important;
     margin-right: 0 !important;
 
     svg {
@@ -1795,4 +1819,6 @@ ion-app {
   }
 }
 
-ion-app.platform-ios12 ion-content { pointer-events: auto; /*fix scroll lock on ios12.2*/ }
+ion-app.platform-ios12 ion-content {
+  pointer-events: auto; /*fix scroll lock on ios12.2*/
+}
