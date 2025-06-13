@@ -34,7 +34,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+//@import "@ionic/angular/css/palettes/dark.system.css";
 
 // http://ionicframework.com/docs/v2/theming/
 // App Global Sass
@@ -50,8 +50,8 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-@import "./theme/fonts";
-@import './src/theme/variables.scss';
+@import "theme/fonts";
+@import 'theme/variables.scss';
 
 
 .svg-icon {

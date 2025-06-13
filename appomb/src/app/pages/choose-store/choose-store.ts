@@ -148,8 +148,8 @@ export class ChooseStore implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.cityId = params['cityId'];
-      this.storeType = params['storeType'];
-      this.deliveryType = params['deliveryType'];
+      this.storeType = params['storeType'] || null;
+      this.deliveryType = params['deliveryType'] || null;
       this.storeId = params['storeId'];
       this.afterCurrentStoreDeleted =
         params['afterCurrentStoreDeleted'] === 'true'; // Convertendo para booleano
