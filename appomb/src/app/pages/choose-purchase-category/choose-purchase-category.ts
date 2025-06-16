@@ -230,6 +230,19 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
     const timout = setTimeout(() => {
       this.loadingHelper.show();
     }, 500);
+
+    // if (storeType === undefined && deliveryType === undefined) {
+    //   this.storeService.getStoresCities().subscribe({
+    //     next: (value) => {
+    //       console.log(value);
+    //     },
+    //     error: (err) => {
+    //       console.error(err);
+    //     },
+    //   });
+    // } else {
+    // }
+
     this.storeService.getStoresCities(storeType, deliveryType).subscribe(
       async (resp) => {
         console.log(resp);
