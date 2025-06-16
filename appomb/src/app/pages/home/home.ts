@@ -259,7 +259,8 @@ export class HomePage implements OnInit, OnDestroy {
     //ACERTAR FUNCOE COM O BRAVUSS
     console.log('User:', this.user);
     console.log('Store:', this.store);
-    if (false) {
+    //if (false) {    
+    if (this.section == 'breads' && !this.isAdminOrStoreSeller(this.user, this.store)) {
       try {
         this.trackHelper.trackByName(
           TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
@@ -478,18 +479,13 @@ export class HomePage implements OnInit, OnDestroy {
         this.isAdminOrStoreSeller(this.user, this.store)
       );
       mainItems = parseItemsWithoutReseller(items);
-
       secondaryItems = filterItemsWithReseller(items);
-
       const { itemsPerReseller, sellersIds } =
         Utils.parseProductsPerReseller(secondaryItems);
       this.itemsPerReseller = itemsPerReseller;
-
       this.sellersIds = sellersIds;
     }
     this.items = mainItems;
-    console.log(mainItems);
-    console.log(secondaryItems);
     this.itemsSecondary = secondaryItems;
     this.serverReturned = true;
     setTimeout(() => {

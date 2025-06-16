@@ -12,6 +12,7 @@ $font-path: "../assets/fonts";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+
 // Shared Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
@@ -60,7 +61,301 @@ $colors: (
   darkGray: #404040,
   gray: #b9b9b9,
   priceProductColor: #656565,
+  btn-menu-footer: (
+    base: #464646,  
+    contrast: #ffffff
+  ),
+  btn-menu-footer-light: (
+    base: #f6f6f6,
+    contrast: #4a4a49
+  ),
+  default-button: (
+    base: #bda991,
+    contrast: #ffffff
+  ),
+  darkBar: (
+    base: #000,
+    contrast: #fff
+  ),
+  dark-gray: (
+    base: #414141,
+    contrast: #fff
+  ),
+  red-button-dark: (
+    base: #ad5a5e,
+    contrast: #fff
+  ),
+  red-button-reverse: (
+    base: #fff,
+    contrast: #ad5a5e
+  ),
+  red-button-outline: (
+    base: #ad5a5e,
+    contrast: #ad5a5e
+  ),
+  light-divider: (
+    base: #eaeaea,
+    contrast: #585858
+  ),
+  light-button: (
+    base: #444444,
+    contrast: #f5f5f5
+  ),
+  dark-button: (
+    base: #f5f5f5,
+    contrast: #898989
+  ),
+  green-button: (
+    base: #4c8441,
+    contrast: #ffffff
+  ),
+  green-button-reverse: (
+    base: transparent,
+    contrast: #4c8441
+  ),
+  transparent: (
+    base: transparent,
+    contrast: #fff
+  ),
+  blue-button: (
+    base: #2e5684,
+    contrast: #ffffff
+  ),
+  disabled-item-list: (
+    base: transparent,
+    contrast: #848484
+  ),
+  enabled-item-list: (
+    base: transparent,
+    contrast: #376a97
+  ),
+  madeira: (
+    base: #444444,
+    contrast: #fff
+  ),
+  //address-bar: (
+  //  base: #f8f8f8,
+  //  contrast: #747474,
+  //),
+  navbar-transparent-dark: (
+    base: transparent,
+    contrast: #000,
+  ),
+  navbar-white: (
+    base: #ffffff,
+    contrast: #353535,
+  ),
+  dark-list-header: (
+    base: #ececec,
+    contrast: #606060,
+  ),
+  transparent-list-header: (
+    base: #fff,
+    contrast: #7d7d7d,
+  ),
 );
+
+:root {
+  --ion-color-primary: #{map-get($colors, primary)};
+  --ion-color-primaryDark: #{map-get($colors, primaryDark)};
+  --ion-color-primaryLight: #{map-get($colors, primaryLight)};
+  --ion-color-primaryTextColor: #{map-get($colors, primaryTextColor)};
+  --ion-color-secondary: #{map-get($colors, secondary)};
+  --ion-color-aqua: #{map-get($colors, aqua)};
+  --ion-color-danger: #{map-get($colors, danger)};
+  --ion-color-success: #{map-get($colors, success)};
+  --ion-color-error: #{map-get($colors, error)};
+  --ion-color-warning: #{map-get($colors, warning)};
+  --ion-color-warningLight: #{map-get($colors, warningLight)};
+  --ion-color-light: #{map-get($colors, light)};
+  --ion-color-mainHeaderBackground: #{map-get($colors, mainHeaderBackground)};
+  --ion-color-white: #{map-get($colors, white)};
+  --ion-color-textGray: #{map-get($colors, textGray)};
+  --ion-color-text-disabled: #{map-get($colors, text-disabled)};
+  --ion-color-dark: #{map-get($colors, dark)};
+  --ion-color-darkGray: #{map-get($colors, darkGray)};
+  --ion-color-gray: #{map-get($colors, gray)};
+  --ion-color-priceProductColor: #{map-get($colors, priceProductColor)};
+
+  // Custom structured colors (base/contrast)
+  --ion-color-btn-menu-footer: #{map-get(map-get($colors, btn-menu-footer), base)};
+  --ion-color-btn-menu-footer-contrast: #{map-get(map-get($colors, btn-menu-footer), contrast)};
+
+  --ion-color-btn-menu-footer-light: #{map-get(map-get($colors, btn-menu-footer-light), base)};
+  --ion-color-btn-menu-footer-light-contrast: #{map-get(map-get($colors, btn-menu-footer-light), contrast)};
+
+  --ion-color-default-button: #{map-get(map-get($colors, default-button), base)};
+  --ion-color-default-button-contrast: #{map-get(map-get($colors, default-button), contrast)};
+
+  --ion-color-darkBar: #{map-get(map-get($colors, darkBar), base)};
+  --ion-color-darkBar-contrast: #{map-get(map-get($colors, darkBar), contrast)};
+
+  --ion-color-dark-gray: #{map-get(map-get($colors, dark-gray), base)};
+  --ion-color-dark-gray-contrast: #{map-get(map-get($colors, dark-gray), contrast)};
+
+  --ion-color-red-button-dark: #{map-get(map-get($colors, red-button-dark), base)};
+  --ion-color-red-button-dark-contrast: #{map-get(map-get($colors, red-button-dark), contrast)};
+
+  --ion-color-red-button-reverse: #{map-get(map-get($colors, red-button-reverse), base)};
+  --ion-color-red-button-reverse-contrast: #{map-get(map-get($colors, red-button-reverse), contrast)};
+
+  --ion-color-red-button-outline: #{map-get(map-get($colors, red-button-outline), base)};
+  --ion-color-red-button-outline-contrast: #{map-get(map-get($colors, red-button-outline), contrast)};
+
+  --ion-color-light-divider: #{map-get(map-get($colors, light-divider), base)};
+  --ion-color-light-divider-contrast: #{map-get(map-get($colors, light-divider), contrast)};
+
+  --ion-color-light-button: #{map-get(map-get($colors, light-button), base)};
+  --ion-color-light-button-contrast: #{map-get(map-get($colors, light-button), contrast)};
+
+  --ion-color-dark-button: #{map-get(map-get($colors, dark-button), base)};
+  --ion-color-dark-button-contrast: #{map-get(map-get($colors, dark-button), contrast)};
+
+  --ion-color-green-button: #{map-get(map-get($colors, green-button), base)};
+  --ion-color-green-button-contrast: #{map-get(map-get($colors, green-button), contrast)};
+
+  --ion-color-green-button-reverse: #{map-get(map-get($colors, green-button-reverse), base)};
+  --ion-color-green-button-reverse-contrast: #{map-get(map-get($colors, green-button-reverse), contrast)};
+
+  --ion-color-transparent: #{map-get(map-get($colors, transparent), base)};
+  --ion-color-transparent-contrast: #{map-get(map-get($colors, transparent), contrast)};
+
+  --ion-color-blue-button: #{map-get(map-get($colors, blue-button), base)};
+  --ion-color-blue-button-contrast: #{map-get(map-get($colors, blue-button), contrast)};
+
+  --ion-color-disabled-item-list: #{map-get(map-get($colors, disabled-item-list), base)};
+  --ion-color-disabled-item-list-contrast: #{map-get(map-get($colors, disabled-item-list), contrast)};
+
+  --ion-color-enabled-item-list: #{map-get(map-get($colors, enabled-item-list), base)};
+  --ion-color-enabled-item-list-contrast: #{map-get(map-get($colors, enabled-item-list), contrast)};
+
+  --ion-color-madeira: #{map-get(map-get($colors, madeira), base)};
+  --ion-color-madeira-contrast: #{map-get(map-get($colors, madeira), contrast)};
+
+  --ion-color-navbar-transparent-dark: #{map-get(map-get($colors, navbar-transparent-dark), base)};
+  --ion-color-navbar-transparent-dark-contrast: #{map-get(map-get($colors, navbar-transparent-dark), contrast)};
+
+  --ion-color-navbar-white: #{map-get(map-get($colors, navbar-white), base)};
+  --ion-color-navbar-white-contrast: #{map-get(map-get($colors, navbar-white), contrast)};
+
+  --ion-color-dark-list-header: #{map-get(map-get($colors, dark-list-header), base)};
+  --ion-color-dark-list-header-contrast: #{map-get(map-get($colors, dark-list-header), contrast)};
+
+  --ion-color-transparent-list-header: #{map-get(map-get($colors, transparent-list-header), base)};
+  --ion-color-transparent-list-header-contrast: #{map-get(map-get($colors, transparent-list-header), contrast)};
+}
+
+.ion-color-btn-menu-footer {
+  --ion-color-base: var(--ion-color-btn-menu-footer);
+  --ion-color-contrast: var(--ion-color-btn-menu-footer-contrast);
+}
+
+.ion-color-btn-menu-footer-light {
+  --ion-color-base: var(--ion-color-btn-menu-footer-light);
+  --ion-color-contrast: var(--ion-color-btn-menu-footer-light-contrast);
+}
+
+.ion-color-default-button {
+  --ion-color-base: var(--ion-color-default-button);
+  --ion-color-contrast: var(--ion-color-default-button-contrast);
+}
+
+.ion-color-darkBar {
+  --ion-color-base: var(--ion-color-darkBar);
+  --ion-color-contrast: var(--ion-color-darkBar-contrast);
+}
+
+.ion-color-dark-gray {
+  --ion-color-base: var(--ion-color-dark-gray);
+  --ion-color-contrast: var(--ion-color-dark-gray-contrast);
+}
+
+.ion-color-red-button-dark {
+  --ion-color-base: var(--ion-color-red-button-dark);
+  --ion-color-contrast: var(--ion-color-red-button-dark-contrast);
+}
+
+.ion-color-red-button-reverse {
+  --ion-color-base: var(--ion-color-red-button-reverse);
+  --ion-color-contrast: var(--ion-color-red-button-reverse-contrast);
+}
+
+.ion-color-red-button-outline {
+  --ion-color-base: var(--ion-color-red-button-outline);
+  --ion-color-contrast: var(--ion-color-red-button-outline-contrast);
+}
+
+.ion-color-light-divider {
+  --ion-color-base: var(--ion-color-light-divider);
+  --ion-color-contrast: var(--ion-color-light-divider-contrast);
+}
+
+.ion-color-light-button {
+  --ion-color-base: var(--ion-color-light-button);
+  --ion-color-contrast: var(--ion-color-light-button-contrast);
+}
+
+.ion-color-dark-button {
+  --ion-color-base: var(--ion-color-dark-button);
+  --ion-color-contrast: var(--ion-color-dark-button-contrast);
+}
+
+.ion-color-green-button {
+  --ion-color-base: var(--ion-color-green-button);
+  --ion-color-contrast: var(--ion-color-green-button-contrast);
+}
+
+.ion-color-green-button-reverse {
+  --ion-color-base: var(--ion-color-green-button-reverse);
+  --ion-color-contrast: var(--ion-color-green-button-reverse-contrast);
+}
+
+.ion-color-transparent {
+  --ion-color-base: var(--ion-color-transparent);
+  --ion-color-contrast: var(--ion-color-transparent-contrast);
+}
+
+.ion-color-blue-button {
+  --ion-color-base: var(--ion-color-blue-button);
+  --ion-color-contrast: var(--ion-color-blue-button-contrast);
+}
+
+.ion-color-disabled-item-list {
+  --ion-color-base: var(--ion-color-disabled-item-list);
+  --ion-color-contrast: var(--ion-color-disabled-item-list-contrast);
+}
+
+.ion-color-enabled-item-list {
+  --ion-color-base: var(--ion-color-enabled-item-list);
+  --ion-color-contrast: var(--ion-color-enabled-item-list-contrast);
+}
+
+.ion-color-madeira {
+  --ion-color-base: var(--ion-color-madeira);
+  --ion-color-contrast: var(--ion-color-madeira-contrast);
+}
+
+.ion-color-navbar-transparent-dark {
+  --ion-color-base: var(--ion-color-navbar-transparent-dark);
+  --ion-color-contrast: var(--ion-color-navbar-transparent-dark-contrast);
+}
+
+.ion-color-navbar-white {
+  --ion-color-base: var(--ion-color-navbar-white);
+  --ion-color-contrast: var(--ion-color-navbar-white-contrast);
+}
+
+.ion-color-dark-list-header {
+  --ion-color-base: var(--ion-color-dark-list-header);
+  --ion-color-contrast: var(--ion-color-dark-list-header-contrast);
+}
+
+.ion-color-transparent-list-header {
+  --ion-color-base: var(--ion-color-transparent-list-header);
+  --ion-color-contrast: var(--ion-color-transparent-list-header-contrast);
+}
+
+
 
 $multiColor: (
   btn-menu-footer: (
@@ -198,4 +493,3 @@ $j-units-1-4: calc($j-units-1-1 / 4);
 
 // Fonts
 // --------------------------------------------------
-

@@ -1,0 +1,114 @@
+@import "../theme/variables.scss";
+
+ion-menu {
+  .toolbar {
+    .toolbar-background {
+      background: #f6f6f6;
+    }
+  }
+  .footer {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+    background: #f6f6f6;
+    padding-left: 0 !important;
+    .item {
+      padding-left: $j-units-1-4 * 2 !important;
+      &.item-md-btn-menu-footer {
+        border-bottom: 1px solid #646464;
+      }
+      .item-inner {
+        border-bottom: none;
+      }
+    }
+  }
+  ion-header {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    &:after {
+      background: none !important;
+    }
+    ion-avatar {
+      display: inline-block;
+      top: .7rem;
+      left: -1rem;
+      position: relative;
+      img {
+        width: 5rem;
+        height: 5rem;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+  .username {
+    color: #ffffff;
+    font-size: 1.8rem;
+    padding: 0;
+    margin: 3px 0;
+
+  }
+  .user-phone {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: normal;
+    padding: 0;
+    margin: 3px 0;
+
+  }
+  .content-user-header {
+    * {
+      color: #414141 !important;
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    width: 100%;
+    height: 100%;
+    padding: $j-units-1-4 10px 3px $j-units-1-4;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    div {
+      display: inline-block;
+    }
+  }
+
+  .btn-menu-featured {
+    color: #339F3D !important;
+    * {
+      color: #339F3D !important;
+    }
+  }
+  .item-md {
+    > ion-icon {
+      margin: 8px 0 8px 0 !important;
+      //margin-bottom: 8px !important;
+    }
+  }
+
+  .credit-amount {
+    color: #00ff01;
+  }
+
+  #refresh-btn {
+    padding: 0 1em;
+    font-size: initial;
+    margin: 0;
+    height: 100%;
+  }
+
+  #user-credit-item {
+    .item-inner {
+      padding-right: 0;
+    }
+
+    ion-spinner {
+      width: 19px !important;
+      height: 19px !important;
+    }
+  }
+}

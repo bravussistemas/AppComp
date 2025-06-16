@@ -67,20 +67,16 @@ export class StoreService extends CachedServiceBase {
     deliveryType?: number
   ): Observable<Store[]> {
     const url = this.getUrl(this.appConfig.API_STORES);
-    let reqparams: any = {
+    let reqparams = {
         city_id: cityId,
         exclude_by_default: true,
+      ...(storeType != null && { store_type: storeType }),
+      ...(deliveryType != null && { delivery_type: deliveryType })
       }
-    if (storeType != null){
-      reqparams.store_type=  storeType ;
-    }
-    if (deliveryType != null){
-      reqparams.delivery_type = deliveryType;
-    }
     let finalRequest = this.authUserHttp.get(url, {
-      params: reqparams,
+      params: reqparams
     });
-    return finalRequest.pipe(map((res: any) => <Store[]>res));
+    return finalRequest.pipe(map((res: any) => <Store[]>res.results));
   }
 
   getStoresCities(

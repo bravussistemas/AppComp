@@ -76,7 +76,7 @@ const orderStoresByType = (stores: Store[]): StoreByType => {
 };
 
 @Component({
-  selector: 'app-page-choose-store',
+  selector: 'page-choose-store',
   templateUrl: 'choose-store.html',
   styleUrls: ['choose-store.scss'],
 })
@@ -298,7 +298,7 @@ export class ChooseStore implements OnInit, OnDestroy {
   }
 
   setStoreList(stores: any) {
-    this.stores = stores.results;
+    this.stores = stores;
 
     this.storesByType = orderStoresByType(this.stores);
 
@@ -321,9 +321,26 @@ export class ChooseStore implements OnInit, OnDestroy {
       .getStores(this.cityId, this.storeType, this.deliveryType)
       .subscribe(
         (res) => {
+          console.log('Lista carregada...');
+          console.log(res);
+          console.log(res.length);
+          if (this.storeId) {
+            console.log('é pra auto selecionar a loja: ' + this.storeId);
+          }
+          if (this.storeId && res && res.length && !this.afterCurrentStoreDeleted) {
+            const lastStore = res.find(store => store.id === parseInt(<any>this.storeId));
+            if (lastStore && lastStore.id) {
+              this.chooseStore(lastStore, true);
+              this.ignoreAmountStoresHideLoading = true;
+              this.setStoreList(res);
+              return;
+            }
+          }
           if (res.length === 1 && !this.afterCurrentStoreDeleted) {
             this.chooseStore(res[0]);
             this.ignoreAmountStoresHideLoading = true;
+            this.setStoreList(res);
+            return;
           }
 
           this.setStoreList(res);

@@ -29,9 +29,9 @@ import { Utils } from '../../utils/utils';
 import { EventService } from 'src/app/providers/event.service';
 
 @Component({
-  selector: 'app-page-choose-purchase-category',
-  templateUrl: './choose-purchase-category.html',
-  styleUrl: './choose-purchase-category.scss',
+  selector: 'page-choose-purchase-category',
+  templateUrl: 'choose-purchase-category.html',
+  //styleUrls: ['choose-purchase-category.scss'],
 })
 /* eslint-disable @angular-eslint/component-class-suffix */
 export class ChoosePurchaseCategory implements OnInit, OnDestroy {
@@ -85,7 +85,7 @@ export class ChoosePurchaseCategory implements OnInit, OnDestroy {
       this.isDeliveryEmployee()
     ) {
       return {
-        icon: 'barcode',
+        icon: 'barcode-sharp',
         iconClass: '',
         handler: (event: any) => {
           this.router.navigate(['/AdmManageProductPage']);

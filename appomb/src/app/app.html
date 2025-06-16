@@ -1,9 +1,40 @@
 <ion-app>
     <ion-menu contentId="main-content">
         <ion-header>
-            <ion-toolbar (click)="handleHeaderClick()">
-                <ion-title *ngIf="userIsLoggedIn">{{ user?.full_name }}</ion-title>
-                <ion-title *ngIf="!userIsLoggedIn">{{ 'GUEST' | translate }}</ion-title>
+            <ion-toolbar (click)="handleHeaderClick()"button>
+                <div class="content-user-header">
+                <ion-grid>
+                    <!-- Usuário logado -->
+                    <ng-container *ngIf="userIsLoggedIn && user; else guestHeader">
+                    <ion-row>
+                        <ion-col size="auto" *ngIf="user?.profile?.profile_photo">
+                        <ion-avatar slot="start" class="menu-avatar">
+                            <img [src]="user.profile.profile_photo" />
+                        </ion-avatar>
+                        </ion-col>
+                        <ion-col>
+                        <h1 class="username" *ngIf="user?.full_name">{{ user.full_name }}</h1>
+                        <h3 class="user-phone" *ngIf="user?.email">{{ user.email }}</h3>
+                        </ion-col>
+                    </ion-row>
+                    </ng-container>
+
+                    <!-- Visitante -->
+                    <ng-template #guestHeader>
+                    <ion-row>
+                        <ion-col size="auto">
+                        <ion-avatar slot="start" class="menu-avatar">
+                            <ion-icon name="contact"></ion-icon>
+                        </ion-avatar>
+                        </ion-col>
+                        <ion-col>
+                        <h1 class="username">{{ 'GUEST' | translate }}</h1>
+                        <h3 class="user-phone">{{ 'WELCOME' | translate }}</h3>
+                        </ion-col>
+                    </ion-row>
+                    </ng-template>
+                </ion-grid>
+                </div>
             </ion-toolbar>
         </ion-header>
 
@@ -29,16 +60,18 @@
                         <ion-label [innerHTML]="p.title | translate"></ion-label>
                     </ion-item>
                 </ng-container>
+                
+                <!-- <hr class="side-menu-divider"> -->
 
                 <ion-item button *ngIf="store" (click)="openPage('HomeList', true)">
-                    <ion-icon slot="start" [name]="store?.delivery_type === 1 ? 'pizza' : 'list-box'"
-                        color="primary"></ion-icon>
+                    <ion-icon slot="start" [name]="store?.delivery_type === 1 ? 'pizza' : 'reader'"
+                       color="primary"></ion-icon>
                     <ion-label>{{ store?.delivery_type === 1 ? 'Pizzas do dia' : 'Pães do dia' }}</ion-label>
                 </ion-item>
 
                 <ion-item button *ngIf="(store && storeCount > 1) || storeCount === null"
                     (click)="openPage('ChoosePurchaseCategory', true)">
-                    <ion-icon slot="start" name="pin" color="primary"></ion-icon>
+                    <ion-icon slot="start" name="storefront-outline" color="primary"></ion-icon>
                     <ion-label>
                         {{ "SIDE_MENU.STORE" | translate }}
                         <br />
@@ -52,9 +85,11 @@
                         <ion-label [innerHTML]="p.title | translate"></ion-label>
                     </ion-item>
                 </ng-container>
+                
+                <!-- <hr class="side-menu-divider"> -->
 
                 <ion-item button (click)="goToListBreads()">
-                    <ion-icon slot="start" name="heart" color="medium"></ion-icon>
+                    <ion-icon slot="start" name="heart" color = "medium"></ion-icon>
                     <ion-label>{{ "SIDE_MENU.OUR_BREADS" | translate }}</ion-label>
                 </ion-item>
 
@@ -84,29 +119,33 @@
         <ion-footer>
             <ion-list>
                 <ng-container *ngFor="let p of pagesFooter">
-                    <ion-item button *ngIf="!p.onlyLogged || userIsLoggedIn" (click)="openPage(p)">
+                    <ion-item button *ngIf="!p.onlyLogged || userIsLoggedIn" (click)="openPage(p) "  color="btn-menu-footer">
                         <ion-icon slot="start" [name]="p.icon" color="primary"></ion-icon>
                         <ion-label [innerHTML]="p.title | translate"></ion-label>
                     </ion-item>
                 </ng-container>
 
-                <ion-item *ngIf="userIsLoggedIn">
-                    <ion-icon slot="start" name="cash" color="primary"></ion-icon>
-                    <ion-label>
+                <ion-item *ngIf="userIsLoggedIn" id="user-credit-item" (click)="openPrePaidInfo()" color="btn-menu-footer" button>
+                    <ion-icon name="cash" slot="start" color="primary"></ion-icon>
+                    <ion-label *ngIf="!loadingHelper.isLoading('userCreditBalance')">
                         <h2>
-                            {{'PRE_PAID' | translate}}:
-                            <span *ngIf="!userCreditBalanceError" class="credit-amount">
-                                {{userCreditBalance || 0 | currency:"BRL":"symbol" }}
-                            </span>
-                            <span *ngIf="userCreditBalanceError">erro conexão</span>
+                        {{ 'PRE_PAID' | translate }}:
+                        <span *ngIf="!userCreditBalanceError" class="credit-amount">
+                            {{ userCreditBalance || 0 | currency:'BRL':true }}
+                        </span>
+                        <span *ngIf="userCreditBalanceError">erro conexão</span>
                         </h2>
                     </ion-label>
-                    <ion-button slot="end" fill="clear" (click)="refreshUserCreditBalance($event)">
+
+                    <ion-button slot="end" fill="clear" id="refresh-btn" (click)="refreshUserCreditBalance($event)">
                         <ion-icon name="refresh"></ion-icon>
                     </ion-button>
-                    <ion-spinner *ngIf="loadingHelper.isLoading('userCreditBalance')" name="lines-small"
-                        color="primary"></ion-spinner>
+
+                    <ion-label *ngIf="loadingHelper.isLoading('userCreditBalance')" slot="end">
+                        <ion-spinner color="light" class="mini-spinner"></ion-spinner>
+                    </ion-label>
                 </ion-item>
+
 
                 <ion-item>
                     {{ appName }}

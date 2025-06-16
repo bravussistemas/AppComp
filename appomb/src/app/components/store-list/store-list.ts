@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Store } from '../../shared/models/store.model';
 
 @Component({
-  selector: 'app-store-list',
+  selector: 'store-list',
   templateUrl: './store-list.html',
-  styleUrls: ['./store-list.scss'],
+  styleUrls: ['store-list.scss'],
 })
 export class StoreListComponent {
   @Output() chooseStore: EventEmitter<Store> = new EventEmitter<Store>();

@@ -214,44 +214,7 @@ body {
   //ion-content * {
   //  color: $dark-base;
   //}
-  .m-app-header {
-    ion-title {
-      &.logo {
-        * {
-          font-family: "Alegreya SC", sans-serif;
-          font-weight: 700;
-        }
 
-        .toolbar-title {
-          text-transform: lowercase;
-          font-size: 1.8em;
-          padding-left: 5px;
-          line-height: 0.7em;
-        }
-      }
-
-      .title-address {
-        font-size: 1.6rem;
-        font-weight: 400;
-      }
-    }
-
-    .toolbar-background {
-      background-color: map-get($colors, mainHeaderBackground);
-    }
-
-    &.header-title-centered {
-      ion-title {
-        .toolbar-title {
-          &.toolbar-title-md {
-            text-align: center;
-            //padding-right: 56px;
-            padding: 0;
-          }
-        }
-      }
-    }
-  }
 
   .list-thumb-round {
     .item-md {
@@ -1518,12 +1481,13 @@ body {
     width: 100%;
     font-size: 1.55rem;
     padding: 5px;
-    text-align: center;
+    text-align: center;  
 
     .credit-amount {
       color: #00ff01;
-    }
+    }  
   }
+  
 
   .invisible {
     visibility: hidden;

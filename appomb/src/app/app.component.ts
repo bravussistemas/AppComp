@@ -59,7 +59,7 @@ declare let cordova: any;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.html',
-  styleUrls: ['app.scss'],
+  styleUrls: ['app.component.scss'],
   standalone: false,
 })
 export class AppComponent implements OnDestroy, OnInit {
@@ -122,7 +122,7 @@ export class AppComponent implements OnDestroy, OnInit {
     const ADMIN: Page = {
       title: 'SIDE_MENU.ADMIN',
       component: 'AdmManageProductPage',
-      icon: 'barcode',
+      icon: 'barcode-sharp',
       onlyAdmin: true,
     };
 
@@ -136,7 +136,7 @@ export class AppComponent implements OnDestroy, OnInit {
     const USER_CREDIT: Page = {
       title: 'SIDE_MENU.USER_CREDIT',
       component: 'AdmManagerUserCreditsPage',
-      icon: 'cash',
+      icon: 'cash-outline',
       onlyAdmin: true,
     };
 
@@ -150,7 +150,7 @@ export class AppComponent implements OnDestroy, OnInit {
     const COUPONS: Page = {
       title: 'Cupons',
       component: 'CouponsPage',
-      icon: 'md-bookmark',
+      icon: 'bookmark',
       onlyLogged: true,
     };
 
@@ -164,7 +164,7 @@ export class AppComponent implements OnDestroy, OnInit {
     const CREDIT_CARDS: Page = {
       title: 'SIDE_MENU.PAYMENT',
       component: 'ListCreditCardPage',
-      icon: 'card',
+      icon: 'card-outline',
       onlyLogged: true,
     };
 

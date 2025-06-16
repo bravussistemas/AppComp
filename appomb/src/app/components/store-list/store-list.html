@@ -1,19 +1,35 @@
 <ng-container *ngIf="stores?.length">
   <ion-item-divider color="madeira" class="text-center">
-    {{title}}
+    {{ title }}
   </ion-item-divider>
 
   <ion-reorder-group [disabled]="!reordering" (ionItemReorder)="reorderItems($event)">
-    <ion-item *ngFor="let store of stores" (click)="!reordering && onChoose(store)">
-      <ion-thumbnail slot="start" *ngIf="store?.image">
-        <img [src]="store?.image?.thumbnail || defaultThumb" />
-      </ion-thumbnail>
-      <ion-label>
-        <h1>{{store.name}}</h1>
-        <h2>{{store.address?.get_simple_address}}</h2>
-        <p *ngIf="store.subtitle">{{store.subtitle?.message}}</p>
-      </ion-label>
-      <ion-reorder slot="end"></ion-reorder>
-    </ion-item>
+    <ion-list>
+      <ion-item
+        *ngFor="let store of stores"
+        class="store-item"
+        button
+        detail="false"
+        (click)="chooseStore.emit(store)"
+      >
+        <ion-thumbnail slot="start" *ngIf="store?.image?.thumbnail">
+          <img [src]="store?.image?.thumbnail || defaultThumb" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h1>{{ store.name }}</h1>
+          <h2>{{ store.address?.get_simple_address }}</h2>
+          <p *ngIf="store.subtitle">{{ store.subtitle?.message }}</p>
+        </ion-label>
+
+        <ion-icon
+          name="chevron-forward"
+          slot="end"
+          color="darkGray"
+        ></ion-icon>
+
+        <ion-reorder slot="end" *ngIf="reordering"></ion-reorder>
+      </ion-item>
+    </ion-list>
   </ion-reorder-group>
 </ng-container>

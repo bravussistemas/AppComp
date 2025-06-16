@@ -1,52 +1,52 @@
-<ion-row class="menu-product-actions reseller-data-content" [attr.data-resellerId]="resellerId"
-  [attr.data-itemTotal]="total">
-  <ng-container *ngIf="maxAmount">
-    <ion-col col-2 class="line-break">
-      <button ion-button item-start color="dark" clear (click)="removeAmount()" [disabled]="loading || amount <= 0">
-        <ion-icon class="bold-icon" name="remove-circle-outline"></ion-icon>
-      </button>
-    </ion-col>
-
-    <ion-col col-3 class="line-break menu-product-amount">
-      <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
-        {{amount}}
-        <small class="disabled-text">/{{maxAmount}}</small>
-      </span>
-    </ion-col>
-
-    <ion-col col-2 class="line-break">
-      <button ion-button item-end color="dark" clear (click)="addAmount()" [disabled]="loading || amount >= maxAmount">
-        <ion-icon class="bold-icon" name="add-circle-outline"></ion-icon>
-      </button>
-    </ion-col>
-
-    <ng-container *ngIf="enableAdminView">
-      <ion-col col-2 class="total-price line-break">
-        <span class="feature">
-          {{ item?.amount_in_store }}
-        </span>
+<ion-grid class="menu-product-actions reseller-data-content" [attr.data-resellerId]="resellerId" [attr.data-itemTotal]="total">
+  <ion-row>
+    <ng-container *ngIf="maxAmount">
+      <ion-col size="2" class="line-break">
+        <ion-button fill="clear" color="dark" (click)="removeAmount()" [disabled]="loading || amount <= 0">
+          <ion-icon class="bold-icon" name="remove-circle-outline"></ion-icon>
+        </ion-button>
       </ion-col>
-      <ion-col col-3 class="total-price line-break">
+
+      <ion-col size="3" class="line-break menu-product-amount">
         <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
-          <span class="small-text normal-text">R$</span>
-          {{ total }}
+          {{ amount }}
+          <small class="disabled-text">/{{ maxAmount }}</small>
         </span>
       </ion-col>
-    </ng-container>
-    <ng-container *ngIf="!enableAdminView">
-      <ion-col col-5 class="total-price line-break">
-        <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
-          <span class="small-text normal-text">R$</span>
-          {{ total }}
-        </span>
+
+      <ion-col size="2" class="line-break">
+        <ion-button fill="clear" (click)="addAmount()" [disabled]="loading || amount >= maxAmount">
+          <ion-icon class="bold-icon" name="add-circle-outline"></ion-icon>
+        </ion-button>
       </ion-col>
+
+      <ng-container *ngIf="enableAdminView">
+        <ion-col size="2" class="total-price line-break">
+          <span class="feature">
+            {{ item?.amount_in_store }}
+          </span>
+        </ion-col>
+        <ion-col size="3" class="total-price line-break">
+          <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
+            <span class="small-text normal-text">R$</span>
+            {{ total }}
+          </span>
+        </ion-col>
+      </ng-container>
+
+      <ng-container *ngIf="!enableAdminView">
+        <ion-col size="5" class="total-price line-break">
+          <span class="feature" [ngClass]="{'disabled-text': amount === 0}">
+            <span class="small-text normal-text">R$</span>
+            {{ total }}
+          </span>
+        </ion-col>
+      </ng-container>
     </ng-container>
-  </ng-container>
-
-</ion-row>
-
+  </ion-row>
+</ion-grid>
 
 <div tappable (click)="goToDetail()" *ngIf="!maxAmount" class="list-item-overlay">
   <div class="list-item-overlay-background"></div>
-  <div class="list-item-overlay-body">{{"SOLD_OUT" | translate}}</div>
+  <div class="list-item-overlay-body">{{ "SOLD_OUT" | translate }}</div>
 </div>
