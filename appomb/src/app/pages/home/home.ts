@@ -280,8 +280,11 @@ export class HomePage implements OnInit, OnDestroy {
   };
 
   setStore(store: Store) {
+    console.log(store);
     this.store = store;
     this.auth.getUser().then((user) => {
+      console.log(user);
+
       this.user = user;
       if (this.isAdminOrStoreSeller(user, store)) {
         this.slides.push({
@@ -319,6 +322,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   onSegmentChanged(segmentButton) {
     this.content.scrollToTop(0);
+
     if (segmentButton.detail.value === 'others') {
       this.othersAlreadyOpen = true;
       setTimeout(() => {
@@ -341,6 +345,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   onSlideChanged(slider: any) {
     const currentSlide = this.slides[slider.getActiveIndex()];
+
     if (currentSlide) {
       this.section = currentSlide.id;
       return;
@@ -479,6 +484,7 @@ export class HomePage implements OnInit, OnDestroy {
         this.isAdminOrStoreSeller(this.user, this.store)
       );
       mainItems = parseItemsWithoutReseller(items);
+      console.log(items);
       secondaryItems = filterItemsWithReseller(items);
       const { itemsPerReseller, sellersIds } =
         Utils.parseProductsPerReseller(secondaryItems);
@@ -486,6 +492,9 @@ export class HomePage implements OnInit, OnDestroy {
       this.sellersIds = sellersIds;
     }
     this.items = mainItems;
+    console.log(mainItems);
+    console.log(secondaryItems);
+    
     this.itemsSecondary = secondaryItems;
     this.serverReturned = true;
     setTimeout(() => {

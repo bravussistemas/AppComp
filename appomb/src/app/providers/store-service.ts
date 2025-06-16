@@ -67,12 +67,14 @@ export class StoreService extends CachedServiceBase {
     deliveryType?: number
   ): Observable<Store[]> {
     const url = this.getUrl(this.appConfig.API_STORES);
+    
     let reqparams = {
         city_id: cityId,
         exclude_by_default: true,
       ...(storeType != null && { store_type: storeType }),
       ...(deliveryType != null && { delivery_type: deliveryType })
-      }
+    }
+    
     let finalRequest = this.authUserHttp.get(url, {
       params: reqparams
     });
@@ -90,14 +92,14 @@ export class StoreService extends CachedServiceBase {
     }
     if (deliveryType) {
       key += deliveryType;
-    }  
+    }
     let reqparams = null;
     if (storeType != null) {
       reqparams = {
         store_type: storeType,
         delivery_type: deliveryType,
-      };  
-    };
+      };
+    }
     const request = this.authUserHttp.get(url, {
       params: reqparams,
     });

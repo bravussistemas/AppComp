@@ -4,7 +4,18 @@ const config: CapacitorConfig = {
   appId: 'br.com.ohmybread', // ID do aplicativo
   appName: 'Oh My Bread!', // Nome do aplicativo
   webDir: 'www', // Diretório onde o build é gerado
- 
+
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000, // Tempo em milissegundos (2 segundos)
+      launchAutoHide: true, // Oculta automaticamente após tempo
+      backgroundColor: '#000000', // Cor de fundo do splash
+      splashFullScreen: true,
+      androidScaleType: 'CENTER_CROP',
+      iosContentMode: 'ScaleAspectFill',
+      showSpinner: false, // Esconde spinner de carregamento
+    },
+  },
 
   // bundledWebRuntime: false, // Runtime do Capacitor no WebView
 
