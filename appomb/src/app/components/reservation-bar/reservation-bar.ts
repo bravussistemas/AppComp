@@ -18,11 +18,30 @@ import { DeliveryMethod } from '../../shared/interfaces';
 import { AppConfig } from '../../../configs';
 import { EventService } from 'src/app/providers/event.service';
 import { Router } from '@angular/router';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'reservation-bar',
   templateUrl: 'reservation-bar.html',
   styleUrls: ['./reservation-bar.scss'],
+  animations: [
+    trigger('slideUpAnimation', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)', opacity: 0 }),
+        animate(
+          '9000ms 9000ms cubic-bezier(0.25, 0.8, 0.25, 1)',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+
+      transition(':leave', [
+        animate(
+          '500ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+          style({ transform: 'translateY(100%)', opacity: 0 })
+        ),
+      ]),
+    ]),
+  ],
 })
 /* eslint-disable @angular-eslint/component-class-suffix */
 export class ReservationBar implements OnInit, OnDestroy {
@@ -30,6 +49,8 @@ export class ReservationBar implements OnInit, OnDestroy {
   total: number = 0;
   updating = false;
   subtitle: string;
+  showReservationBar = false;
+
   @Input() canGoCheckout = () => true;
 
   constructor(
@@ -93,11 +114,15 @@ export class ReservationBar implements OnInit, OnDestroy {
       return;
     }
     this.updating = true;
+
     this.cartManagerTable
       .getCartInfo()
       .then((data) => {
         this.units = data.countItems;
         this.total = data.totalToPay;
+
+        this.showReservationBar = this.total > 0;
+
         this.updating = false;
       })
       .catch(() => {

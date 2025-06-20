@@ -259,23 +259,28 @@ export class HomePage implements OnInit, OnDestroy {
     //ACERTAR FUNCOE COM O BRAVUSS
     console.log('User:', this.user);
     console.log('Store:', this.store);
-    //if (false) {    
-    if (this.section == 'breads' && !this.isAdminOrStoreSeller(this.user, this.store)) {
-      try {
-        this.trackHelper.trackByName(
-          TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
-          { store_id: this.store.id }
-        );
-      } catch (e) {
-        console.error(e);
+    //DEIXANDO O IF COMO FALSE
+    if (false) {
+      if (
+        this.section == 'breads' &&
+        !this.isAdminOrStoreSeller(this.user, this.store)
+      ) {
+        try {
+          this.trackHelper.trackByName(
+            TrackHelper.EVENTS.REDIRECT_USER_TO_OTHERS_SALES,
+            { store_id: this.store.id }
+          );
+        } catch (e) {
+          console.error(e);
+        }
+
+        const swiperInstance = this.sliderRef?.nativeElement?.swiper;
+        swiperInstance.slideTo(1);
+        //aqui é false
+        return false;
       }
-
-      const swiperInstance = this.sliderRef?.nativeElement?.swiper;
-      swiperInstance.slideTo(1);
-      //aqui é false
-      return false;
     }
-
+    
     return true;
   };
 
@@ -484,7 +489,7 @@ export class HomePage implements OnInit, OnDestroy {
         this.isAdminOrStoreSeller(this.user, this.store)
       );
       mainItems = parseItemsWithoutReseller(items);
-      console.log(items);
+
       secondaryItems = filterItemsWithReseller(items);
       const { itemsPerReseller, sellersIds } =
         Utils.parseProductsPerReseller(secondaryItems);
@@ -492,9 +497,7 @@ export class HomePage implements OnInit, OnDestroy {
       this.sellersIds = sellersIds;
     }
     this.items = mainItems;
-    console.log(mainItems);
-    console.log(secondaryItems);
-    
+
     this.itemsSecondary = secondaryItems;
     this.serverReturned = true;
     setTimeout(() => {

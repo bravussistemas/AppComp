@@ -45,7 +45,7 @@
   <page-message-box *ngIf="!hasError() && notHasDays()"
     [text]="'Essa loja não possuí dias de funcionamento no momento.'"></page-message-box>
 
-  <div class="list-thumb-round" >
+  <div class="list-thumb-round">
     <!-- Substituindo ion-slides por swiper -->
     <swiper-container #mySlider [speed]="200" [slides-per-view]="'auto'"
       (swiperSlideChangeTransitionStart)="onSlideWillChange($event)" (swiperSlideChange)="onSlideChanged($event)">
@@ -164,6 +164,5 @@
       </swiper-slide>
     </swiper-container>
   </div>
-  
-<reservation-bar [canGoCheckout]="canGoCheckout" class="hide-open-keyboard" ion-fixed></reservation-bar>
 </ion-content>
+<reservation-bar [canGoCheckout]="canGoCheckout" class="hide-open-keyboard" ion-fixed></reservation-bar>
